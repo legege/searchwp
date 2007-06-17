@@ -1,0 +1,53 @@
+#searchwp-terms-container {
+  min-height: 23px;
+}
+
+#searchwp-terms-title {
+  background: url("chrome://searchwp/skin/icons/search-nocolor.png") no-repeat;
+  background-position: left 50%;
+  padding: 4px 0 0 16px;
+}
+
+#searchwp-terms-menu {
+  list-style-image: url("chrome://searchwp/skin/icons/search.png");
+}
+
+toolbar > #searchwp-terms-container > #searchwp-terms-title {
+  display: none;
+}
+
+toolbar > #searchwp-terms-container {
+  min-width: 0;
+}
+
+#searchwp-terms-popup > toolbarbutton {
+  list-style-image: none !important;
+}
+
+#searchwp-terms-box > toolbarbutton > .toolbarbutton-text,
+#searchwp-terms-popup > toolbarbutton > .toolbarbutton-text {
+  display: -moz-box !important;
+  text-align: left !important;
+  padding: 0 2px 0 0px !important;
+}
+
+/* SearchWP Highlight Button */
+
+#searchwp-highlight-button {
+  list-style-image: url("chrome://searchwp/skin/icons/highlight.png");
+  -moz-image-region: rect(0px 16px 16px 0px);
+  -moz-box-orient: vertical;
+}
+
+toolbar:not([iconsize="small"]) #searchwp-highlight-button > .toolbarbutton-icon {
+  padding: 4px 2px;
+}
+
+#searchwp-highlight-button:hover,
+#searchwp-highlight-button:active {
+  -moz-image-region: rect(16px 16px 32px 0px);
+}
+
+#searchwp-highlight-button[disabled="true"] {
+  -moz-image-region: rect(32px 16px 48px 0px) !important;
+}

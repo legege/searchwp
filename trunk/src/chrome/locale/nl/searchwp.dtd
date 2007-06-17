@@ -1,0 +1,13 @@
+<!ENTITY toolbar.terms.label "Zoekwoordenwerkbalk">
+<!ENTITY button.highlight.label "Markeren">
+<!ENTITY button.highlight.tooltiptext "Markeer alle zoekwoorden">
+<!ENTITY pref.title "Opties">
+<!ENTITY pref.termstoolbar.label "Zoekwoordenwerkbalk">
+<!ENTITY pref.termstoolbar.addition.label "De woorden moeten worden toegevoegd in:">
+<!ENTITY pref.termstoolbar.addition.o1.label "de zoekwoordenwerkbalk zolang er genoeg ruimte is, daarna in een menu.">
+<!ENTITY pref.termstoolbar.addition.o2.label.before "de zoekwoordenwerkbalk tot aan">
+<!ENTITY pref.termstoolbar.addition.o2.label.after "woorden en dan in een menu.">
+<!ENTITY pref.termstoolbar.addition.o3.label "een enkel menu.">
+<!ENTITY pref.highlighting.label "Markeren">
+<!ENTITY pref.highlightMinlength.label "Minimumlengte van woorden om te worden gemarkeerd:">
+<!ENTITY pref.highlightMinlength.accesskey "M">

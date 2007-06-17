@@ -1,0 +1,13 @@
+<!ENTITY toolbar.terms.label "Alatna traka pojmova">
+<!ENTITY button.highlight.label "Istakni">
+<!ENTITY button.highlight.tooltiptext "Istakni sve pojmove">
+<!ENTITY pref.title "Opcije">
+<!ENTITY pref.termstoolbar.label "Alatna traka pojmova">
+<!ENTITY pref.termstoolbar.addition.label "Riječi će se dodati u:">
+<!ENTITY pref.termstoolbar.addition.o1.label "alatnu traku pojmova sve dok ima dovoljno mjesta, a poslije u izbornik.">
+<!ENTITY pref.termstoolbar.addition.o2.label.before "alatnu traku pojmova sve do">
+<!ENTITY pref.termstoolbar.addition.o2.label.after "riječi, a poslije u izbornik.">
+<!ENTITY pref.termstoolbar.addition.o3.label "jedan izbornik">
+<!ENTITY pref.highlighting.label "Isticanje">
+<!ENTITY pref.highlightMinlength.label "Najmanja dužina za riječi koje će se isticati:">
+<!ENTITY pref.highlightMinlength.accesskey "d">

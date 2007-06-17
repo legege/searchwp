@@ -1,0 +1,22 @@
+.searchwp-term-highlight1,
+.searchwp-term-highlight2,
+.searchwp-term-highlight3,
+.searchwp-term-highlight4 {
+  color: black;
+}
+
+.searchwp-term-highlight1 {
+  background-color: #ffff77;
+}
+
+.searchwp-term-highlight2 {
+  background-color: #c3fffe;
+}
+
+.searchwp-term-highlight3 {
+  background-color: #99ff99;
+}
+
+.searchwp-term-highlight4 {
+  background-color: #ff9999;
+}

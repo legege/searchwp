@@ -1,0 +1,24 @@
+content searchwp jar:chrome/searchwp.jar!/content/
+overlay chrome://browser/content/browser.xul chrome://searchwp/content/overlay.xul
+# locale searchwp ca-AD jar:chrome/searchwp.jar!/locale/ca-AD/
+# locale searchwp cs-CZ jar:chrome/searchwp.jar!/locale/cs-CZ/
+locale searchwp de jar:chrome/searchwp.jar!/locale/de/
+locale searchwp el-GR jar:chrome/searchwp.jar!/locale/el-GR/
+locale searchwp en jar:chrome/searchwp.jar!/locale/en/
+locale searchwp es-ES jar:chrome/searchwp.jar!/locale/es-ES/
+locale searchwp fr jar:chrome/searchwp.jar!/locale/fr/
+locale searchwp fy-NL jar:chrome/searchwp.jar!/locale/fy-NL/
+locale searchwp hr jar:chrome/searchwp.jar!/locale/hr/
+# locale searchwp hu jar:chrome/searchwp.jar!/locale/hu/
+locale searchwp it jar:chrome/searchwp.jar!/locale/it/
+# locale searchwp ja jar:chrome/searchwp.jar!/locale/ja/
+locale searchwp ko jar:chrome/searchwp.jar!/locale/ko/
+locale searchwp nl jar:chrome/searchwp.jar!/locale/nl/
+locale searchwp pl jar:chrome/searchwp.jar!/locale/pl/
+# locale searchwp pt-BR jar:chrome/searchwp.jar!/locale/pt-BR/
+locale searchwp ru jar:chrome/searchwp.jar!/locale/ru/
+locale searchwp sk jar:chrome/searchwp.jar!/locale/sk/
+locale searchwp zh-CN jar:chrome/searchwp.jar!/locale/zh-CN/
+# locale searchwp zh-TW jar:chrome/searchwp.jar!/locale/zh-TW/
+skin searchwp classic/1.0 jar:chrome/searchwp.jar!/skin/classic/
+style chrome://global/content/customizeToolbar.xul chrome://searchwp/skin/global.css

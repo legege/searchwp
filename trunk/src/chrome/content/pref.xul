@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://global/skin/"?>
+
+<!DOCTYPE window [
+<!ENTITY % brandDTD SYSTEM "chrome://global/locale/brand.dtd" >
+%brandDTD;
+<!ENTITY % prefDTD SYSTEM "chrome://searchwp/locale/searchwp.dtd" >
+%prefDTD;
+]>
+
+<dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" id="searchwpPref"
+  title="&pref.title;" buttons="accept"
+  onload="gSearchWPPreferences.onLoad();"
+  ondialogaccept="return gSearchWPPreferences.onAccept();">
+
+  <script type="application/x-javascript" src="chrome://searchwp/content/global.js" />
+  <script type="application/x-javascript" src="chrome://searchwp/content/pref.js" />
+
+  <stringbundle id="bundle_searchwp" src="chrome://searchwp/locale/searchwp.properties"/>
+
+  <groupbox>
+    <caption label="&pref.termstoolbar.label;" />
+    <vbox>
+      <label>&pref.termstoolbar.addition.label;</label>
+      <radiogroup id="termstoolbar-addition" oncommand="gSearchWPPreferences.onTTAdditionSelect();">
+        <radio label="&pref.termstoolbar.addition.o1.label;" value="option1" />
+        <hbox align="center">
+          <radio label="&pref.termstoolbar.addition.o2.label.before;"  value="option2" />
+          <textbox id="termstoolbar-addition-upto" size="2" disabled="true" />
+          <label>&pref.termstoolbar.addition.o2.label.after;</label>
+        </hbox>
+        <radio label="&pref.termstoolbar.addition.o3.label;" value="option3" />
+      </radiogroup>
+    </vbox>
+  </groupbox>
+
+  <groupbox>
+    <caption label="&pref.highlighting.label;" />
+    <hbox align="center">
+      <label control="highlightMinlength" accesskey="&pref.highlightMinlength.accesskey;">&pref.highlightMinlength.label;</label>
+      <textbox id="highlightMinlength" size="2" preference="extensions.searchwp.highlight-minlength" />
+    </hbox>
+  </groupbox>
+</dialog>
