@@ -1,0 +1,13 @@
+<!ENTITY toolbar.terms.label "Frazy">
+<!ENTITY button.highlight.label "Podświetl">
+<!ENTITY button.highlight.tooltiptext "Podświetla wszystkie znalezione frazy">
+<!ENTITY pref.title "Opcje">
+<!ENTITY pref.termstoolbar.label "Frazy">
+<!ENTITY pref.termstoolbar.addition.label "Wyrazy jakie muszą być dodane w:">
+<!ENTITY pref.termstoolbar.addition.o1.label "The terms toolbar as long as there is enough space and then in a menu">
+<!ENTITY pref.termstoolbar.addition.o2.label.before "The terms toolbar up to">
+<!ENTITY pref.termstoolbar.addition.o2.label.after "Words and then in a menu.">
+<!ENTITY pref.termstoolbar.addition.o3.label "Pojedyncze menu">
+<!ENTITY pref.highlighting.label "Podświetlanie">
+<!ENTITY pref.highlightMinlength.label "Minimalna długość podświetlanych słów:">
+<!ENTITY pref.highlightMinlength.accesskey "D">

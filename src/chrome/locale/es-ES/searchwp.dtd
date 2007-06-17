@@ -1,0 +1,13 @@
+<!ENTITY toolbar.terms.label "Barra de términos">
+<!ENTITY button.highlight.label "Marcar">
+<!ENTITY button.highlight.tooltiptext "Marcar todos los términos">
+<!ENTITY pref.title "Opciones">
+<!ENTITY pref.termstoolbar.label "Barra de términos">
+<!ENTITY pref.termstoolbar.addition.label "Las palabras se añadirán en:">
+<!ENTITY pref.termstoolbar.addition.o1.label "la barra de términos mientras haya espacio suficiente, y después en un menú.">
+<!ENTITY pref.termstoolbar.addition.o2.label.before "la barra de términos hasta">
+<!ENTITY pref.termstoolbar.addition.o2.label.after "palabras, y después en un menú.">
+<!ENTITY pref.termstoolbar.addition.o3.label "un menú simple.">
+<!ENTITY pref.highlighting.label "Resaltado">
+<!ENTITY pref.highlightMinlength.label "Longitud mínima de las palabras para ser resaltadas">
+<!ENTITY pref.highlightMinlength.accesskey "L">

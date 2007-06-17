@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+  
+  <Description about="urn:mozilla:install-manifest">
+    <em:id>{3e270ac3-8936-43fb-ad20-b4685172a83d}</em:id>
+    <em:version>1.0</em:version>
+    
+    <!-- Firefox -->
+    <em:targetApplication>
+      <Description>
+        <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+        <em:minVersion>1.5</em:minVersion>
+        <em:maxVersion>2.0.0.*</em:maxVersion>
+      </Description>
+    </em:targetApplication>
+
+    <!-- Front End MetaData -->
+    <em:name>SearchWP</em:name>
+    <em:description>Buttons bar for the searchbox</em:description>
+    <em:creator>Georges-Etienne Legendre</em:creator>
+    <em:homepageURL>http://legege.com/mozilla/</em:homepageURL>
+    <em:optionsURL>chrome://searchwp/content/pref.xul</em:optionsURL>
+    <em:iconURL>chrome://searchwp/skin/icon.png</em:iconURL>
+  </Description>
+</RDF>
