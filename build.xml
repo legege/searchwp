@@ -3,7 +3,7 @@
   Ant build for Mozilla Firefox and Thunderbird extension
   by Georges-Etienne Legendre (http://legege.com)
   -->
-<project name="AdditionalFoldersView" default="run" basedir="./">
+<project name="searchwp" default="run" basedir="./">
   <property file="extension.properties" />
 
   <!-- Directories and filenames -->
