@@ -3,8 +3,8 @@
    xmlns:em="http://www.mozilla.org/2004/em-rdf#">
   
   <Description about="urn:mozilla:install-manifest">
-    <em:id>{3e270ac3-8936-43fb-ad20-b4685172a83d}</em:id>
-    <em:version>1.0</em:version>
+    <em:id>@ID@</em:id>
+    <em:version>@VERSION@</em:version>
     
     <!-- Firefox -->
     <em:targetApplication>
@@ -20,7 +20,7 @@
     <em:description>Buttons bar for the searchbox</em:description>
     <em:creator>Georges-Etienne Legendre</em:creator>
     <em:homepageURL>http://legege.com/mozilla/</em:homepageURL>
-    <em:optionsURL>chrome://searchwp/content/pref.xul</em:optionsURL>
-    <em:iconURL>chrome://searchwp/skin/icon.png</em:iconURL>
+    <em:optionsURL>chrome://@NAME@/content/pref.xul</em:optionsURL>
+    <em:iconURL>chrome://@NAME@/skin/icon.png</em:iconURL>
   </Description>
 </RDF>
