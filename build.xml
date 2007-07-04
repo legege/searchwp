@@ -1,73 +1,72 @@
 <?xml version="1.0"?>
-<!-- 
-  Ant build for Mozilla Firefox and Thunderbird extension
-  by Georges-Etienne Legendre (http://legege.com)
-  -->
-<project name="searchwp" default="run" basedir="./">
-  <property file="extension.properties" />
+<project name="searchwp" default="all">
+  <property file="build.properties" />
 
   <!-- Directories and filenames -->
   <property name="src.dir" value="src" />
-  <property name="bin.dir" value="bin" />
-  <property name="chrome.dir" value="${src.dir}/chrome" />
+  <property name="src.chrome.dir" value="${src.dir}/chrome" />
 
-  <property name="extension.xpi.filename" value="${bin.dir}/${extension.file}_${extension.version}.xpi" />
-  <property name="extension.chrome.jar.filename" value="${chrome.dir}/${extension.file}.jar" />
+  <property name="target.dir" value="target" />
+  <property name="target.xpi.dir" value="${target.dir}/${extension.id}" />
+
+  <property name="extension.name" value="${ant.project.name}" />
 
   <!-- App Profile -->
-  <property name="app.profile.dir" value="${app.profiles.dir}/${app.profile.id}.${app.profile.name}" />
-  <property name="app.profile.extension.install.dir" value="${app.profile.dir}/extensions/{${extension.uuid}}" />
+  <property name="app.profile.extension.install.dir" value="${app.profile.dir}/extensions/${extension.id}" />
 
   <!-- Targets -->
-  <target name="jar">
-    <zip destfile="${extension.chrome.jar.filename}">
-      <fileset dir="${chrome.dir}">
-        <include name="**/*.js" />
-        <include name="**/*.rdf" />
-        <include name="**/*.xul" />
-        <include name="**/*.xml" />
-        <include name="**/*.dtd" />
-        <include name="**/*.css" />
-        <include name="**/*.png" />
-        <include name="**/*.properties" />
-      </fileset>
+  <target name="all" description="Execute all" depends="xpi, uninstall, install, run" />
+
+  <target name="xpi" description="Build the extension" depends="clean">
+    <mkdir dir="${target.dir}" />
+    <mkdir dir="${target.xpi.dir}" />
+
+    <!-- Copy everything -->
+    <copy todir="${target.xpi.dir}">
+      <fileset dir="${src.dir}" includes="**/*" />
+    </copy>
+
+    <!-- Replace tokens everything -->
+    <replace dir="${target.xpi.dir}">
+      <replacefilter token="@ID@" value="${extension.id}" />
+      <replacefilter token="@NAME@" value="${extension.name}" />
+      <replacefilter token="@VERSION@" value="${extension.version}" />
+    </replace>
+
+    <!-- Create the chrome jar -->
+    <zip destfile="${target.xpi.dir}/chrome/${extension.name}.jar">
+      <fileset dir="${target.xpi.dir}/chrome" includes="**/*" />
     </zip>
+
+    <!-- Create the XPI -->
+    <zip destfile="${target.dir}/${extension.name}_${extension.version}.xpi">
+      <fileset dir="${target.xpi.dir}" excludes="chrome/**/*" />
+      <fileset dir="${target.xpi.dir}" includes="chrome/*.jar" />
+    </zip>
+
+    <!-- Create the checksum -->
+    <checksum file="${target.dir}/${extension.name}_${extension.version}.xpi" />
   </target>
 
-  <target name="xpi" depends="jar">
-    <mkdir dir="${bin.dir}" />
-    <zip destfile="${extension.xpi.filename}">
-      <fileset dir="${src.dir}">
-        <include name="**/*.jar" />
-        <include name="install.rdf" />
-        <include name="chrome.manifest" />
-        <include name="defaults/**/*.*" />
-      </fileset>
-    </zip>
-  </target>
-
-  <target name="install" depends="xpi">
+  <target name="install" description="Install the extension in the application">
     <copy todir="${app.profile.extension.install.dir}">
-      <fileset dir="${src.dir}">
-        <include name="**/*.jar" />
-        <include name="install.rdf" />
-        <include name="chrome.manifest" />
-        <include name="defaults/**/*.*" />
-      </fileset>
+      <fileset dir="${target.xpi.dir}" excludes="chrome/**/*" />
+      <fileset dir="${target.xpi.dir}" includes="chrome/*.jar" />
     </copy>
   </target>
 
-  <target name="uninstall">
+  <target name="uninstall" description="Uninstall the extension in the application">
     <delete dir="${app.profile.extension.install.dir}" />
   </target>
 
-  <target name="run" depends="install">
-    <exec executable="${app.path}">
+  <target name="clean" description="Clean the target directory">
+    <delete dir="${target.dir}" />
+  </target>
+
+  <target name="run" description="Run the application">
+    <exec executable="${app.executable}">
       <arg line="-p ${app.profile.name}" />
     </exec>
   </target>
-
-  <target name="clean">
-    <delete file="${extension.chrome.jar.filename}" />
-  </target>
 </project>
+
