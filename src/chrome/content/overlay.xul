@@ -1,18 +1,18 @@
 <?xml version="1.0"?>
 
-<?xml-stylesheet href="chrome://searchwp/skin/global.css" ?>
-<?xml-stylesheet href="chrome://searchwp/skin/highlighting-agent.css" ?>
+<?xml-stylesheet href="chrome://@NAME@/skin/global.css" ?>
+<?xml-stylesheet href="chrome://@NAME@/skin/highlighting-agent.css" ?>
 
-<!DOCTYPE overlay SYSTEM "chrome://searchwp/locale/searchwp.dtd">
+<!DOCTYPE overlay SYSTEM "chrome://@NAME@/locale/searchwp.dtd">
 
 <overlay id="searchwpOverlay"
     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
   <stringbundleset id="stringbundleset">
-    <stringbundle id="bundle_searchwp" src="chrome://searchwp/locale/searchwp.properties" />
+    <stringbundle id="bundle_searchwp" src="chrome://@NAME@/locale/searchwp.properties" />
   </stringbundleset>
 
-  <script type="application/x-javascript" src="chrome://searchwp/content/fixKeyset.js" />
+  <script type="application/x-javascript" src="chrome://@NAME@/content/fixKeyset.js" />
   <keyset id="mainKeyset">
     <key id="key_findAgainSWP" keycode="VK_F3" oncommand="gSearchWPOverlay.onFindAgain(event);" />
     <key id="key_findAgainSWP_2" keycode="VK_F3" modifiers="control" oncommand="gSearchWPOverlay.onFindAgain(event);" />
@@ -20,12 +20,12 @@
     <key id="key_highlight" keycode="VK_F8" oncommand="gSearchWPHighlighting.toggleHighlight();" />
   </keyset>
 
-  <script type="application/x-javascript" src="chrome://searchwp/content/global.js" />
-  <script type="application/x-javascript" src="chrome://searchwp/content/highlighting.js" />
-  <script type="application/x-javascript" src="chrome://searchwp/content/highlighter.js" />
-  <script type="application/x-javascript" src="chrome://searchwp/content/termsToolbar.js" />
-  <script type="application/x-javascript" src="chrome://searchwp/content/termsUtil.js" />
-  <script type="application/x-javascript" src="chrome://searchwp/content/overlay.js" />
+  <script type="application/x-javascript" src="chrome://@NAME@/content/global.js" />
+  <script type="application/x-javascript" src="chrome://@NAME@/content/highlighting.js" />
+  <script type="application/x-javascript" src="chrome://@NAME@/content/highlighter.js" />
+  <script type="application/x-javascript" src="chrome://@NAME@/content/termsToolbar.js" />
+  <script type="application/x-javascript" src="chrome://@NAME@/content/termsUtil.js" />
+  <script type="application/x-javascript" src="chrome://@NAME@/content/overlay.js" />
 
   <toolbarpalette id="BrowserToolbarPalette">
     <toolbaritem id="searchwp-terms-container">

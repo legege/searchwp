@@ -5,7 +5,7 @@
 <!DOCTYPE window [
 <!ENTITY % brandDTD SYSTEM "chrome://global/locale/brand.dtd" >
 %brandDTD;
-<!ENTITY % prefDTD SYSTEM "chrome://searchwp/locale/searchwp.dtd" >
+<!ENTITY % prefDTD SYSTEM "chrome://@NAME@/locale/searchwp.dtd" >
 %prefDTD;
 ]>
 
@@ -14,10 +14,10 @@
   onload="gSearchWPPreferences.onLoad();"
   ondialogaccept="return gSearchWPPreferences.onAccept();">
 
-  <script type="application/x-javascript" src="chrome://searchwp/content/global.js" />
-  <script type="application/x-javascript" src="chrome://searchwp/content/pref.js" />
+  <script type="application/x-javascript" src="chrome://@NAME@/content/global.js" />
+  <script type="application/x-javascript" src="chrome://@NAME@/content/pref.js" />
 
-  <stringbundle id="bundle_searchwp" src="chrome://searchwp/locale/searchwp.properties"/>
+  <stringbundle id="bundle_searchwp" src="chrome://@NAME@/locale/searchwp.properties"/>
 
   <groupbox>
     <caption label="&pref.termstoolbar.label;" />

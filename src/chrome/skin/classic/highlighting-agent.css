@@ -2,31 +2,31 @@
 #searchwp-terms-popup > toolbarbutton > .toolbarbutton-icon {
   width: 11px;
   height: 11px;
-  background: url("chrome://searchwp/skin/icons/search-nocolor.png") no-repeat;
+  background: url("chrome://@NAME@/skin/icons/search-nocolor.png") no-repeat;
   margin-left: 2px !important;
 }
 
 #searchwp-terms-box > toolbarbutton.searchwp-term-notfound > .toolbarbutton-icon,
 #searchwp-terms-popup > toolbarbutton.searchwp-term-notfound > .toolbarbutton-icon {
-  list-style-image: url("chrome://searchwp/skin/icons/notfound.png");
+  list-style-image: url("chrome://@NAME@/skin/icons/notfound.png");
 }
 
 #searchwp-terms-box > toolbarbutton.searchwp-term-highlight1 > .toolbarbutton-icon,
 #searchwp-terms-popup > toolbarbutton.searchwp-term-highlight1 > .toolbarbutton-icon {
-  background-image: url("chrome://searchwp/skin/icons/search-yellow.png");
+  background-image: url("chrome://@NAME@/skin/icons/search-yellow.png");
 }
 
 #searchwp-terms-box > toolbarbutton.searchwp-term-highlight2 > .toolbarbutton-icon,
 #searchwp-terms-popup > toolbarbutton.searchwp-term-highlight2 > .toolbarbutton-icon {
-  background-image: url("chrome://searchwp/skin/icons/search-aqua.png");
+  background-image: url("chrome://@NAME@/skin/icons/search-aqua.png");
 }
 
 #searchwp-terms-box > toolbarbutton.searchwp-term-highlight3 > .toolbarbutton-icon,
 #searchwp-terms-popup > toolbarbutton.searchwp-term-highlight3 > .toolbarbutton-icon {
-  background-image: url("chrome://searchwp/skin/icons/search-chartreuse.png");
+  background-image: url("chrome://@NAME@/skin/icons/search-chartreuse.png");
 }
 
 #searchwp-terms-box > toolbarbutton.searchwp-term-highlight4 > .toolbarbutton-icon,
 #searchwp-terms-popup > toolbarbutton.searchwp-term-highlight4 > .toolbarbutton-icon {
-  background-image: url("chrome://searchwp/skin/icons/search-coral.png");
+  background-image: url("chrome://@NAME@/skin/icons/search-coral.png");
 }

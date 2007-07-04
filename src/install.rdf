@@ -17,7 +17,7 @@
 
     <!-- Front End MetaData -->
     <em:name>SearchWP</em:name>
-    <em:description>Buttons bar for the searchbox</em:description>
+    <em:description>Buttons bar for the search box</em:description>
     <em:creator>Georges-Etienne Legendre</em:creator>
     <em:homepageURL>http://legege.com/mozilla/</em:homepageURL>
     <em:optionsURL>chrome://@NAME@/content/pref.xul</em:optionsURL>
