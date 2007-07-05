@@ -88,7 +88,7 @@
   </target>
 
   <target name="run" description="Run the application">
-    <exec executable="${mozapp.exec}">
+    <exec executable="${mozapp.exec}" spawn="true">
       <arg line="-p ${mozapp.profile.name}" />
     </exec>
   </target>
