@@ -4,10 +4,19 @@
   See <http://legege.com> for more information 
   -->
 <project name="searchwp" default="all">
-  <!-- Determine the OS family -->
+  <!-- Include some global extension properties -->
+  <property file="extension.properties" />
+  
+  <!-- Now, include user and os specific properties -->
   <condition property="os.family" value="windows">
+    <os family="windows" />
+  </condition>
+  <condition property="os.family" value="unix">
     <and>
-      <os family="windows" />
+      <os family="unix" />
+      <not>
+        <os family="mac" />
+      </not>
     </and>
   </condition>
   <condition property="os.family" value="macosx">
@@ -17,19 +26,14 @@
     </and>
   </condition>
 
-  <property file="extension.properties" />
-  <property file="env.${os.family}.properties" />
-
-  <!-- Directories and filenames -->
-  <property name="src.dir" value="src" />
-  <property name="src.chrome.dir" value="${src.dir}/chrome" />
-
-  <property name="target.dir" value="target" />
-  <property name="target.xpi.dir" value="${target.dir}/${extension.id}" />
-
-  <property name="extension.name" value="${ant.project.name}" />
-
+  <loadproperties srcfile="env.properties">
+    <filterchain>
+      <containsregex byline="true" pattern="^${user.name}\.${os.family}\.(.*)" replace="\1" />
+    </filterchain>
+  </loadproperties>
+  
   <!-- Mozilla App Profile -->
+  <echo level="verbose">If this fails, you haven't configured your specific environment in the env.properties file.</echo>
   <pathconvert property="profile.dir" pathsep=" ">
     <path>
       <dirset dir="${mozapp.profiles.dir}">
@@ -38,8 +42,16 @@
     </path>
     <identitymapper />
   </pathconvert>
-
+  <available file="${profile.dir}/prefs.js" property="profile.exists" />
   <property name="install.dir" value="${profile.dir}/extensions/${extension.id}" />
+  
+  <!-- Define other properties -->
+  <property name="extension.name" value="${ant.project.name}" />
+
+  <property name="src.dir" value="src" />
+  <property name="src.chrome.dir" value="${src.dir}/chrome" />
+  <property name="target.dir" value="target" />
+  <property name="target.xpi.dir" value="${target.dir}/${extension.id}" />
 
   <!-- Targets -->
   <target name="all" description="Execute all" depends="xpi, uninstall, install, run" />
@@ -56,7 +68,7 @@
       <replacefilter token="@NAME@" value="${extension.name}" />
       <replacefilter token="@VERSION@" value="${extension.version}" />
     </replace>
-
+    
     <!-- Create the chrome jar -->
     <zip destfile="${target.xpi.dir}/chrome/${extension.name}.jar">
       <fileset dir="${target.xpi.dir}/chrome" includes="**/*" />
@@ -69,25 +81,26 @@
     </zip>
 
     <!-- Create the checksum -->
-    <checksum file="${target.dir}/${extension.name}-${extension.version}.xpi" />
-  </target>
-
-  <target name="install" description="Install the extension in the application">
-    <copy todir="${install.dir}">
-      <fileset dir="${target.xpi.dir}" excludes="chrome/**/*" />
-      <fileset dir="${target.xpi.dir}" includes="chrome/${extension.name}.jar" />
-    </copy>
-  </target>
-
-  <target name="uninstall" description="Uninstall the extension in the application">
-    <delete dir="${install.dir}" />
+    <checksum algorithm="SHA1" file="${target.dir}/${extension.name}-${extension.version}.xpi" />
   </target>
 
   <target name="clean" description="Clean the target directory">
     <delete dir="${target.dir}" />
   </target>
 
-  <target name="run" description="Run the application">
+  <target name="install" description="Install the extension in the application" if="profile.exists">
+    <copy todir="${install.dir}">
+      <fileset dir="${target.xpi.dir}" excludes="chrome/**/*" />
+      <fileset dir="${target.xpi.dir}" includes="chrome/${extension.name}.jar" />
+    </copy>
+  </target>
+
+  <target name="uninstall" description="Uninstall the extension in the application" if="profile.exists">
+    <delete dir="${install.dir}" />
+  </target>
+
+  <target name="run" description="Run the application or create the profile">
+    <echo level="verbose">Please note: Launching the application only works when it was not already running...</echo>
     <exec executable="${mozapp.exec}" spawn="true">
       <arg line="-p ${mozapp.profile.name}" />
     </exec>
