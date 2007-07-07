@@ -1,0 +1,11 @@
+= Version History =
+
+== SearchWP 1.1 (not yet released) ==
+
+ * New: Highlighting count
+ * New: Highlighting match case
+ * Improvement: SearchWP uses FastFind instead of WebBrowserFinder. FastFind is better and contains less bugs.
+ * Ready for Firefox 3.0, not compatible with Firefox 2.x and lower
+ * Development: New ANT Build script
+ 
+
