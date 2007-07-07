@@ -178,7 +178,6 @@ var gSearchWPOverlay = {
    * Called when the highlighting button is pressed/unpressed.
    */
   toggleHighlight: function(aHighlight) {
-    gSearchWPOverlay.searchBox.onInput();
     gSearchWPHighlighting.toggleHighlight(aHighlight);
   },
 

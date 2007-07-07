@@ -35,11 +35,13 @@ var gSearchWPHighligther = {
   },
 
   add: function(aTermsData) {
+    var count = 0;
     for (var term in aTermsData) {
       if (aTermsData[term].className != "searchwp-term-disabled") {
-        this.highlightDoc(aTermsData[term].text, aTermsData[term].className);
+        count = count + this.highlightDoc(aTermsData[term].text, aTermsData[term].className);
       }
     }
+    return count;
   },
 
   highlightDoc: function(aWord, aStyleClassName, aWin) {
@@ -80,6 +82,8 @@ var gSearchWPHighligther = {
     aWord = aWord.replace(/\+/,"\+");
 
     this.doSearch(doc, aWord, aStyleClassName);
+
+    return doc.countHighlighted;
   },
 
   highlightNode: function(aDoc, aWord, aStyleClassName, aNode) {

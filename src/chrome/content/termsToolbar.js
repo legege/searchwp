@@ -358,14 +358,14 @@ var gSearchWPTermsToolbar = {
         break;
       case 1: // Not found
         this._setTermNotFound(aTermButton);
-        gSearchWP.displayMessage(this.stringBundle.getFormattedString("notFound", [term], 1));
+        gSearchWP.displayMessage(this.stringBundle.getFormattedString("notFound", [term], 1), true);
         break;
       case 2: // Wrapped
         if (aFindBackwards) {
-          gSearchWP.displayMessage(this.stringBundle.getString("wrappedToBottom"));
+          gSearchWP.displayMessage(this.stringBundle.getString("wrappedToBottom"), true);
         }
         else {
-          gSearchWP.displayMessage(this.stringBundle.getString("wrappedToTop"));
+          gSearchWP.displayMessage(this.stringBundle.getString("wrappedToTop"), true);
         }
         break;
     }
