@@ -342,56 +342,32 @@ var gSearchWPTermsToolbar = {
       gFindBar.find("");
     }
 
-    // Initialize a new finder
-    var finder = window.getBrowser().docShell
-                       .QueryInterface(Components.interfaces.nsIInterfaceRequestor)
-                       .getInterface(Components.interfaces.nsIWebBrowserFind);
+    var fastFind = window.getBrowser().fastFind;
+    fastFind.caseSensitive = aMatchCase;
 
-    // This finder is buggy with tabs.
-    // var finder = window.getBrowser().webBrowserFind;
-
-    finder.wrapFind = true;
-    finder.searchString = term;
-    finder.findBackwards = aFindBackwards;
-    finder.matchCase = aMatchCase;
-
-    // Detect if the search is returning to top/bottom
-    var prevRange = null;
-    try {
-      var focusedWindow = document.commandDispatcher.focusedWindow;
-      prevRange = focusedWindow.getSelection().getRangeAt(0);
-
-      if (prevRange.toString().toLowerCase() != term.toLowerCase()) {
-        prevRange = null;
-      }
+    var result;
+    if (fastFind.searchString != term) {
+      result = fastFind.find(term, false);
     }
-    catch(e) {}
+    else {
+      result = fastFind.findAgain(aFindBackwards, false);
+    }
 
-    var result = finder.findNext();
-    if (!result) {
-      /* Sometime, the term isn't found even if the word is in the page... try again */
-
-      result = finder.findNext();
-      if (!result) {
+    switch (result) {
+      case 0: // Found
+        break;
+      case 1: // Not found
         this._setTermNotFound(aTermButton);
         gSearchWP.displayMessage(this.stringBundle.getFormattedString("notFound", [term], 1));
-      }
-    }
-
-    if (result && prevRange) {
-      // Detect if the search is returning to top/bottom
-      try {
-        var curRange = focusedWindow.getSelection().getRangeAt(0);
-        var res = curRange.compareBoundaryPoints(Components.interfaces.nsIDOMRange.START_TO_START,
-                    prevRange);
-        if (res <= 0 && !aFindBackwards) {
-          gSearchWP.displayMessage(this.stringBundle.getString("wrappedToTop"));
-        }
-        else if (res >= 0 && aFindBackwards) {
+        break;
+      case 2: // Wrapped
+        if (aFindBackwards) {
           gSearchWP.displayMessage(this.stringBundle.getString("wrappedToBottom"));
         }
-      }
-      catch(e) {}
+        else {
+          gSearchWP.displayMessage(this.stringBundle.getString("wrappedToTop"));
+        }
+        break;
     }
   },
 
