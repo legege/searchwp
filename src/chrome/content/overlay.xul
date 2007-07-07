@@ -54,10 +54,22 @@
     </toolbaritem>
 
     <toolbaritem id="searchwp-highlight-container" align="center">
-      <toolbarbutton id="searchwp-highlight-button" class="chromeclass-toolbar-additional"
-          label="&button.highlight.label;" tooltiptext="&button.highlight.tooltiptext;"
-          oncommand="gSearchWPOverlay.toggleHighlight(!this.checked);"
-          type="checkbox" disabled="false" />
+      <toolbarbutton id="searchwp-highlight-button"
+          class="chromeclass-toolbar-additional"
+          label="&button.highlight.label;"
+          tooltiptext="&button.highlight.tooltiptext;"
+          oncommand="gSearchWPHighlighting.toggleHighlight(); event.stopPropagation();"
+          type="menu-button"
+          autocheck="false"
+          disabled="false">
+        <menupopup>
+          <menuitem id="searchwp-highlight-match-case"
+              label="&button.highlight.matchcase.label;"
+              type="checkbox"
+              autocheck="false"
+              oncommand="gSearchWPHighlighting.changeMatchCase(); event.stopPropagation();" />			
+        </menupopup>
+      </toolbarbutton>
     </toolbaritem>
   </toolbarpalette>
 

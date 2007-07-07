@@ -1,6 +1,7 @@
 <!ENTITY toolbar.terms.label "Terms Toolbar">
 <!ENTITY button.highlight.label "Highlight">
 <!ENTITY button.highlight.tooltiptext "Highlight all terms">
+<!ENTITY button.highlight.matchcase.label "Match case">
 <!ENTITY pref.title "Options">
 <!ENTITY pref.termstoolbar.label "Terms toolbar">
 <!ENTITY pref.termstoolbar.addition.label "The words have to be added in:">

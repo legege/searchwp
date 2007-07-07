@@ -34,9 +34,11 @@ var gSearchWPHighlighting = {
     tabBox.addEventListener("select", function(event) { gSearchWPHighlighting.refresh() }, false);
 
     if (this.highlightButton) {
-      this.highlightButton.checked = gSearchWP.pref.highlighted;
-      // It's better to have the ability to unpress this button at any time.
-      // this.highlightButton.disabled = true;
+      this.highlightButton.setAttribute("checked", gSearchWP.pref.highlighted);
+    }
+
+    if (this.highlightMatchCase) {
+      this.highlightMatchCase.setAttribute("checked", gSearchWP.pref.highlightMatchCase);
     }
 
     // Load the highlighting style sheet
@@ -56,20 +58,10 @@ var gSearchWPHighlighting = {
    * Updates the highlighting according to the terms.
    */
   update: function(termsData, force) {
-    // Highlight terms even if the hightlight button is not there.
-    // if (!this.exist()) {
-    //   return;
-    // }
-
     if (force || !gSearchWPTermsUtil.areIdenticals(this._termsData, termsData)) {
       this._termsData = termsData;
       this._setRefreshTimeout();
     }
-
-    // It's better to have the ability to unpress this button at any time.
-    // if (this.highlightButton != null && this._termsData != null) {
-    //  this.highlightButton.disabled = this._termsData.length <= 0;
-    // }
   },
 
   /**
@@ -89,27 +81,45 @@ var gSearchWPHighlighting = {
   /**
    * Toggles on and off the highlighting.
    */
-  toggleHighlight: function(aHighlight) {
-    if (aHighlight == null) {
+  toggleHighlight: function() {
+    if (!this._disableToggleHighlight) {
       gSearchWP.pref.highlighted = !gSearchWP.pref.highlighted;
-    }
-    else {
-      gSearchWP.pref.highlighted = aHighlight;
     }
   },
 
   /**
-   * @return Returns true if the highlight button exists.
+   * Set if the highlighting should match case.
+   */
+  changeMatchCase: function() {
+    this._disableToggleHighlight = true;
+
+    try {
+      gSearchWP.pref.highlightMatchCase = !gSearchWP.pref.highlightMatchCase;
+    }
+    catch(e) {}
+
+    this._disableToggleHighlight = false;
+  },
+
+  /**
+   * @return true if the highlight button exists.
    */
   exist: function() {
     return this.highlightButton != null;
   },
 
   /**
-   * Returns a reference to the highlight button.
+   * @return a reference to the highlight button.
    */
   get highlightButton() {
     return document.getElementById("searchwp-highlight-button");
+  },
+
+  /**
+   * @return a reference to the highlight match case menu.
+   */
+  get highlightMatchCase() {
+    return document.getElementById("searchwp-highlight-match-case");
   },
 
   /**
@@ -120,7 +130,7 @@ var gSearchWPHighlighting = {
     this._unhighlight();
 
     if (this._termsData) {
-      var count = gSearchWPHighligther.add(this._termsData);
+      var count = gSearchWPHighligther.add(this._termsData, gSearchWP.pref.highlightMatchCase);
       if (count > 1) {
         gSearchWP.displayMessage(this.stringBundle.getFormattedString("highlightCountN", [count], 1), false);
       }

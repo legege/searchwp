@@ -174,13 +174,6 @@ var gSearchWPOverlay = {
     return toolbox.__searchwp__customizeDone();
   },
 
-  /**
-   * Called when the highlighting button is pressed/unpressed.
-   */
-  toggleHighlight: function(aHighlight) {
-    gSearchWPHighlighting.toggleHighlight(aHighlight);
-  },
-
   searchBox: {
     /**
      * Return a reference to the searchbar.
@@ -272,6 +265,15 @@ var gSearchWPPreferencesObserver = {
           function() {
             if (gSearchWPHighlighting.highlightButton) {
               gSearchWPHighlighting.highlightButton.checked = gSearchWP.pref.highlighted;
+            }
+          }, 0);
+        gSearchWPHighlighting.refresh();
+        break;
+      case gSearchWP.pref.PREF_HIGHLIGHT_MATCH_CASE:
+        setTimeout(
+          function() {
+            if (gSearchWPHighlighting.highlightMatchCase) {
+              gSearchWPHighlighting.highlightMatchCase.setAttribute("checked", gSearchWP.pref.highlightMatchCase);
             }
           }, 0);
         gSearchWPHighlighting.refresh();
