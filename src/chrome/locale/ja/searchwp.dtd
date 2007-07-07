@@ -1,13 +1,13 @@
 <!ENTITY toolbar.terms.label "タームツールバー">
 <!ENTITY button.highlight.label "強調表示">
 <!ENTITY button.highlight.tooltiptext "全ての語句を強調表示する">
-<!ENTITY pref.title "オプション">
-<!ENTITY pref.termstoolbar.label "Terms toolbar">
-<!ENTITY pref.termstoolbar.addition.label "The words have to be added in:">
-<!ENTITY pref.termstoolbar.addition.o1.label "the terms toolbar as long as there is enough space and then in a menu.">
-<!ENTITY pref.termstoolbar.addition.o2.label.before "the terms toolbar up to ">
-<!ENTITY pref.termstoolbar.addition.o2.label.after "words and then in a menu.">
-<!ENTITY pref.termstoolbar.addition.o3.label "a single menu.">
-<!ENTITY pref.highlighting.label "Highlithing">
-<!ENTITY pref.highlightMinlength.label "Minimum length for the words to be highlighted:">
+<!ENTITY pref.title "SearchWPのオプション">
+<!ENTITY pref.termstoolbar.label "タームツールバーの設定">
+<!ENTITY pref.termstoolbar.addition.label "語句を表示する方法の指定:">
+<!ENTITY pref.termstoolbar.addition.o1.label "ツールバーに可能なだけ表示する">
+<!ENTITY pref.termstoolbar.addition.o2.label.before "ツールバーに最大">
+<!ENTITY pref.termstoolbar.addition.o2.label.after "語句まで表示する">
+<!ENTITY pref.termstoolbar.addition.o3.label "プルダウンボタンに表示する">
+<!ENTITY pref.highlighting.label "強調表示の設定">
+<!ENTITY pref.highlightMinlength.label "強調表示する語句の最小文字数:">
 <!ENTITY pref.highlightMinlength.accesskey "L">

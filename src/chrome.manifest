@@ -11,7 +11,7 @@ locale @NAME@ fy-NL jar:chrome/@NAME@.jar!/locale/fy-NL/
 locale @NAME@ hr jar:chrome/@NAME@.jar!/locale/hr/
 # locale @NAME@ hu jar:chrome/@NAME@.jar!/locale/hu/
 locale @NAME@ it jar:chrome/@NAME@.jar!/locale/it/
-# locale @NAME@ ja jar:chrome/@NAME@.jar!/locale/ja/
+locale @NAME@ ja jar:chrome/@NAME@.jar!/locale/ja/
 locale @NAME@ ko jar:chrome/@NAME@.jar!/locale/ko/
 locale @NAME@ nl jar:chrome/@NAME@.jar!/locale/nl/
 locale @NAME@ pl jar:chrome/@NAME@.jar!/locale/pl/
