@@ -48,6 +48,8 @@ var gSearchWPHighlighting = {
     if(!sss.sheetRegistered(uri, sss.USER_SHEET)) {
       sss.loadAndRegisterSheet(uri, sss.USER_SHEET);
     }
+
+    this.stringBundle = document.getElementById("bundle_searchwp");
   },
 
   /**
@@ -118,7 +120,16 @@ var gSearchWPHighlighting = {
     this._unhighlight();
 
     if (this._termsData) {
-      gSearchWPHighligther.add(this._termsData);
+      var count = gSearchWPHighligther.add(this._termsData);
+      if (count > 1) {
+        gSearchWP.displayMessage(this.stringBundle.getFormattedString("highlightCountN", [count], 1), false);
+      }
+      else if (count == 1) {
+        gSearchWP.displayMessage(this.stringBundle.getFormattedString("highlightCount1", [count], 1), false);
+      }
+      else {
+        gSearchWP.displayMessage(this.stringBundle.getString("highlightCount0"), false);
+      }
     }
   },
 

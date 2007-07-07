@@ -149,7 +149,7 @@ var gSearchWP = {
               .beep();
   },
 
-  displayMessage: function(aMessage) {
+  displayMessage: function(aMessage, aBeep) {
     var xulBrowserWindow = window.XULBrowserWindow;
 
     if (!xulBrowserWindow) {
@@ -157,7 +157,9 @@ var gSearchWP = {
     }
 
     xulBrowserWindow.setOverLink(aMessage, null);
-    this.playBeep();
+    if (aBeep) {
+      this.playBeep();
+    }
 
     if (this._displayMessageTimeout) {
       clearTimeout(this._displayMessageTimeout);
