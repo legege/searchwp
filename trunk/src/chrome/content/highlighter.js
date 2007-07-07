@@ -31,26 +31,26 @@
 var gSearchWPHighligther = {
 
   clear: function() {
-    this.highlightDoc(null, null, null);
+    this.highlightDoc(null, null, false, null);
   },
 
-  add: function(aTermsData) {
+  add: function(aTermsData, aMatchCase) {
     var count = 0;
     for (var term in aTermsData) {
       if (aTermsData[term].className != "searchwp-term-disabled") {
-        count = count + this.highlightDoc(aTermsData[term].text, aTermsData[term].className);
+        count = count + this.highlightDoc(aTermsData[term].text, aTermsData[term].className, aMatchCase);
       }
     }
     return count;
   },
 
-  highlightDoc: function(aWord, aStyleClassName, aWin) {
+  highlightDoc: function(aWord, aStyleClassName, aMatchCase, aWin) {
     if (!aWin) {
       aWin = window._content;
     }
 
     for (var i = 0; aWin.frames && i < aWin.frames.length; i++) {
-      this.highlightDoc(aWord, aStyleClassName, aWin.frames[i]);
+      this.highlightDoc(aWord, aStyleClassName, aMatchCase, aWin.frames[i]);
     }
 
     var doc = aWin.document;
@@ -81,14 +81,50 @@ var gSearchWPHighligther = {
     aWord = aWord.replace(/\*/,"\*");
     aWord = aWord.replace(/\+/,"\+");
 
-    this.doSearch(doc, aWord, aStyleClassName);
+    this._doSearch(doc, aWord, aStyleClassName, aMatchCase);
 
     return doc.countHighlighted;
   },
 
-  highlightNode: function(aDoc, aWord, aStyleClassName, aNode) {
-    var match = aWord.toLowerCase();
-    var text = aNode.data.toLowerCase();
+  _doSearch: function(aDoc, aWord, aStyleClassName, aMatchCase) {
+    var high = aDoc.createRange();
+
+    if (!("body" in aDoc)) {
+      return;
+    }
+
+    high.selectNodeContents(aDoc.body);
+
+    var startIndex = 0, endIndex = high.commonAncestorContainer.childNodes.length;
+    var rangeMatches = [];
+
+    var regexp = new RegExp(aWord.replace(/\s*/, ""), "i");
+
+    /* search-limits */
+    var externalCounter = {countMax: 6000, matchMax: 6000, count: 0, matches: rangeMatches};
+    if (high.toString().match(regexp)) {
+      this.binaryRangeSearch(high, startIndex, endIndex, regexp, rangeMatches, externalCounter);
+    }
+
+    /* highlight the matches */
+    for (var n in rangeMatches) {
+      if (rangeMatches[n].length == 1) {
+        this._highlightNode(aDoc, aWord, aStyleClassName, aMatchCase, rangeMatches[n][0]);
+      }
+    }
+  },
+
+  _highlightNode: function(aDoc, aWord, aStyleClassName, aMatchCase, aNode) {
+    var match;
+    var text;
+    if (aMatchCase) {
+      match = aWord;
+      text = aNode.data;
+    }
+    else {
+      match = aWord.toLowerCase();
+      text = aNode.data.toLowerCase();
+    }
 
     if (!aDoc.countHighlighted) {
       aDoc.countHighlighted = 0;
@@ -116,34 +152,6 @@ var gSearchWPHighligther = {
       // Move to next node
       aNode = layer.nextSibling;
       text = aNode.data.toLowerCase();
-    }
-  },
-
-  doSearch: function(aDoc, aWord, aStyleClassName) {
-    var high = aDoc.createRange();
-
-    if (!("body" in aDoc)) {
-      return;
-    }
-
-    high.selectNodeContents(aDoc.body);
-
-    var startIndex = 0, endIndex = high.commonAncestorContainer.childNodes.length;
-    var rangeMatches = [];
-
-    var regexp = new RegExp(aWord.replace(/\s*/, ""), "i");
-
-    /* search-limits */
-    var externalCounter = {countMax: 6000, matchMax: 6000, count: 0, matches: rangeMatches};
-    if (high.toString().match(regexp)) {
-      this.binaryRangeSearch(high, startIndex, endIndex, regexp, rangeMatches, externalCounter);
-    }
-
-    /* highlight the matches */
-    for (var n in rangeMatches) {
-      if (rangeMatches[n].length == 1) {
-        this.highlightNode(aDoc, aWord, aStyleClassName, rangeMatches[n][0]);
-      }
     }
   },
 

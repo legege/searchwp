@@ -1,6 +1,7 @@
 <!ENTITY toolbar.terms.label "Barre d&apos;outils des termes">
 <!ENTITY button.highlight.label "Surligner">
 <!ENTITY button.highlight.tooltiptext "Surligner tous les termes">
+<!ENTITY button.highlight.matchcase.label "Respecter la casse">
 <!ENTITY pref.title "Options">
 <!ENTITY pref.termstoolbar.label "Barre des termes">
 <!ENTITY pref.termstoolbar.addition.label "Les mots doivent être ajouté dans...">

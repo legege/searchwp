@@ -29,24 +29,25 @@ var gSearchWP = {
    */
   pref: {
     PREF_BRANCH: "extensions.searchwp.",
-    PREF_BEEP_NOT_FOUND: "beep-not-found",
-    PREF_HIGHLIGHTER_COUNT: "highlighter-count",
-    PREF_HIGHLIGHT_MINLENGTH: "highlight-minlength",
-    PREF_HIGHLIGHT_STATE: "highlight-state",
-    PREF_FIRST_LAUNCH: "first-launch",
-    PREF_MAX_TERM_BUTTONS: "max-term-buttons",
+    PREF_BEEP_NOT_FOUND: "beepNotFound",
+    PREF_HIGHLIGHTER_COUNT: "highlighterCount",
+    PREF_HIGHLIGHT_MINLENGTH: "highlightMinLength",
+    PREF_HIGHLIGHT_STATE: "highlightState",
+    PREF_HIGHLIGHT_MATCH_CASE: "highlightMatchCase",
+    PREF_FIRST_LAUNCH: "firstLaunch",
+    PREF_MAX_TERM_BUTTONS: "maxTermButtons",
     _prefService: Components.classes["@mozilla.org/preferences-service;1"]
                             .getService(Components.interfaces.nsIPrefService),
 
     /**
-     * @return Returns the preferences branch.
+     * @return the preferences branch.
      */
     get branch() {
       return this._prefService.getBranch(this.PREF_BRANCH);
     },
 
     /**
-     * @return Returns the state of the highlighting.
+     * @return the state of the highlighting.
      */
     get highlighted() {
       try {
@@ -60,14 +61,35 @@ var gSearchWP = {
 
     /**
      * Sets the state of the highlighting.
-     * @param v True or false
+     * @param v true or false
      */
     set highlighted(v) {
       this.branch.setBoolPref(this.PREF_HIGHLIGHT_STATE, v);
     },
 
     /**
-     * @return Returns true if it is the first launch after installation.
+     * @return if highlighting should match case.
+     */
+    get highlightMatchCase() {
+      try {
+        return this.branch.getBoolPref(this.PREF_HIGHLIGHT_MATCH_CASE);
+      }
+      catch (e) {
+        this.highlightMatchCase = false;
+        return false;
+      }
+    },
+
+    /**
+     * Sets if highlighting should match case.
+     * @param v true or false
+     */
+    set highlightMatchCase(v) {
+      this.branch.setBoolPref(this.PREF_HIGHLIGHT_MATCH_CASE, v);
+    },
+
+    /**
+     * @return true if it is the first launch after installation.
      */
     get firstLaunch() {
       try {
@@ -81,14 +103,14 @@ var gSearchWP = {
 
     /**
      * Sets the first launch flag.
-     * @param v True or false
+     * @param v true or false
      */
     set firstLaunch(v) {
       this.branch.setBoolPref(this.PREF_FIRST_LAUNCH, v);
     },
 
     /**
-     * @return Returns the number of highlighter.
+     * @return the number of highlighter.
      */
     get highlighterCount() {
       try {
@@ -101,7 +123,7 @@ var gSearchWP = {
     },
 
     /**
-     * @return Returns the mininum length to highlight a term.
+     * @return the mininum length to highlight a term.
      */
     get highlightMinLength() {
       try {
@@ -122,7 +144,7 @@ var gSearchWP = {
     },
 
     /**
-     * @return Returns the maximum number of term's button. (-1: unlimited)
+     * @return the maximum number of term's button. (-1: unlimited)
      */
     get maxTermButtons() {
       try {

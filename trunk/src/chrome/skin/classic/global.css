@@ -39,8 +39,8 @@ toolbar > #searchwp-terms-container {
   -moz-box-orient: vertical;
 }
 
-toolbar:not([iconsize="small"]) #searchwp-highlight-button > .toolbarbutton-icon {
-  padding: 4px 2px;
+#searchwp-highlight-button .toolbarbutton-icon {
+  -moz-margin-end: 0px;
 }
 
 #searchwp-highlight-button:hover,
