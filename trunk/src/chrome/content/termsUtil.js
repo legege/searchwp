@@ -185,42 +185,5 @@ var gSearchWPTermsUtil = {
       return "";
     }
     return string.replace(/(^\s+)|(\s+$)/g, '');
-  },
-
-  findBar: {
-    get ref() {
-      return document.getElementById("FindToolbar");
-    },
-
-    isVisible: function() {
-      return !this.ref.hidden;
-    },
-
-    find: function(aVal) {
-      try {
-        gFindBar.find(aVal);
-      }
-      catch (e) {
-        find(aVal);
-      }
-    },
-
-    onFindAgainCmd: function() {
-      try {
-        gFindBar.onFindAgainCmd();
-      }
-      catch (e) {
-        onFindAgainCmd();
-      }
-    },
-
-    onFindPreviousCmd: function() {
-      try {
-        gFindBar.onFindPreviousCmd();
-      }
-      catch (e) {
-        onFindPreviousCmd();
-      }
-    }
   }
 }

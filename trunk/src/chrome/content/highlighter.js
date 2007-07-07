@@ -43,7 +43,6 @@ var gSearchWPHighligther = {
   },
 
   highlightDoc: function(aWord, aStyleClassName, aWin) {
-
     if (!aWin) {
       aWin = window._content;
     }

@@ -31,8 +31,8 @@ if (elements.length == 2) {
       && elements[0].getAttribute("command") == "cmd_findAgain"
       && elements[1].getAttribute("command") == "cmd_findPrevious") {
     elements[0].setAttribute("id", "key_findAgainSWP");
-    elements[0].setAttribute("command", '');
+    elements[0].setAttribute("command", "");
     elements[1].setAttribute("id", "key_findPreviousSWP");
-    elements[1].setAttribute("command", '');
+    elements[1].setAttribute("command", "");
   }
 }
