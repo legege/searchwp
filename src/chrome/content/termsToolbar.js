@@ -337,10 +337,9 @@ var gSearchWPTermsToolbar = {
     var term = aTermButton.getAttribute("label");
 
     // To handle F3 correctly, we have to clear this find bar search.
-    if (!gSearchWPTermsUtil.findBar.isVisible()
-        && document.getElementById("find-field").value.length > 0) {
-      document.getElementById("find-field").value = "";
-      gSearchWPTermsUtil.findBar.find("");
+    if (gFindBar.hidden && gFindBar.getElement("findbar-textbox").value.length > 0) {
+      gFindBar.getElement("findbar-textbox").value = "";
+      gFindBar.find("");
     }
 
     // Initialize a new finder

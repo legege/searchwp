@@ -36,7 +36,7 @@ var gSearchWPOverlay = {
 
     gSearchWPPreferencesObserver.register();
     window.getBrowser().addProgressListener(gSearchWPProgressListener,
-                                            Components.interfaces.nsIWebProgress.NOTIFY_STATE_DOCUMENT);
+        Components.interfaces.nsIWebProgress.NOTIFY_STATE_DOCUMENT);
 
     /* XXXLegege: Unfortunately, there is no event on the termisation of the
        toolbox customization. All EventListeners of the searchbar are lost when
@@ -92,31 +92,16 @@ var gSearchWPOverlay = {
    * @param aEvent The event.
    */
   onFindAgain: function(aEvent) {
-    var findString = getBrowser().findString;
+    var findString = getBrowser().fastFind.searchString;
 
-    if (gSearchWPTermsUtil.findBar.isVisible()
-        || !gSearchWPTermsUtil.findBar.isVisible() && findString != "") {
-      this._findBarSearch(aEvent);
+    if (!gFindBar.hidden || gFindBar.hidden && findString != "") {
+      gFindBar.onFindAgainCommand(aEvent.shiftKey);
     }
     else {
       var hasSearch = gSearchWPTermsToolbar.searchAgain(aEvent);
       if (!hasSearch) {
-        this._findBarSearch(aEvent);
+        gFindBar.onFindAgainCommand(aEvent.shiftKey);
       }
-    }
-  },
-
-  /**
-   * Call this function for the standard F3/Shift+F3 handling.
-   *
-   * @param aEvent The event.
-   */
-  _findBarSearch: function(aEvent) {
-    if (aEvent.shiftKey) {
-      gSearchWPTermsUtil.findBar.onFindPreviousCmd();
-    }
-    else {
-      gSearchWPTermsUtil.findBar.onFindAgainCmd();
     }
   },
 

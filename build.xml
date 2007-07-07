@@ -16,9 +16,9 @@
   <property name="target.xpi.dir" value="${target.dir}/${extension.id}" />
 
   <!-- Public Targets -->
-  <target name="all" description="Execute all" depends="clean, xpi, uninstall, install, run" />
+  <target name="all" description="Execute all" depends="xpi, uninstall, install, run" />
 
-  <target name="xpi" description="Build the extension" depends="clean">
+  <target name="xpi" description="Build the extension">
     <!-- Copy everything -->
     <copy todir="${target.xpi.dir}">
       <fileset dir="${src.dir}" includes="**/*" />
@@ -33,7 +33,7 @@
 
     <!-- Create the chrome jar -->
     <zip destfile="${target.xpi.dir}/chrome/${extension.name}.jar">
-      <fileset dir="${target.xpi.dir}/chrome" includes="**/*" />
+      <fileset dir="${target.xpi.dir}/chrome" includes="**/*" excludes="${extension.name}.jar" />
     </zip>
 
     <!-- Create the xpi -->
