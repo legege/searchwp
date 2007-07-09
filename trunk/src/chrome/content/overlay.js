@@ -143,7 +143,7 @@ var gSearchWPOverlay = {
 
     this.searchBox.ref.addEventListener("input", function(event) { gSearchWPOverlay.searchBox.onInput(event); }, false, true);
 
-    /* XXXLegege: For SearchBox AutoUpdater, we have to listen the "oninput" event
+    /* XXXLegege: For SearchBox Sync, we have to listen the "oninput" event
        because it appears that we cannot fire/catch an "input" event on the
        searchbar. */
     this.searchBox.ref.addEventListener("oninput", function(event) { gSearchWPOverlay.searchBox.onInput(event); }, false, true);
