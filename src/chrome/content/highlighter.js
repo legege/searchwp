@@ -28,12 +28,13 @@
  *  Context Highlight (http://www.cusser.net/) for more information. 
  */
 
-function SearchWPHighlighter() {
+searchwp.Highlighter = function() {
   var self = this;
-  this.searcher = new DocumentRangeSearcher;
+  this.searcher = new searchwp.highlighting.NodeSearcher;
+  this.highlighter = new searchwp.highlighting.NodeHighlighter("searchwp");
 
   this.clear = function() {
-     highlightBrowserWindow();
+    highlightBrowserWindow();
   }
 
   this.add = function(aTermsData, aMatchCase) {
@@ -61,11 +62,7 @@ function SearchWPHighlighter() {
     }
 
     if (!aStyleClassName) {
-      if (document.countHighlighted) {
-        if (document.countHighlighted > 0) {
-          clearHL(document);
-        }
-      }
+      self.highlighter.clear(document);
       return;
     }
 
@@ -88,12 +85,13 @@ function SearchWPHighlighter() {
 
       function soundex(str, p) {
         var i, j, r, p = isNaN(p) ? 4 : p > 10 ? 10 : p < 4 ? 4 : p,
-        m = {BFPV: 1, CGJKQSXZ: 2, DT: 3, L: 4, MN: 5, R: 6},
-        r = (s = str.toUpperCase().replace(/[^A-Z]/g, "").split("")).splice(0, 1);
-        for(i in s)
-            for(j in m)
-                if(j.indexOf(s[i]) + 1 && r[r.length-1] != m[j] && r.push(m[j]))
-                    break;
+          m = {BFPV: 1, CGJKQSXZ: 2, DT: 3, L: 4, MN: 5, R: 6},
+          r = (s = str.toUpperCase().replace(/[^A-Z]/g, "").split("")).splice(0, 1);
+        for (i in s) {
+          for(j in m) {
+            if(j.indexOf(s[i]) + 1 && r[r.length-1] != m[j] && r.push(m[j])) break;
+          }
+        }
         return r.length > p && (r.length = p), r.join("") + (new Array(p - r.length + 1)).join("0");
       }
     }
@@ -114,68 +112,24 @@ function SearchWPHighlighter() {
        .replace(/\,/, "\,").replace(/\?/, "\?").replace(/\./, "\.")
        .replace(/\^/, "\^").replace(/\$/, "\$").replace(/\*/, "\*")
        .replace(/\+/, "\+");
-    matcher = new SoundexMatcher(criteria);
+
+    //var criteria = aWord.replace(/\s*/, "").replace(/\\/, "\\b")
+    //   .replace(/\,/, "\\b").replace(/\?/, "\?")//.replace(/\./, "\\b")
+    //   .replace(/\^/, "\\b").replace(/\$/, "\\b").replace(/\*/, "\\b")
+    //   .replace(/\+/, "\\b");
+    //matcher = new SoundexMatcher(criteria);
     matcher = new RegexMatcher(criteria, aMatchCase);
 
     var rangeMatches = self.searcher.search(document, matcher);
 
     /* highlight the matches */
+    var count = 0;
     for (var n in rangeMatches) {
       if (!rangeMatches[n].overlaps) {
-        highlightNode(document, aStyleClassName, rangeMatches[n].node, rangeMatches[n].match);
+        count += self.highlighter.highlight(document, rangeMatches[n].node, rangeMatches[n].match, {class: aStyleClassName});
       }
     }
 
-    return document.countHighlighted;
-  }
-
-  function clearHL(aDocument) {
-    if (!aDocument) {
-      return;
-    }
-
-    // Find and remove all highlight span nodes
-    while (aDocument.countHighlighted > 0) {
-      var concat_id = "searchwpHighlighted" + --aDocument.countHighlighted;
-      var oldSpan = aDocument.getElementById(concat_id);
-      var parent = oldSpan.parentNode;
-      parent.replaceChild(oldSpan.childNodes[0], oldSpan);
-      parent.normalize();
-    }
-  }
-
-  function highlightNode(aDocument, aStyleClassName, aNode, aMatch) {
-    var match;
-    var text;
-    match = aMatch;
-    text = aNode.data;
-
-    if (!aDocument.countHighlighted) {
-      aDocument.countHighlighted = 0;
-    }
-
-    while (text.indexOf(match) != -1) {
-      var matchText = aNode.splitText(text.toUpperCase().indexOf(match.toUpperCase()));
-
-      aNode = matchText.splitText(match.length);
-      var clone = matchText.cloneNode(true);
-
-      var layer = aDocument.createElement("layer");
-      var concatId = "searchwpHighlighted" + aDocument.countHighlighted++;
-      // Be sure that this id doesn't exist.
-      while (aDocument.getElementById(concatId) != null) {
-        concatId = "searchwpHighlighted" + aDocument.countHighlighted++;
-      }
-
-      layer.setAttribute("id", concatId);
-      layer.className = aStyleClassName;
-
-      layer.appendChild(clone);
-      matchText.parentNode.replaceChild(layer, matchText);
-
-      // Move to next node
-      aNode = layer.nextSibling;
-      text = aNode.data.toLowerCase();
-    }
+    return count;
   }
 }

@@ -20,14 +20,18 @@
     <key id="key_highlight" keycode="VK_F8" oncommand="gSearchWPHighlighting.toggleHighlight();" />
   </keyset>
 
+  <script type="application/x-javascript" src="chrome://@NAME@/content/package-info.js" />
   <script type="application/x-javascript" src="chrome://@NAME@/content/global.js" />
-  <script type="application/x-javascript" src="chrome://@NAME@/content/documentRangeSearcher.js" />
   <script type="application/x-javascript" src="chrome://@NAME@/content/highlighting.js" />
   <script type="application/x-javascript" src="chrome://@NAME@/content/highlighter.js" />
   <script type="application/x-javascript" src="chrome://@NAME@/content/termsToolbar.js" />
   <script type="application/x-javascript" src="chrome://@NAME@/content/termsUtil.js" />
   <script type="application/x-javascript" src="chrome://@NAME@/content/overlay.js" />
-
+  
+  <script type="application/x-javascript" src="chrome://@NAME@/content/highlighting/package-info.js" />
+  <script type="application/x-javascript" src="chrome://@NAME@/content/highlighting/nodeHighlighter.js" />
+  <script type="application/x-javascript" src="chrome://@NAME@/content/highlighting/nodeSearcher.js" />
+  
   <toolbarpalette id="BrowserToolbarPalette">
     <toolbaritem id="searchwp-terms-container">
       <label id="searchwp-terms-title" value="&toolbar.terms.label;" />
