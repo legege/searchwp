@@ -21,6 +21,7 @@
   </keyset>
 
   <script type="application/x-javascript" src="chrome://@NAME@/content/global.js" />
+  <script type="application/x-javascript" src="chrome://@NAME@/content/documentRangeSearcher.js" />
   <script type="application/x-javascript" src="chrome://@NAME@/content/highlighting.js" />
   <script type="application/x-javascript" src="chrome://@NAME@/content/highlighter.js" />
   <script type="application/x-javascript" src="chrome://@NAME@/content/termsToolbar.js" />
