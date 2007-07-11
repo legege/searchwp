@@ -28,106 +28,130 @@
  *  Context Highlight (http://www.cusser.net/) for more information. 
  */
 
-var gSearchWPHighligther = {
+function SearchWPHighlighter() {
+  var self = this;
+  this.searcher = new DocumentRangeSearcher;
 
-  clear: function() {
-    this.highlightDoc(null, null, false, null);
-  },
+  this.clear = function() {
+     highlightBrowserWindow();
+  }
 
-  add: function(aTermsData, aMatchCase) {
+  this.add = function(aTermsData, aMatchCase) {
     var count = 0;
     for (var term in aTermsData) {
       if (aTermsData[term].className != "searchwp-term-disabled") {
-        count = count + this.highlightDoc(aTermsData[term].text, aTermsData[term].className, aMatchCase);
+        count = count + highlightBrowserWindow(aTermsData[term].text, aTermsData[term].className, aMatchCase);
       }
     }
     return count;
-  },
-
-  highlightDoc: function(aWord, aStyleClassName, aMatchCase, aWin) {
-    if (!aWin) {
-      aWin = window._content;
+  }
+      
+  function highlightBrowserWindow(aWord, aStyleClassName, aMatchCase, aWindow) {
+    if (!aWindow) {
+      aWindow = window._content;
     }
 
-    for (var i = 0; aWin.frames && i < aWin.frames.length; i++) {
-      this.highlightDoc(aWord, aStyleClassName, aMatchCase, aWin.frames[i]);
+    for (var i = 0; aWindow.frames && i < aWindow.frames.length; i++) {
+      highlightBrowserWindow(aWord, aStyleClassName, aMatchCase, aWindow.frames[i]);
     }
 
-    var doc = aWin.document;
-    if (!document) {
+    var document = aWindow.document;
+    if (!document || document && !("body" in document)) {
       return;
     }
 
     if (!aStyleClassName) {
-      if (doc.countHighlighted) {
-        if (doc.countHighlighted > 0) {
-          this.clearHL(doc);
+      if (document.countHighlighted) {
+        if (document.countHighlighted > 0) {
+          clearHL(document);
         }
       }
       return;
     }
 
-    /*
-      Characters remaining are then escaped so that the regexp does not use
-      wildcards or return unexpected matches.
-    */
+    // Characters remaining are then escaped so that the regexp does not use
+    // wildcards or return unexpected matches.
 
-    aWord = aWord.replace(/\\/,"\\");
-    aWord = aWord.replace(/\,/,"\,");
-    aWord = aWord.replace(/\?/,"\?");
-    aWord = aWord.replace(/\./,"\.");
-    aWord = aWord.replace(/\^/,"\^");
-    aWord = aWord.replace(/\$/,"\$");
-    aWord = aWord.replace(/\*/,"\*");
-    aWord = aWord.replace(/\+/,"\+");
+    function SoundexMatcher(criteria) {
+      this.soundex = soundex(criteria);
+      
+      this.match = function(str) {
+        var matches = str.match(/\b\w+\b/gi);
+        if (matches) {
+          for (var i = 0; i < matches.length; i++) {
+            if (soundex(matches[i]) == this.soundex) {
+              return matches[i];
+            }
+          }
+        }
+      }
 
-    this._doSearch(doc, aWord, aStyleClassName, aMatchCase);
-
-    return doc.countHighlighted;
-  },
-
-  _doSearch: function(aDoc, aWord, aStyleClassName, aMatchCase) {
-    var high = aDoc.createRange();
-
-    if (!("body" in aDoc)) {
-      return;
+      function soundex(str, p) {
+        var i, j, r, p = isNaN(p) ? 4 : p > 10 ? 10 : p < 4 ? 4 : p,
+        m = {BFPV: 1, CGJKQSXZ: 2, DT: 3, L: 4, MN: 5, R: 6},
+        r = (s = str.toUpperCase().replace(/[^A-Z]/g, "").split("")).splice(0, 1);
+        for(i in s)
+            for(j in m)
+                if(j.indexOf(s[i]) + 1 && r[r.length-1] != m[j] && r.push(m[j]))
+                    break;
+        return r.length > p && (r.length = p), r.join("") + (new Array(p - r.length + 1)).join("0");
+      }
     }
 
-    high.selectNodeContents(aDoc.body);
+    function RegexMatcher(criteria, matchCase) {
+      this.regex = new RegExp(criteria, matchCase ? "" : "i");
 
-    var startIndex = 0, endIndex = high.commonAncestorContainer.childNodes.length;
-    var rangeMatches = [];
-
-    var regexp = new RegExp(aWord.replace(/\s*/, ""), "i");
-
-    /* search-limits */
-    var externalCounter = {countMax: 6000, matchMax: 6000, count: 0, matches: rangeMatches};
-    if (high.toString().match(regexp)) {
-      this.binaryRangeSearch(high, startIndex, endIndex, regexp, rangeMatches, externalCounter);
+      this.match = function(str) {
+        var res = str.match(this.regex);
+        if (res) {
+          return res[0];
+        }
+      }        
     }
+
+    // Escape some RegExp characters
+    var criteria = aWord.replace(/\s*/, "").replace(/\\/, "\\")
+       .replace(/\,/, "\,").replace(/\?/, "\?").replace(/\./, "\.")
+       .replace(/\^/, "\^").replace(/\$/, "\$").replace(/\*/, "\*")
+       .replace(/\+/, "\+");
+    matcher = new SoundexMatcher(criteria);
+    matcher = new RegexMatcher(criteria, aMatchCase);
+
+    var rangeMatches = self.searcher.search(document, matcher);
 
     /* highlight the matches */
     for (var n in rangeMatches) {
-      if (rangeMatches[n].length == 1) {
-        this._highlightNode(aDoc, aWord, aStyleClassName, aMatchCase, rangeMatches[n][0]);
+      if (!rangeMatches[n].overlaps) {
+        highlightNode(document, aStyleClassName, rangeMatches[n].node, rangeMatches[n].match);
       }
     }
-  },
 
-  _highlightNode: function(aDoc, aWord, aStyleClassName, aMatchCase, aNode) {
+    return document.countHighlighted;
+  }
+
+  function clearHL(aDocument) {
+    if (!aDocument) {
+      return;
+    }
+
+    // Find and remove all highlight span nodes
+    while (aDocument.countHighlighted > 0) {
+      var concat_id = "searchwpHighlighted" + --aDocument.countHighlighted;
+      var oldSpan = aDocument.getElementById(concat_id);
+      var parent = oldSpan.parentNode;
+      parent.replaceChild(oldSpan.childNodes[0], oldSpan);
+      parent.normalize();
+    }
+  }
+
+  function highlightNode(aDocument, aStyleClassName, aNode, aMatch) {
     var match;
     var text;
-    if (aMatchCase) {
-      match = aWord;
-      text = aNode.data;
-    }
-    else {
-      match = aWord.toLowerCase();
-      text = aNode.data.toLowerCase();
-    }
+    match = aMatch;
+    text = aNode.data;
 
-    if (!aDoc.countHighlighted) {
-      aDoc.countHighlighted = 0;
+    if (!aDocument.countHighlighted) {
+      aDocument.countHighlighted = 0;
     }
 
     while (text.indexOf(match) != -1) {
@@ -136,11 +160,11 @@ var gSearchWPHighligther = {
       aNode = matchText.splitText(match.length);
       var clone = matchText.cloneNode(true);
 
-      var layer = aDoc.createElement("layer");
-      var concatId = "searchwpHighlighted" + aDoc.countHighlighted++;
+      var layer = aDocument.createElement("layer");
+      var concatId = "searchwpHighlighted" + aDocument.countHighlighted++;
       // Be sure that this id doesn't exist.
-      while (aDoc.getElementById(concatId) != null) {
-        concatId = "searchwpHighlighted" + aDoc.countHighlighted++;
+      while (aDocument.getElementById(concatId) != null) {
+        concatId = "searchwpHighlighted" + aDocument.countHighlighted++;
       }
 
       layer.setAttribute("id", concatId);
@@ -153,105 +177,5 @@ var gSearchWPHighligther = {
       aNode = layer.nextSibling;
       text = aNode.data.toLowerCase();
     }
-  },
-
-  clearHL: function (aDoc) {
-    if (!aDoc) {
-      return;
-    }
-
-    // Find and remove all highlight span nodes
-    while (aDoc.countHighlighted > 0) {
-      var concat_id = "searchwpHighlighted" + --aDoc.countHighlighted;
-      var oldSpan = aDoc.getElementById(concat_id);
-      var parent = oldSpan.parentNode;
-      parent.replaceChild(oldSpan.childNodes[0], oldSpan);
-      parent.normalize();
-    }
-  },
-
-  /*
-    Binary Search Function
-    Original code written by rue (http://homepage.mac.com/rue/binary-search-comparison.html)
-  */
-
-  binaryRangeSearch: function (high, startIndex, endIndex, searchRe, rangeMatches, externalCounter) {
-    if (externalCounter.count++ > externalCounter.countMax || externalCounter.matches.length > externalCounter.matchMax) {
-      return;
-    }
-
-    var origNode;
-    var node = origNode = high.startContainer;
-    var origStartIndex = startIndex;
-    var origEndIndex = endIndex;
-
-    if (endIndex - startIndex == 1 && node.childNodes.length > 0) {
-      node = node.childNodes[endIndex - 1];
-      while (node.childNodes.length == 1) {
-        if (node.nodeName.toLowerCase() in {script:null, style:null, textarea:null, input:null}) {
-          return; // ignore these elements
-        }
-        node = node.firstChild;
-      }
-
-      startIndex = 0;
-      endIndex = node.childNodes.length;
-
-      if (endIndex == 0) {
-        rangeMatches.push([node]);
-        return;
-      } // this *must* come before we change high's indices (next)
-
-      high.setStart(node, startIndex);
-      high.setEnd(node, endIndex);
-    }
-
-    var midIndex = startIndex + Math.ceil((endIndex - startIndex) / 2);
-    if (midIndex == endIndex || endIndex == 0) {
-      rangeMatches.push([node]);
-      return;
-    }
-
-    high.setEnd(node, midIndex);
-    var highString = high.toString();
-
-    if (highString.match(searchRe)) {
-      var deeper = true;
-      this.binaryRangeSearch(high, startIndex, midIndex, searchRe, rangeMatches, externalCounter);
-    }
-
-    // split range
-    var low = high;
-    low.setEnd(node, endIndex); // *must* come first: since we altered the end (above), we have to set it back.
-    low.setStart(node, midIndex);
-
-    if (!deeper) {
-      var highLength = highString.length;
-      var lowString = low.toString();
-      highString += lowString;
-      var lowMatch = lowString.match(searchRe);
-      var overlaps = lowMatch && highString.indexOf(lowMatch[0]) < highLength;
-    }
-    else {
-      lowMatch = low.toString().match(searchRe);
-    }
-
-    /*
-      this will log subsearches on 'low'. if you do this, you'll need to
-      restrict multi-element handling to just the First Contiguous Match
-      -- otherwise you'll duplicate handling
-    */
-
-    var subSearchLowerOverlap = false;
-    if (lowMatch && (!overlaps || subSearchLowerOverlap)) {
-      deeper = true;
-      this.binaryRangeSearch(low, midIndex, endIndex, searchRe, rangeMatches, externalCounter);
-    }
-
-    if (!deeper || overlaps) {
-      rangeMatches.push([origNode, origStartIndex, origEndIndex]);
-    }
-
-    return;
   }
 }

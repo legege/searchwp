@@ -24,6 +24,8 @@
 
 var gSearchWPHighlighting = {
 
+  _stringBundle: null,
+  _highlighter: null,
   _termsData: null,
 
   /**
@@ -51,7 +53,9 @@ var gSearchWPHighlighting = {
       sss.loadAndRegisterSheet(uri, sss.USER_SHEET);
     }
 
-    this.stringBundle = document.getElementById("bundle_searchwp");
+    this._stringBundle = document.getElementById("bundle_searchwp");
+    
+    this._highlighter = new SearchWPHighlighter();
   },
 
   /**
@@ -130,15 +134,15 @@ var gSearchWPHighlighting = {
     this._unhighlight();
 
     if (this._termsData) {
-      var count = gSearchWPHighligther.add(this._termsData, gSearchWP.pref.highlightMatchCase);
+      var count = this._highlighter.add(this._termsData, gSearchWP.pref.highlightMatchCase);
       if (count > 1) {
-        gSearchWP.displayMessage(this.stringBundle.getFormattedString("highlightCountN", [count], 1), false);
+        gSearchWP.displayMessage(this._stringBundle.getFormattedString("highlightCountN", [count], 1), false);
       }
       else if (count == 1) {
-        gSearchWP.displayMessage(this.stringBundle.getFormattedString("highlightCount1", [count], 1), false);
+        gSearchWP.displayMessage(this._stringBundle.getFormattedString("highlightCount1", [count], 1), false);
       }
       else {
-        gSearchWP.displayMessage(this.stringBundle.getString("highlightCount0"), false);
+        gSearchWP.displayMessage(this._stringBundle.getString("highlightCount0"), false);
       }
     }
   },
@@ -148,7 +152,7 @@ var gSearchWPHighlighting = {
    * @private
    */
   _unhighlight: function() {
-    gSearchWPHighligther.clear();
+    this._highlighter.clear();
   },
 
   /**
