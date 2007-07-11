@@ -55,7 +55,7 @@ var gSearchWPHighlighting = {
 
     this._stringBundle = document.getElementById("bundle_searchwp");
     
-    this._highlighter = new SearchWPHighlighter();
+    this._highlighter = new searchwp.Highlighter();
   },
 
   /**

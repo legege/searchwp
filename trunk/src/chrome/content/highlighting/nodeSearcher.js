@@ -22,7 +22,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-function DocumentRangeSearcher() {
+searchwp.highlighting.NodeSearcher = function() {
   /**
    * @param document The Document to search in.
    * @param matcher An object that has a <code>match</code> function taking
