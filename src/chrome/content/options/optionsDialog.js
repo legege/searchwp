@@ -22,17 +22,17 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-var gSearchWPPreferences = {
+searchwp.options.OptionsDialog = {
   stringBundle: null,
 
   onLoad: function() {
     this.stringBundle = document.getElementById("bundle_searchwp");
     
-    document.getElementById("highlightMinlength").value = gSearchWP.pref.highlightMinLength;
+    document.getElementById("highlightMinlength").value = searchwp.Preferences.highlightMinLength;
     
     document.getElementById("termstoolbar-addition-upto").value = ""
     
-    var maxTermsButtons = gSearchWP.pref.maxTermButtons;
+    var maxTermsButtons = searchwp.Preferences.maxTermButtons;
     if (maxTermsButtons < 0) {
       document.getElementById("termstoolbar-addition").value = "option1";
     }
@@ -50,21 +50,21 @@ var gSearchWPPreferences = {
     // Highlighting options
     var highlightMinLength = document.getElementById("highlightMinlength").value;
     if (highlightMinLength > 0) {
-      gSearchWP.pref.highlightMinLength = highlightMinLength;
+      searchwp.Preferences.highlightMinLength = highlightMinLength;
     }
   
     // Terms toolbar options
     var additionOption = document.getElementById("termstoolbar-addition").value;
     switch (additionOption) {
       case "option2":
-        gSearchWP.pref.maxTermButtons = document.getElementById("termstoolbar-addition-upto").value;
+        searchwp.Preferences.maxTermButtons = document.getElementById("termstoolbar-addition-upto").value;
         break;
       case "option3":
-        gSearchWP.pref.maxTermButtons = 0;
+        searchwp.Preferences.maxTermButtons = 0;
         break;
       case "option1":
       default:
-        gSearchWP.pref.maxTermButtons = -1;
+        searchwp.Preferences.maxTermButtons = -1;
         break;
     }
     
@@ -73,7 +73,7 @@ var gSearchWPPreferences = {
   
   onTTAdditionSelect: function() {
     if (document.getElementById("termstoolbar-addition").value == "option2") {
-      var maxTermsButtons = gSearchWP.pref.maxTermButtons;
+      var maxTermsButtons = searchwp.Preferences.maxTermButtons;
       if (maxTermsButtons > 0) {
         document.getElementById("termstoolbar-addition-upto").value = maxTermsButtons;
       }

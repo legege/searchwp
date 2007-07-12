@@ -11,11 +11,14 @@
 
 <dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" id="searchwpPref"
   title="&pref.title;" buttons="accept"
-  onload="gSearchWPPreferences.onLoad();"
-  ondialogaccept="return gSearchWPPreferences.onAccept();">
+  onload="searchwp.options.OptionsDialog.onLoad();"
+  ondialogaccept="return searchwp.options.OptionsDialog.onAccept();">
 
-  <script type="application/x-javascript" src="chrome://@NAME@/content/global.js" />
-  <script type="application/x-javascript" src="chrome://@NAME@/content/pref.js" />
+  <script type="application/x-javascript" src="chrome://@NAME@/content/package-info.js" />
+  <script type="application/x-javascript" src="chrome://@NAME@/content/preferences.js" />
+
+  <script type="application/x-javascript" src="chrome://@NAME@/content/options/package-info.js" />
+  <script type="application/x-javascript" src="chrome://@NAME@/content/options/optionsDialog.js" />
 
   <stringbundle id="bundle_searchwp" src="chrome://@NAME@/locale/searchwp.properties"/>
 
@@ -23,7 +26,7 @@
     <caption label="&pref.termstoolbar.label;" />
     <vbox>
       <label>&pref.termstoolbar.addition.label;</label>
-      <radiogroup id="termstoolbar-addition" oncommand="gSearchWPPreferences.onTTAdditionSelect();">
+      <radiogroup id="termstoolbar-addition" oncommand="searchwp.options.OptionsDialog.onTTAdditionSelect();">
         <radio label="&pref.termstoolbar.addition.o1.label;" value="option1" />
         <hbox align="center">
           <radio label="&pref.termstoolbar.addition.o2.label.before;"  value="option2" />

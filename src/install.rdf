@@ -20,7 +20,7 @@
     <em:description>Buttons bar for the search box</em:description>
     <em:creator>Georges-Etienne Legendre</em:creator>
     <em:homepageURL>http://legege.com/mozilla/</em:homepageURL>
-    <em:optionsURL>chrome://@NAME@/content/pref.xul</em:optionsURL>
+    <em:optionsURL>chrome://@NAME@/content/options/optionsDialog.xul</em:optionsURL>
     <em:iconURL>chrome://@NAME@/skin/icon.png</em:iconURL>
   </Description>
 </RDF>

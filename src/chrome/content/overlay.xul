@@ -14,24 +14,26 @@
 
   <script type="application/x-javascript" src="chrome://@NAME@/content/fixKeyset.js" />
   <keyset id="mainKeyset">
-    <key id="key_findAgainSWP" keycode="VK_F3" oncommand="gSearchWPOverlay.onFindAgain(event);" />
-    <key id="key_findAgainSWP_2" keycode="VK_F3" modifiers="control" oncommand="gSearchWPOverlay.onFindAgain(event);" />
-    <key id="key_findPreviousSWP" keycode="VK_F3" modifiers="shift" oncommand="gSearchWPOverlay.onFindAgain(event);" />
-    <key id="key_highlight" keycode="VK_F8" oncommand="gSearchWPHighlighting.toggleHighlight();" />
+    <key id="key_findAgainSWP" keycode="VK_F3" oncommand="searchwp.Overlay.onFindAgain(event);" />
+    <key id="key_findAgainSWP_2" keycode="VK_F3" modifiers="control" oncommand="searchwp.Overlay.onFindAgain(event);" />
+    <key id="key_findPreviousSWP" keycode="VK_F3" modifiers="shift" oncommand="searchwp.Overlay.onFindAgain(event);" />
+    <key id="key_highlight" keycode="VK_F8" oncommand="searchwp.Highlighting.toggleHighlight();" />
   </keyset>
 
   <script type="application/x-javascript" src="chrome://@NAME@/content/package-info.js" />
-  <script type="application/x-javascript" src="chrome://@NAME@/content/global.js" />
+  <script type="application/x-javascript" src="chrome://@NAME@/content/overlay.js" />
+  <script type="application/x-javascript" src="chrome://@NAME@/content/preferences.js" />
+
   <script type="application/x-javascript" src="chrome://@NAME@/content/highlighting.js" />
   <script type="application/x-javascript" src="chrome://@NAME@/content/highlighter.js" />
+
   <script type="application/x-javascript" src="chrome://@NAME@/content/termsToolbar.js" />
-  <script type="application/x-javascript" src="chrome://@NAME@/content/termsUtil.js" />
-  <script type="application/x-javascript" src="chrome://@NAME@/content/overlay.js" />
-  
+  <script type="application/x-javascript" src="chrome://@NAME@/content/termsDataFactory.js" />
+
   <script type="application/x-javascript" src="chrome://@NAME@/content/highlighting/package-info.js" />
   <script type="application/x-javascript" src="chrome://@NAME@/content/highlighting/nodeHighlighter.js" />
   <script type="application/x-javascript" src="chrome://@NAME@/content/highlighting/nodeSearcher.js" />
-  
+
   <toolbarpalette id="BrowserToolbarPalette">
     <toolbaritem id="searchwp-terms-container">
       <label id="searchwp-terms-title" value="&toolbar.terms.label;" />
@@ -63,7 +65,7 @@
           class="chromeclass-toolbar-additional"
           label="&button.highlight.label;"
           tooltiptext="&button.highlight.tooltiptext;"
-          oncommand="gSearchWPHighlighting.toggleHighlight(); event.stopPropagation();"
+          oncommand="searchwp.Highlighting.toggleHighlight(); event.stopPropagation();"
           type="menu-button"
           autocheck="false"
           disabled="false">
@@ -72,7 +74,7 @@
               label="&button.highlight.matchcase.label;"
               type="checkbox"
               autocheck="false"
-              oncommand="gSearchWPHighlighting.changeMatchCase(); event.stopPropagation();" />			
+              oncommand="searchwp.Highlighting.changeMatchCase(); event.stopPropagation();" />			
         </menupopup>
       </toolbarbutton>
     </toolbaritem>

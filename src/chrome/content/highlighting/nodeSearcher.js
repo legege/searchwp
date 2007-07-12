@@ -33,7 +33,7 @@ searchwp.highlighting.NodeSearcher = function() {
     var high = document.createRange();
 
     if (!("body" in document) || !matcher) {
-      return;
+      return [];
     }
 
     high.selectNodeContents(document.body);
@@ -44,7 +44,7 @@ searchwp.highlighting.NodeSearcher = function() {
 
     /* search-limits */
     var externalCounter = {countMax: 6000, matchMax: 6000, count: 0, matches: rangeMatches};
-    lastMatch = matcher.match(high.toString());
+    var lastMatch = matcher.match(high.toString());
     if (lastMatch) {
       binaryRangeSearch(high, startIndex, endIndex, matcher, lastMatch, rangeMatches, externalCounter);
     }
