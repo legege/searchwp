@@ -30,15 +30,15 @@ searchwp.playBeep = function() {
             .beep();
 }
 
-searchwp.displayMessage = function(aMessage, aBeep) {
+searchwp.displayMessage = function(message, beep) {
   var xulBrowserWindow = window.XULBrowserWindow;
 
   if (!xulBrowserWindow) {
     return;
   }
 
-  xulBrowserWindow.setOverLink(aMessage, null);
-  if (aBeep) {
+  xulBrowserWindow.setOverLink(message, null);
+  if (beep) {
     this.playBeep();
   }
 
@@ -46,11 +46,11 @@ searchwp.displayMessage = function(aMessage, aBeep) {
     clearTimeout(this._displayMessageTimeout);
   }
 
-  this._displayMessageTimeout = setTimeout(function(aText) {
-    if (window.XULBrowserWindow.overLink == aText) {
+  this._displayMessageTimeout = setTimeout(function(text) {
+    if (window.XULBrowserWindow.overLink == text) {
       window.XULBrowserWindow.setOverLink("", null);
     }
-  }, 3000, aMessage);
+  }, 3000, message);
 
   return;
 }
