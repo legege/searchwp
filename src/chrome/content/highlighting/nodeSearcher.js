@@ -26,7 +26,7 @@ searchwp.highlighting.NodeSearcher = function() {
   /**
    * @param document The Document to search in.
    * @param matcher An object that has a <code>match</code> function taking
-   *   a string in argument. This function returns the matched substring if
+   *   a string in argument. This function must returns the matched substring if
    *   this searcher should consider this range as a valid result.
    */
   this.search = function(document, matcher) {

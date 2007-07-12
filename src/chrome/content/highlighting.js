@@ -111,7 +111,6 @@ searchwp.Highlighting = new function() {
 
   /**
    * Sets a refresh for the highlighting in 500ms.
-   * @private
    */
   function setRefreshTimeout() {
     if (self.highlightTimeout) {
@@ -179,57 +178,11 @@ searchwp.Highlighting = new function() {
     // Characters remaining are then escaped so that the regexp does not use
     // wildcards or return unexpected matches.
 
-    function SoundexMatcher(criteria) {
-      this.soundex = soundex(criteria);
-
-      this.match = function(str) {
-        var matches = str.match(/\b\w+\b/gi);
-        if (matches) {
-          for (var i = 0; i < matches.length; i++) {
-            if (soundex(matches[i]) == this.soundex) {
-              return matches[i];
-            }
-          }
-        }
-        return null;
-      }
-
-      function soundex(str, p) {
-        p = isNaN(p) ? 4 : p > 10 ? 10 : p < 4 ? 4 : p;
-        var i, j, r, m = {BFPV: 1, CGJKQSXZ: 2, DT: 3, L: 4, MN: 5, R: 6},
-          r = (s = str.toUpperCase().replace(/[^A-Z]/g, "").split("")).splice(0, 1);
-        for (i in s) {
-          for(j in m) {
-            if(j.indexOf(s[i]) + 1 && r[r.length-1] != m[j] && r.push(m[j])) break;
-          }
-        }
-        return r.length > p && (r.length = p), r.join("") + (new Array(p - r.length + 1)).join("0");
-      }
-    }
-
-    function RegexMatcher(criteria, matchCase) {
-      this.regex = new RegExp(criteria, matchCase ? "" : "i");
-
-      this.match = function(str) {
-        var res = str.match(this.regex);
-        if (res) {
-          return res[0];
-        }
-        return null;
-      }
-    }
-
     // Escape some RegExp characters
-    var criteria = word.replace(/\s*/, "").replace(/\\/, "\\")
-       .replace(/\,/, "\,").replace(/\?/, "\?").replace(/\./, "\.")
-       .replace(/\^/, "\^").replace(/\$/, "\$").replace(/\*/, "\*")
-       .replace(/\+/, "\+");
+    var criteria = word.replace(/\s*/, "");
+    criteria = criteria.replace(/\W/g, "\\W*");
 
-    //var criteria = aWord.replace(/\s*/, "").replace(/\\/, "\\b")
-    //   .replace(/\,/, "\\b").replace(/\?/, "\?")//.replace(/\./, "\\b")
-    //   .replace(/\^/, "\\b").replace(/\$/, "\\b").replace(/\*/, "\\b")
-    //   .replace(/\+/, "\\b");
-    //matcher = new SoundexMatcher(criteria);
+    //var matcher = new SoundexMatcher(criteria);
     var matcher = new RegexMatcher(criteria, matchCase);
 
     var rangeMatches = self.searcher.search(document, matcher);
@@ -242,5 +195,51 @@ searchwp.Highlighting = new function() {
     }
 
     return count;
+  }
+
+  /**
+   * RegexMatcher for the NodeSearcher.
+   */
+  function RegexMatcher(criteria, matchCase) {
+    this.regex = new RegExp(criteria, matchCase ? "" : "i");
+
+    this.match = function(str) {
+      var res = str.match(this.regex);
+      if (res) {
+        return res[0];
+      }
+      return null;
+    }
+  }
+
+  /**
+   * SoundexMatcher for the NodeSearcher.
+   */
+  function SoundexMatcher(criteria) {
+    this.soundex = soundex(criteria);
+
+    this.match = function(str) {
+      var matches = str.match(/\b\w+\b/gi);
+      if (matches) {
+        for (var i = 0; i < matches.length; i++) {
+          if (soundex(matches[i]) == this.soundex) {
+            return matches[i];
+          }
+        }
+      }
+      return null;
+    }
+
+    function soundex(str, p) {
+      p = isNaN(p) ? 4 : p > 10 ? 10 : p < 4 ? 4 : p;
+      var i, j, r, m = {BFPV: 1, CGJKQSXZ: 2, DT: 3, L: 4, MN: 5, R: 6},
+        r = (s = str.toUpperCase().replace(/[^A-Z]/g, "").split("")).splice(0, 1);
+      for (i in s) {
+        for(j in m) {
+          if(j.indexOf(s[i]) + 1 && r[r.length-1] != m[j] && r.push(m[j])) break;
+        }
+      }
+      return r.length > p && (r.length = p), r.join("") + (new Array(p - r.length + 1)).join("0");
+    }
   }
 }

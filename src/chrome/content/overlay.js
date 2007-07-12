@@ -133,7 +133,7 @@ searchwp.Overlay = new function() {
 
   /**
    * Called when the customization of the toolbar is finised.
-   * @return Returns the original method.
+   * @return the original method.
    */
   this.customizeDone = function() {
     searchwp.Overlay._init();
@@ -153,7 +153,7 @@ searchwp.Overlay = new function() {
     },
 
     /**
-     * @return Returns the current searchbox value.
+     * @return the current searchbox value.
      */
     get value() {
       var textbox = document.getAnonymousElementByAttribute(this.ref, "class", "searchbar-textbox");
@@ -176,7 +176,7 @@ searchwp.Overlay = new function() {
 
     /**
      * Determines if the focus is in the searchbox.
-     * @return Returns true if the focus is in the searchbox.
+     * @return true if the focus is in the searchbox.
      */
     focused: function() {
       if (this.ref) {
@@ -187,7 +187,7 @@ searchwp.Overlay = new function() {
 
     /**
      * Determines if the searchbox exists.
-     * @return Returns true if the searchbox exists.
+     * @return true if the searchbox exists.
      */
     exist: function() {
       return this.ref != null;
