@@ -20,19 +20,16 @@
     <key id="key_highlight" keycode="VK_F8" oncommand="searchwp.Highlighting.toggleHighlight();" />
   </keyset>
 
-  <script type="application/x-javascript" src="chrome://@NAME@/content/package-info.js" />
-  <script type="application/x-javascript" src="chrome://@NAME@/content/overlay.js" />
-  <script type="application/x-javascript" src="chrome://@NAME@/content/preferences.js" />
-
-  <script type="application/x-javascript" src="chrome://@NAME@/content/highlighting.js" />
-  <script type="application/x-javascript" src="chrome://@NAME@/content/highlighter.js" />
-
-  <script type="application/x-javascript" src="chrome://@NAME@/content/termsToolbar.js" />
-  <script type="application/x-javascript" src="chrome://@NAME@/content/termsDataFactory.js" />
-
   <script type="application/x-javascript" src="chrome://@NAME@/content/highlighting/package-info.js" />
   <script type="application/x-javascript" src="chrome://@NAME@/content/highlighting/nodeHighlighter.js" />
   <script type="application/x-javascript" src="chrome://@NAME@/content/highlighting/nodeSearcher.js" />
+
+  <script type="application/x-javascript" src="chrome://@NAME@/content/package-info.js" />
+  <script type="application/x-javascript" src="chrome://@NAME@/content/preferences.js" />
+  <script type="application/x-javascript" src="chrome://@NAME@/content/highlighting.js" />
+  <script type="application/x-javascript" src="chrome://@NAME@/content/termsToolbar.js" />
+  <script type="application/x-javascript" src="chrome://@NAME@/content/termsDataFactory.js" />
+  <script type="application/x-javascript" src="chrome://@NAME@/content/overlay.js" />
 
   <toolbarpalette id="BrowserToolbarPalette">
     <toolbaritem id="searchwp-terms-container">
@@ -74,7 +71,7 @@
               label="&button.highlight.matchcase.label;"
               type="checkbox"
               autocheck="false"
-              oncommand="searchwp.Highlighting.changeMatchCase(); event.stopPropagation();" />			
+              oncommand="searchwp.Highlighting.changeMatchCase(); event.stopPropagation();" />
         </menupopup>
       </toolbarbutton>
     </toolbaritem>

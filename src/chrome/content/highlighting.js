@@ -22,147 +22,225 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-searchwp.Highlighting = {
+searchwp.Highlighting = new function() {
+  var self = this;
+  this.stringBundle = null;
+  this.termsDataCache = null;
 
-  _stringBundle: null,
-  _highlighter: null,
-  _termsData: null,
+  this.searcher = new searchwp.highlighting.NodeSearcher;
+  this.highlighter = new searchwp.highlighting.NodeHighlighter("searchwp");
+
+  searchwp.loadStyleSheet("chrome://@NAME@/skin/highlighting-user.css");
 
   /**
-   * Initializes the highlighting.
+   * Initialize this class.
    */
-  init: function() {
+  this.init = function() {
+    this.stringBundle = document.getElementById("bundle_searchwp");
+
     var tabBox = document.getElementById("content").mTabBox;
     tabBox.addEventListener("select", function(event) { searchwp.Highlighting.refresh() }, false);
 
-    if (this.highlightButton) {
-      this.highlightButton.setAttribute("checked", searchwp.Preferences.highlighted);
+    if (this.getHighlightButton()) {
+      this.getHighlightButton().setAttribute("checked", searchwp.Preferences.highlighted);
     }
 
-    if (this.highlightMatchCase) {
-      this.highlightMatchCase.setAttribute("checked", searchwp.Preferences.highlightMatchCase);
+    if (this.getHighlightMatchCase()) {
+      this.getHighlightMatchCase().setAttribute("checked", searchwp.Preferences.highlightMatchCase);
     }
-
-    // Load the highlighting style sheet
-    var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"]
-        .getService(Components.interfaces.nsIStyleSheetService);
-    var ios = Components.classes["@mozilla.org/network/io-service;1"]
-        .getService(Components.interfaces.nsIIOService);
-    var uri = ios.newURI("chrome://@NAME@/skin/highlighting-user.css", null, null);
-    if(!sss.sheetRegistered(uri, sss.USER_SHEET)) {
-      sss.loadAndRegisterSheet(uri, sss.USER_SHEET);
-    }
-
-    this._stringBundle = document.getElementById("bundle_searchwp");
-    
-    this._highlighter = new searchwp.Highlighter();
-  },
+  }
 
   /**
    * Updates the highlighting according to the terms.
    */
-  update: function(termsData, force) {
-    if (force || !searchwp.TermsDataFactory.compareTermsData(this._termsData, termsData)) {
-      this._termsData = termsData;
-      this._setRefreshTimeout();
+  this.update = function(termsData, force) {
+    if (force || !searchwp.TermsDataFactory.compareTermsData(this.termsDataCache, termsData)) {
+      this.termsDataCache = termsData;
+      setRefreshTimeout();
     }
-  },
+  }
 
   /**
    * Refreshes the current highlighting.
    */
-  refresh: function() {
+  this.refresh = function() {
     if (searchwp.Preferences.highlighted) {
-      this._highlight();
+      highlight();
     }
     else {
-      this._unhighlight();
+      unhighlight();
     }
 
     searchwp.TermsToolbar.updateTermsStyleClassName();
-  },
+  }
 
   /**
    * Toggles on and off the highlighting.
    */
-  toggleHighlight: function() {
-    if (!this._disableToggleHighlight) {
-      searchwp.Preferences.highlighted = !searchwp.Preferences.highlighted;
-    }
-  },
+  this.toggleHighlight = function() {
+    searchwp.Preferences.highlighted = !searchwp.Preferences.highlighted;
+  }
 
   /**
    * Set if the highlighting should match case.
    */
-  changeMatchCase: function() {
-    this._disableToggleHighlight = true;
-
-    try {
-      searchwp.Preferences.highlightMatchCase = !searchwp.Preferences.highlightMatchCase;
-    }
-    catch(e) {}
-
-    this._disableToggleHighlight = false;
-  },
+  this.changeMatchCase = function() {
+    searchwp.Preferences.highlightMatchCase = !searchwp.Preferences.highlightMatchCase;
+  }
 
   /**
    * @return true if the highlight button exists.
    */
-  exist: function() {
-    return this.highlightButton != null;
-  },
+  this.exist = function() {
+    return this.getHighlightButton() != null;
+  }
 
   /**
    * @return a reference to the highlight button.
    */
-  get highlightButton() {
+  this.getHighlightButton = function() {
     return document.getElementById("searchwp-highlight-button");
-  },
+  }
 
   /**
    * @return a reference to the highlight match case menu.
    */
-  get highlightMatchCase() {
+  this.getHighlightMatchCase = function() {
     return document.getElementById("searchwp-highlight-match-case");
-  },
-
-  /**
-   * Hightlights the current page.
-   * @private
-   */
-  _highlight: function() {
-    this._unhighlight();
-
-    if (this._termsData) {
-      var count = this._highlighter.add(this._termsData, searchwp.Preferences.highlightMatchCase);
-      if (count > 1) {
-        searchwp.displayMessage(this._stringBundle.getFormattedString("highlightCountN", [count], 1), false);
-      }
-      else if (count == 1) {
-        searchwp.displayMessage(this._stringBundle.getFormattedString("highlightCount1", [count], 1), false);
-      }
-      else {
-        searchwp.displayMessage(this._stringBundle.getString("highlightCount0"), false);
-      }
-    }
-  },
-
-  /**
-   * Removes the highlighting of the current page.
-   * @private
-   */
-  _unhighlight: function() {
-    this._highlighter.clear();
-  },
+  }
 
   /**
    * Sets a refresh for the highlighting in 500ms.
    * @private
    */
-  _setRefreshTimeout: function() {
-    if (this._highlightTimeout) {
-      clearTimeout(this._highlightTimeout);
+  function setRefreshTimeout() {
+    if (self.highlightTimeout) {
+      clearTimeout(self.highlightTimeout);
     }
-    this._highlightTimeout = setTimeout(function() { searchwp.Highlighting.refresh(); }, 500);
+    self.highlightTimeout = setTimeout(function() { searchwp.Highlighting.refresh(); }, 500);
+  }
+
+  /**
+   * Hightlight the current page.
+   */
+  function highlight() {
+    unhighlight();
+
+    var termsData = self.termsDataCache;
+    if (termsData) {
+      var count = 0;
+      for (var term in termsData) {
+        if (termsData[term].className != "searchwp-term-disabled") {
+          count = count + highlightBrowserWindow(termsData[term].text, termsData[term].className,
+              searchwp.Preferences.highlightMatchCase);
+        }
+      }
+
+      if (count > 1) {
+        searchwp.displayMessage(self.stringBundle.getFormattedString("highlightCountN", [count], 1), false);
+      }
+      else if (count == 1) {
+        searchwp.displayMessage(self.stringBundle.getFormattedString("highlightCount1", [count], 1), false);
+      }
+      else {
+        searchwp.displayMessage(self.stringBundle.getString("highlightCount0"), false);
+      }
+    }
+  }
+
+  /**
+   * Removes the highlighting of the current page.
+   */
+  function unhighlight() {
+    highlightBrowserWindow();
+  }
+
+  function highlightBrowserWindow(word, styleClassName, matchCase, win) {
+    var count = 0;
+
+    if (!win) {
+      win = window._content;
+    }
+
+    for (var i = 0; win.frames && i < win.frames.length; i++) {
+      count += highlightBrowserWindow(word, styleClassName, matchCase, win.frames[i]);
+    }
+
+    var document = win.document;
+    if (!document || document && !("body" in document)) {
+      return count;
+    }
+
+    if (!styleClassName || !word) {
+      self.highlighter.clear(document);
+      return count;
+    }
+
+    // Characters remaining are then escaped so that the regexp does not use
+    // wildcards or return unexpected matches.
+
+    function SoundexMatcher(criteria) {
+      this.soundex = soundex(criteria);
+
+      this.match = function(str) {
+        var matches = str.match(/\b\w+\b/gi);
+        if (matches) {
+          for (var i = 0; i < matches.length; i++) {
+            if (soundex(matches[i]) == this.soundex) {
+              return matches[i];
+            }
+          }
+        }
+        return null;
+      }
+
+      function soundex(str, p) {
+        p = isNaN(p) ? 4 : p > 10 ? 10 : p < 4 ? 4 : p;
+        var i, j, r, m = {BFPV: 1, CGJKQSXZ: 2, DT: 3, L: 4, MN: 5, R: 6},
+          r = (s = str.toUpperCase().replace(/[^A-Z]/g, "").split("")).splice(0, 1);
+        for (i in s) {
+          for(j in m) {
+            if(j.indexOf(s[i]) + 1 && r[r.length-1] != m[j] && r.push(m[j])) break;
+          }
+        }
+        return r.length > p && (r.length = p), r.join("") + (new Array(p - r.length + 1)).join("0");
+      }
+    }
+
+    function RegexMatcher(criteria, matchCase) {
+      this.regex = new RegExp(criteria, matchCase ? "" : "i");
+
+      this.match = function(str) {
+        var res = str.match(this.regex);
+        if (res) {
+          return res[0];
+        }
+        return null;
+      }
+    }
+
+    // Escape some RegExp characters
+    var criteria = word.replace(/\s*/, "").replace(/\\/, "\\")
+       .replace(/\,/, "\,").replace(/\?/, "\?").replace(/\./, "\.")
+       .replace(/\^/, "\^").replace(/\$/, "\$").replace(/\*/, "\*")
+       .replace(/\+/, "\+");
+
+    //var criteria = aWord.replace(/\s*/, "").replace(/\\/, "\\b")
+    //   .replace(/\,/, "\\b").replace(/\?/, "\?")//.replace(/\./, "\\b")
+    //   .replace(/\^/, "\\b").replace(/\$/, "\\b").replace(/\*/, "\\b")
+    //   .replace(/\+/, "\\b");
+    //matcher = new SoundexMatcher(criteria);
+    var matcher = new RegexMatcher(criteria, matchCase);
+
+    var rangeMatches = self.searcher.search(document, matcher);
+
+    /* highlight the matches */
+    for (var n in rangeMatches) {
+      if (!rangeMatches[n].overlaps) {
+        count += self.highlighter.highlight(document, rangeMatches[n].node, rangeMatches[n].match, {class: styleClassName});
+      }
+    }
+
+    return count;
   }
 }

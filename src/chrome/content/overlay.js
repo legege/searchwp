@@ -22,19 +22,20 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-searchwp.Overlay = {
-  stringBundle: null,
+searchwp.Overlay = new function() {
+  var self = this;
+  this.stringBundle = document.getElementById("bundle_searchwp");
 
   /**
    * Initializes this extension.
-   * @param aEvent The load event.
+   * @param event The load event.
    */
-  onLoad: function(aEvent) {
-    if (aEvent.target != document || !window.getBrowser) {
+  this.onLoad = function(event) {
+    if (event.target != document || !window.getBrowser) {
       return;
     }
 
-    searchwp.Overlay.preferencesObserver.register();
+    this.preferencesObserver.register();
     window.getBrowser().addProgressListener(this.progressListener,
         Components.interfaces.nsIWebProgress.NOTIFY_STATE_DOCUMENT);
 
@@ -50,48 +51,45 @@ searchwp.Overlay = {
       }
     }, 0);
 
-    this.stringBundle = document.getElementById("bundle_searchwp");
-
     if (searchwp.Preferences.firstLaunch
-        && !searchwp.TermsToolbar.exist()
-        && !searchwp.Highlighting.exist()) {
+        && !searchwp.TermsToolbar.exist() && !searchwp.Highlighting.exist()) {
       setTimeout(function() {
         searchwp.Overlay.firstLaunchMessage();
       }, 50);
     }
 
-    this._init();
+    init();
     searchwp.Highlighting.init();
     searchwp.TermsToolbar.init();
 
     addEventListener("resize", function(event) { searchwp.Overlay.onResize(event); }, false);
     addEventListener("unload", function(event) { searchwp.Overlay.onUnload(event); }, false);
-  },
+  }
 
   /**
    * Uninitializes this extension.
    * @param event The unload event.
    */
-  onUnload: function(aEvent) {
+  this.onUnload = function(event) {
     searchwp.Overlay.preferencesObserver.unregister();
     window.getBrowser().removeProgressListener(this.progressListener);
 
-    this._uninit();
-  },
+    uninit();
+  }
 
   /**
    * Called when the window is resized.
-   * @param aEvent The resize event.
+   * @param event The resize event.
    */
-  onResize: function(aEvent) {
+  this.onResize = function(event) {
     searchwp.TermsToolbar.refresh();
-  },
+  }
 
   /**
    * Called when F3/Shift+F3 is pressed.
-   * @param aEvent The event.
+   * @param event The event.
    */
-  onFindAgain: function(aEvent) {
+  this.onFindAgain = function(event) {
     var findString = getBrowser().fastFind.searchString;
 
     if (!gFindBar.hidden || gFindBar.hidden && findString != "") {
@@ -103,12 +101,12 @@ searchwp.Overlay = {
         gFindBar.onFindAgainCommand(aEvent.shiftKey);
       }
     }
-  },
+  }
 
   /**
    * firstLaunchMessage
    */
-  firstLaunchMessage: function() {
+  this.firstLaunchMessage = function() {
     var showAgain = {value: false};
 
     if (typeof(BrowserCustomizeToolbar) != "function") {
@@ -119,62 +117,34 @@ searchwp.Overlay = {
     var promptService = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
                                   .getService(Components.interfaces.nsIPromptService);
     var no = promptService.confirmEx(window,
-               this.stringBundle.getString("firstLaunchTitle"),
-               this.stringBundle.getString("firstLaunchMessage"),
-               Components.interfaces.nsIPromptService.BUTTON_TITLE_YES * Components.interfaces.nsIPromptService.BUTTON_POS_0
-                 + Components.interfaces.nsIPromptService.BUTTON_TITLE_NO * Components.interfaces.nsIPromptService.BUTTON_POS_1,
-               null, null, null,
-               this.stringBundle.getString("firstLaunchCheckbox"),
-               showAgain);
+        this.stringBundle.getString("firstLaunchTitle"),
+        this.stringBundle.getString("firstLaunchMessage"),
+          Components.interfaces.nsIPromptService.BUTTON_TITLE_YES * Components.interfaces.nsIPromptService.BUTTON_POS_0
+            + Components.interfaces.nsIPromptService.BUTTON_TITLE_NO * Components.interfaces.nsIPromptService.BUTTON_POS_1,
+        null, null, null,
+        this.stringBundle.getString("firstLaunchCheckbox"),
+        showAgain);
     if (!no) {
       BrowserCustomizeToolbar();
     }
 
     searchwp.Preferences.firstLaunch = showAgain.value;
-  },
-
-  /**
-   * init
-   */
-  _init: function() {
-    if (!this.searchBox.exist()) {
-      return;
-    }
-
-    this.searchBox.ref.addEventListener("input", function(event) { searchwp.Overlay.searchBox.onInput(event); }, false, true);
-
-    /* XXXLegege: For SearchBox Sync, we have to listen the "oninput" event
-       because it appears that we cannot fire/catch an "input" event on the
-       searchbar. */
-    this.searchBox.ref.addEventListener("oninput", function(event) { searchwp.Overlay.searchBox.onInput(event); }, false, true);
-  },
-
-  /**
-   * uninit
-   */
-  _uninit: function() {
-    if (!this.searchBox.exist()) {
-      return;
-    }
-
-    this.searchBox.ref.removeEventListener("input", function(event) { searchwp.Overlay.searchBox.onInput(event); }, false);
-    this.searchBox.ref.removeEventListener("oninput", function(event) { searchwp.Overlay.searchBox.onInput(event); }, false);
-  },
+  }
 
   /**
    * Called when the customization of the toolbar is finised.
    * @return Returns the original method.
    */
-  customizeDone: function() {
+  this.customizeDone = function() {
     searchwp.Overlay._init();
     searchwp.Preferences.highlighted = false;
     searchwp.Overlay.searchBox.onInput();
 
     var toolbox = document.getElementById("navigator-toolbox");
     return toolbox.__searchwp__customizeDone();
-  },
+  }
 
-  searchBox: {
+  this.searchBox = {
     /**
      * Return a reference to the searchbar.
      */
@@ -231,12 +201,12 @@ searchwp.Overlay = {
       searchwp.TermsToolbar.update(termsData, false);
       searchwp.Highlighting.update(termsData, false);
     }
-  },
+  }
 
   /**
    * Progress Listener to automatically highlight terms on page load.
    */
-  progressListener: {
+  this.progressListener = {
     QueryInterface: function(aIID) {
       if (aIID.equals(Components.interfaces.nsIWebProgressListener) ||
         aIID.equals(Components.interfaces.nsISupportsWeakReference) ||
@@ -269,17 +239,17 @@ searchwp.Overlay = {
   /**
    * Preferences Observer
    */
-  preferencesObserver: {
+  this.preferencesObserver = {
     register: function() {
       this.branch = searchwp.Preferences.branch;
-  
+
       var pbi = this.branch.QueryInterface(Components.interfaces.nsIPrefBranchInternal);
       pbi.addObserver("", this, false);
     },
 
     unregister: function() {
       if (!this.branch) return;
-  
+
       var pbi = this.branch.QueryInterface(Components.interfaces.nsIPrefBranchInternal);
       pbi.removeObserver("", this, false);
     },
@@ -288,13 +258,14 @@ searchwp.Overlay = {
       if (aTopic != "nsPref:changed") {
         return;
       }
-  
+
       switch (aData) {
         case searchwp.Preferences.PREF_HIGHLIGHT_STATE:
           setTimeout(
             function() {
-              if (searchwp.Highlighting.highlightButton) {
-                searchwp.Highlighting.highlightButton.checked = searchwp.Preferences.highlighted;
+              var item = searchwp.Highlighting.getHighlightButton();
+              if (item) {
+                item.checked = searchwp.Preferences.highlighted;
               }
             }, 0);
           searchwp.Highlighting.refresh();
@@ -302,8 +273,9 @@ searchwp.Overlay = {
         case searchwp.Preferences.PREF_HIGHLIGHT_MATCH_CASE:
           setTimeout(
             function() {
-              if (searchwp.Highlighting.highlightMatchCase) {
-                searchwp.Highlighting.highlightMatchCase.setAttribute("checked", searchwp.Preferences.highlightMatchCase);
+              var item = searchwp.Highlighting.getHighlightMatchCase();
+              if (item) {
+                item.setAttribute("checked", searchwp.Preferences.highlightMatchCase);
               }
             }, 0);
           searchwp.Highlighting.refresh();
@@ -316,6 +288,36 @@ searchwp.Overlay = {
           break;
       }
     }
+  }
+
+  /**
+   * init
+   */
+  function init() {
+    if (!self.searchBox.exist()) {
+      return;
+    }
+
+    self.searchBox.ref.addEventListener("input",
+      function(event) { searchwp.Overlay.searchBox.onInput(event); }, false, true);
+
+    /* XXXLegege: For SearchBox Sync, we have to listen the "oninput" event
+       because it appears that we cannot fire/catch an "input" event on the
+       searchbar. */
+    self.searchBox.ref.addEventListener("oninput",
+      function(event) { searchwp.Overlay.searchBox.onInput(event); }, false, true);
+  }
+
+  /**
+   * uninit
+   */
+  function uninit() {
+    if (!self.searchBox.exist()) {
+      return;
+    }
+
+    self.searchBox.ref.removeEventListener("input", function(event) { searchwp.Overlay.searchBox.onInput(event); }, false);
+    self.searchBox.ref.removeEventListener("oninput", function(event) { searchwp.Overlay.searchBox.onInput(event); }, false);
   }
 }
 
