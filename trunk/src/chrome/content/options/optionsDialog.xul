@@ -20,8 +20,6 @@
   <script type="application/x-javascript" src="chrome://@NAME@/content/options/package-info.js" />
   <script type="application/x-javascript" src="chrome://@NAME@/content/options/optionsDialog.js" />
 
-  <stringbundle id="bundle_searchwp" src="chrome://@NAME@/locale/searchwp.properties"/>
-
   <groupbox>
     <caption label="&pref.termstoolbar.label;" />
     <vbox>

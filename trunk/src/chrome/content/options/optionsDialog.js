@@ -22,14 +22,9 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-searchwp.options.OptionsDialog = {
-  stringBundle: null,
-
-  onLoad: function() {
-    this.stringBundle = document.getElementById("bundle_searchwp");
-    
+searchwp.options.OptionsDialog = new function() {
+  this.onLoad = function() {
     document.getElementById("highlightMinlength").value = searchwp.Preferences.highlightMinLength;
-    
     document.getElementById("termstoolbar-addition-upto").value = ""
     
     var maxTermsButtons = searchwp.Preferences.maxTermButtons;
@@ -44,9 +39,9 @@ searchwp.options.OptionsDialog = {
     else {
       document.getElementById("termstoolbar-addition").value = "option3";
     }
-  },
+  }
 
-  onAccept: function() {
+  this.onAccept = function() {
     // Highlighting options
     var highlightMinLength = document.getElementById("highlightMinlength").value;
     if (highlightMinLength > 0) {
@@ -69,9 +64,9 @@ searchwp.options.OptionsDialog = {
     }
     
     return true;
-  },
+  }
   
-  onTTAdditionSelect: function() {
+  this.onTTAdditionSelect = function() {
     if (document.getElementById("termstoolbar-addition").value == "option2") {
       var maxTermsButtons = searchwp.Preferences.maxTermButtons;
       if (maxTermsButtons > 0) {
