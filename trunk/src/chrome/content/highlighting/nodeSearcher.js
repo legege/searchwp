@@ -28,6 +28,7 @@ searchwp.highlighting.NodeSearcher = function() {
    * @param matcher An object that has a <code>match</code> function taking
    *   a string in argument. This function must returns the matched substring if
    *   this searcher should consider this range as a valid result.
+   *   (see RegexMatcher below)
    */
   this.search = function(document, matcher) {
     var high = document.createRange();
@@ -136,5 +137,20 @@ searchwp.highlighting.NodeSearcher = function() {
     }
 
     return;
+  }
+}
+
+/**
+ * RegexMatcher for the NodeSearcher.
+ */
+searchwp.highlighting.RegexMatcher = function(criteria, matchCase) {
+  this.regex = new RegExp(criteria, matchCase ? "" : "i");
+
+  this.match = function(str) {
+    var res = str.match(this.regex);
+    if (res) {
+      return res[0];
+    }
+    return null;
   }
 }
