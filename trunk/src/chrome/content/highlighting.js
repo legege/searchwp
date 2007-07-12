@@ -22,7 +22,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-var gSearchWPHighlighting = {
+searchwp.Highlighting = {
 
   _stringBundle: null,
   _highlighter: null,
@@ -33,21 +33,21 @@ var gSearchWPHighlighting = {
    */
   init: function() {
     var tabBox = document.getElementById("content").mTabBox;
-    tabBox.addEventListener("select", function(event) { gSearchWPHighlighting.refresh() }, false);
+    tabBox.addEventListener("select", function(event) { searchwp.Highlighting.refresh() }, false);
 
     if (this.highlightButton) {
-      this.highlightButton.setAttribute("checked", gSearchWP.pref.highlighted);
+      this.highlightButton.setAttribute("checked", searchwp.Preferences.highlighted);
     }
 
     if (this.highlightMatchCase) {
-      this.highlightMatchCase.setAttribute("checked", gSearchWP.pref.highlightMatchCase);
+      this.highlightMatchCase.setAttribute("checked", searchwp.Preferences.highlightMatchCase);
     }
 
     // Load the highlighting style sheet
     var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"]
-                        .getService(Components.interfaces.nsIStyleSheetService);
+        .getService(Components.interfaces.nsIStyleSheetService);
     var ios = Components.classes["@mozilla.org/network/io-service;1"]
-                        .getService(Components.interfaces.nsIIOService);
+        .getService(Components.interfaces.nsIIOService);
     var uri = ios.newURI("chrome://@NAME@/skin/highlighting-user.css", null, null);
     if(!sss.sheetRegistered(uri, sss.USER_SHEET)) {
       sss.loadAndRegisterSheet(uri, sss.USER_SHEET);
@@ -62,7 +62,7 @@ var gSearchWPHighlighting = {
    * Updates the highlighting according to the terms.
    */
   update: function(termsData, force) {
-    if (force || !gSearchWPTermsUtil.areIdenticals(this._termsData, termsData)) {
+    if (force || !searchwp.TermsDataFactory.compareTermsData(this._termsData, termsData)) {
       this._termsData = termsData;
       this._setRefreshTimeout();
     }
@@ -72,14 +72,14 @@ var gSearchWPHighlighting = {
    * Refreshes the current highlighting.
    */
   refresh: function() {
-    if (gSearchWP.pref.highlighted) {
+    if (searchwp.Preferences.highlighted) {
       this._highlight();
     }
     else {
       this._unhighlight();
     }
 
-    gSearchWPTermsToolbar.updateTermsStyleClassName();
+    searchwp.TermsToolbar.updateTermsStyleClassName();
   },
 
   /**
@@ -87,7 +87,7 @@ var gSearchWPHighlighting = {
    */
   toggleHighlight: function() {
     if (!this._disableToggleHighlight) {
-      gSearchWP.pref.highlighted = !gSearchWP.pref.highlighted;
+      searchwp.Preferences.highlighted = !searchwp.Preferences.highlighted;
     }
   },
 
@@ -98,7 +98,7 @@ var gSearchWPHighlighting = {
     this._disableToggleHighlight = true;
 
     try {
-      gSearchWP.pref.highlightMatchCase = !gSearchWP.pref.highlightMatchCase;
+      searchwp.Preferences.highlightMatchCase = !searchwp.Preferences.highlightMatchCase;
     }
     catch(e) {}
 
@@ -134,15 +134,15 @@ var gSearchWPHighlighting = {
     this._unhighlight();
 
     if (this._termsData) {
-      var count = this._highlighter.add(this._termsData, gSearchWP.pref.highlightMatchCase);
+      var count = this._highlighter.add(this._termsData, searchwp.Preferences.highlightMatchCase);
       if (count > 1) {
-        gSearchWP.displayMessage(this._stringBundle.getFormattedString("highlightCountN", [count], 1), false);
+        searchwp.displayMessage(this._stringBundle.getFormattedString("highlightCountN", [count], 1), false);
       }
       else if (count == 1) {
-        gSearchWP.displayMessage(this._stringBundle.getFormattedString("highlightCount1", [count], 1), false);
+        searchwp.displayMessage(this._stringBundle.getFormattedString("highlightCount1", [count], 1), false);
       }
       else {
-        gSearchWP.displayMessage(this._stringBundle.getString("highlightCount0"), false);
+        searchwp.displayMessage(this._stringBundle.getString("highlightCount0"), false);
       }
     }
   },
@@ -163,6 +163,6 @@ var gSearchWPHighlighting = {
     if (this._highlightTimeout) {
       clearTimeout(this._highlightTimeout);
     }
-    this._highlightTimeout = setTimeout(function() { gSearchWPHighlighting.refresh(); }, 500);
+    this._highlightTimeout = setTimeout(function() { searchwp.Highlighting.refresh(); }, 500);
   }
 }

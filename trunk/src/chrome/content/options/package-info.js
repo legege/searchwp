@@ -22,35 +22,5 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-if (!this.searchwp) this.searchwp = {}; 
-
-searchwp.playBeep = function() {
-  Components.classes["@mozilla.org/sound;1"]
-            .createInstance(Components.interfaces.nsISound)
-            .beep();
-}
-
-searchwp.displayMessage = function(aMessage, aBeep) {
-  var xulBrowserWindow = window.XULBrowserWindow;
-
-  if (!xulBrowserWindow) {
-    return;
-  }
-
-  xulBrowserWindow.setOverLink(aMessage, null);
-  if (aBeep) {
-    this.playBeep();
-  }
-
-  if (this._displayMessageTimeout) {
-    clearTimeout(this._displayMessageTimeout);
-  }
-
-  this._displayMessageTimeout = setTimeout(function(aText) {
-    if (window.XULBrowserWindow.overLink == aText) {
-      window.XULBrowserWindow.setOverLink("", null);
-    }
-  }, 3000, aMessage);
-
-  return;
-}
+if (!this.searchwp) this.searchwp = {};
+if (!this.searchwp.options) this.searchwp.options = {};

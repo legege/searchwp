@@ -22,15 +22,15 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-var gSearchWPTermsUtil = {
+searchwp.TermsDataFactory = new function() {
 
   /**
    * @param searchString The search string.
    * @return Returns an array that contains, for each words, the label to display and
-   *         the className when the term is highlighted.
+   *   the className when the term is highlighted.
    */
-  getTermsDataArray: function(searchString) {
-    var terms = this._parseTerms(searchString);
+  this.createTermsData = function(searchString) {
+    var terms = parseTerms(searchString);
     var termsData = new Array();
 
     var j = 0;
@@ -38,22 +38,22 @@ var gSearchWPTermsUtil = {
       if (terms[i].length > 0) {
         // Restrict the length to highlight
         var termClassName = "searchwp-term-disabled";
-        if (terms[i].length >= gSearchWP.pref.highlightMinLength) {
-          termClassName = "searchwp-term-highlight" + ((j % gSearchWP.pref.highlighterCount) + 1);
+        if (terms[i].length >= searchwp.Preferences.highlightMinLength) {
+          termClassName = "searchwp-term-highlight" + ((j % searchwp.Preferences.highlighterCount) + 1);
           j++;
         }
 
-        termsData.push({text:terms[i], className:termClassName});
+        termsData.push({text: terms[i], className: termClassName});
       }
     }
 
     return termsData;
-  },
+  }
 
   /**
    * @return Returns true if the 2 termsData are identicals
    */
-  areIdenticals: function(termsData1, termsData2) {
+  this.compareTermsData = function(termsData1, termsData2) {
     if (termsData1 && termsData2) {
       if (termsData1.length == termsData2.length) {
         var i = 0;
@@ -68,7 +68,7 @@ var gSearchWPTermsUtil = {
       }
     }
     return false;
-  },
+  }
 
   /**
    * From the Googlebar project: googlebarUtil.js
@@ -77,7 +77,7 @@ var gSearchWPTermsUtil = {
    * @return Returns an array of terms.
    * @private
    */
-  _parseTerms: function(aCriteria) {
+  function parseTerms(aCriteria) {
     // quotes only matter when preceded by a space or a quote.
     var terms = new Array();
     var inQuote = false;
@@ -108,9 +108,9 @@ var gSearchWPTermsUtil = {
             currPtr = index;
           }
           else if (!inQuote && haveTerm) {
-            val = this._trimString(aCriteria.substring(currPtr, index));
+            val = trimString(aCriteria.substring(currPtr, index));
 
-            if (val[0] != '-' && val != 'OR' && val != 'AND' && !this._inArray(terms, val)) {
+            if (val[0] != '-' && val != 'OR' && val != 'AND' && !inArray(terms, val)) {
               terms.push(val);
               currPtr = index;
             }
@@ -125,7 +125,7 @@ var gSearchWPTermsUtil = {
         case '"':
           if (haveTerm) {
             val = aCriteria.substring(currPtr, index);
-            if (!this._inArray(terms, val)) {
+            if (!inArray(terms, val)) {
               terms.push(val);
             }
           }
@@ -150,37 +150,35 @@ var gSearchWPTermsUtil = {
       prevChar = currChar;
     }
 
-    val = this._trimString(aCriteria.substring(currPtr, index));
+    val = trimString(aCriteria.substring(currPtr, index));
 
-    if (haveTerm && val[0] != '-' && val != 'OR' && val != 'AND' && !this._inArray(terms, val)) {
+    if (haveTerm && val[0] != '-' && val != 'OR' && val != 'AND' && !inArray(terms, val)) {
       terms.push(val);
     }
 
     return terms;
-  },
+  }
 
   /**
    * Determines if a given string is contained in an array.
    * @param arr The array.
    * @param str The string.
    * @return Returns true if the string is contained in the array, false if not.
-   * @private
    */
-  _inArray: function(arr, str) {
+  function inArray(arr, str) {
     for (var i = 0; i < arr.length; i++) {
-      if (arr[i].toLowerCase() == this._trimString(str.toLowerCase())) {
+      if (arr[i].toLowerCase() == trimString(str.toLowerCase())) {
         return true;
       }
     }
     return false;
-  },
+  }
 
   /**
    * Trim a string.
    * @return Returns the modified string.
-   * @private
    */
-  _trimString: function(string) {
+  function trimString(string) {
     if (!string) {
       return "";
     }

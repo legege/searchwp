@@ -37,11 +37,11 @@ searchwp.Highlighter = function() {
     highlightBrowserWindow();
   }
 
-  this.add = function(aTermsData, aMatchCase) {
+  this.add = function(termsData, matchCase) {
     var count = 0;
-    for (var term in aTermsData) {
-      if (aTermsData[term].className != "searchwp-term-disabled") {
-        count = count + highlightBrowserWindow(aTermsData[term].text, aTermsData[term].className, aMatchCase);
+    for (var term in termsData) {
+      if (termsData[term].className != "searchwp-term-disabled") {
+        count = count + highlightBrowserWindow(termsData[term].text, termsData[term].className, matchCase);
       }
     }
     return count;
@@ -118,7 +118,7 @@ searchwp.Highlighter = function() {
     //   .replace(/\^/, "\\b").replace(/\$/, "\\b").replace(/\*/, "\\b")
     //   .replace(/\+/, "\\b");
     //matcher = new SoundexMatcher(criteria);
-    matcher = new RegexMatcher(criteria, aMatchCase);
+    var matcher = new RegexMatcher(criteria, aMatchCase);
 
     var rangeMatches = self.searcher.search(document, matcher);
 

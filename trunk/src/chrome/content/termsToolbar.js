@@ -22,7 +22,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-var gSearchWPTermsToolbar = {
+searchwp.TermsToolbar = {
 
   _lastTermButtonSearch: null,
 
@@ -44,7 +44,7 @@ var gSearchWPTermsToolbar = {
     }
 
     // This is not in the init function because this can change in a session.
-    if (gSearchWP.pref.maxTermButtons == 0) {
+    if (searchwp.Preferences.maxTermButtons == 0) {
       this._menu.hidden = false;
       this._menu.className = ""; //Remove the chevron style
     }
@@ -52,7 +52,7 @@ var gSearchWPTermsToolbar = {
       this._menu.className = "chevron";
     }
 
-    if (!aForceUpdate && gSearchWPTermsUtil.areIdenticals(this._termsData, aTermsData)) {
+    if (!aForceUpdate && searchwp.TermsDataFactory.compareTermsData(this._termsData, aTermsData)) {
       return;
     }
     this._termsData = aTermsData;
@@ -143,7 +143,7 @@ var gSearchWPTermsToolbar = {
    * @param aItem The term button.
    */
   updateTermStyleClassName: function(aItem) {
-    if (gSearchWP.pref.highlighted) {
+    if (searchwp.Preferences.highlighted) {
       aItem.className = aItem.getAttribute("highlightStyleClassName");
     }
     else {
@@ -211,8 +211,8 @@ var gSearchWPTermsToolbar = {
       }
       itemsWidth = itemsWidth + this._menu.boxObject.width;
 
-      if (itemsWidth > window.innerWidth || (gSearchWP.pref.maxTermButtons > -1
-          && this._nextElemBoxId > gSearchWP.pref.maxTermButtons)) {
+      if (itemsWidth > window.innerWidth || (searchwp.Preferences.maxTermButtons > -1
+          && this._nextElemBoxId > searchwp.Preferences.maxTermButtons)) {
         this._removeTermButton(button);
         button = this._addTermButton(false, aLabel, aStyleClassName);
         this._inBox = false;
@@ -261,7 +261,7 @@ var gSearchWPTermsToolbar = {
     }
 
     button.setAttribute("label", aLabel);
-    button.setAttribute("oncommand", "gSearchWPTermsToolbar.onTermCommand(event, this)");
+    button.setAttribute("oncommand", "searchwp.TermsToolbar.onTermCommand(event, this)");
     button.setAttribute("highlightStyleClassName", aStyleClassName);
     this.updateTermStyleClassName(button);
 
@@ -301,7 +301,7 @@ var gSearchWPTermsToolbar = {
     this._nextElemPopupId = 0;
 
     this._inBox = true;
-    if (gSearchWP.pref.maxTermButtons != 0) {
+    if (searchwp.Preferences.maxTermButtons != 0) {
       this._menu.hidden = true;
     }
 
@@ -358,14 +358,14 @@ var gSearchWPTermsToolbar = {
         break;
       case 1: // Not found
         this._setTermNotFound(aTermButton);
-        gSearchWP.displayMessage(this.stringBundle.getFormattedString("notFound", [term], 1), true);
+        searchwp.displayMessage(this.stringBundle.getFormattedString("notFound", [term], 1), true);
         break;
       case 2: // Wrapped
         if (aFindBackwards) {
-          gSearchWP.displayMessage(this.stringBundle.getString("wrappedToBottom"), true);
+          searchwp.displayMessage(this.stringBundle.getString("wrappedToBottom"), true);
         }
         else {
-          gSearchWP.displayMessage(this.stringBundle.getString("wrappedToTop"), true);
+          searchwp.displayMessage(this.stringBundle.getString("wrappedToTop"), true);
         }
         break;
     }
@@ -383,6 +383,6 @@ var gSearchWPTermsToolbar = {
       clearTimeout(this._termNotFoundTimeout);
     }
 
-    this._termNotFoundTimeout = setTimeout(function(e) { gSearchWPTermsToolbar.updateTermStyleClassName(e); }, 3000, item);
+    this._termNotFoundTimeout = setTimeout(function(e) { searchwp.TermsToolbar.updateTermStyleClassName(e); }, 3000, item);
   }
 }
