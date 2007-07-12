@@ -24,7 +24,7 @@
 
 searchwp.Overlay = new function() {
   var self = this;
-  this.stringBundle = document.getElementById("bundle_searchwp");
+  this.stringBundle = null;
 
   /**
    * Initializes this extension.
@@ -34,6 +34,8 @@ searchwp.Overlay = new function() {
     if (event.target != document || !window.getBrowser) {
       return;
     }
+
+    this.stringBundle = document.getElementById("bundle_searchwp");
 
     this.preferencesObserver.register();
     window.getBrowser().addProgressListener(this.progressListener,
@@ -93,12 +95,12 @@ searchwp.Overlay = new function() {
     var findString = getBrowser().fastFind.searchString;
 
     if (!gFindBar.hidden || gFindBar.hidden && findString != "") {
-      gFindBar.onFindAgainCommand(aEvent.shiftKey);
+      gFindBar.onFindAgainCommand(event.shiftKey);
     }
     else {
-      var hasSearch = searchwp.TermsToolbar.searchAgain(aEvent);
+      var hasSearch = searchwp.TermsToolbar.searchAgain(event);
       if (!hasSearch) {
-        gFindBar.onFindAgainCommand(aEvent.shiftKey);
+        gFindBar.onFindAgainCommand(event.shiftKey);
       }
     }
   }
@@ -196,7 +198,7 @@ searchwp.Overlay = new function() {
     /**
      * Called when an input event is detected on the searchbox.
      */
-    onInput: function(aEvent) {
+    onInput: function(event) {
       var termsData = searchwp.TermsDataFactory.createTermsData(this.value);
       searchwp.TermsToolbar.update(termsData, false);
       searchwp.Highlighting.update(termsData, false);
@@ -207,24 +209,24 @@ searchwp.Overlay = new function() {
    * Progress Listener to automatically highlight terms on page load.
    */
   this.progressListener = {
-    QueryInterface: function(aIID) {
-      if (aIID.equals(Components.interfaces.nsIWebProgressListener) ||
-        aIID.equals(Components.interfaces.nsISupportsWeakReference) ||
-        aIID.equals(Components.interfaces.nsISupports))
+    QueryInterface: function(iid) {
+      if (iid.equals(Components.interfaces.nsIWebProgressListener) ||
+        iid.equals(Components.interfaces.nsISupportsWeakReference) ||
+        iid.equals(Components.interfaces.nsISupports))
         return this;
       throw Components.results.NS_NOINTERFACE;
     },
 
-    onProgressChange: function (aWebProgress, aRequest, aCurSelfProgress, aMaxSelfProgress, aCurTotalProgress, aMaxTotalProgress) {},
+    onProgressChange: function (webProgress, request, curSelfProgress, maxSelfProgress, curTotalProgress, maxTotalProgress) {},
 
-    onStatusChange: function(aWebProgress, aRequest, aStatus, aMessage) {},
+    onStatusChange: function(webProgress, request, status, message) {},
 
-    onSecurityChange: function(aWebProgress, aRequest, aState) {},
+    onSecurityChange: function(webProgress, request, state) {},
 
     onLinkIconAvailable: function(a) {},
 
-    onStateChange: function (aWebProgress, aRequest, aStateFlags, aStatus) {
-      if (aStateFlags & Components.interfaces.nsIWebProgressListener.STATE_STOP) {
+    onStateChange: function (webProgress, request, stateFlags, status) {
+      if (stateFlags & Components.interfaces.nsIWebProgressListener.STATE_STOP) {
         /**
          * XXXLegege (July 15th, 2005): Some users report that the page never stop
          * to load. Make the highlighting asynchrone.
@@ -233,7 +235,7 @@ searchwp.Overlay = new function() {
       }
     },
 
-    onLocationChange: function(aProgress, aRequest, aLocation) {}
+    onLocationChange: function(progress, request, location) {}
   },
 
   /**
@@ -254,12 +256,12 @@ searchwp.Overlay = new function() {
       pbi.removeObserver("", this, false);
     },
 
-    observe: function(aSubject, aTopic, aData) {
-      if (aTopic != "nsPref:changed") {
+    observe: function(subject, topic, data) {
+      if (topic != "nsPref:changed") {
         return;
       }
 
-      switch (aData) {
+      switch (data) {
         case searchwp.Preferences.PREF_HIGHLIGHT_STATE:
           setTimeout(
             function() {

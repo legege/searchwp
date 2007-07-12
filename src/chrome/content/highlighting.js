@@ -183,33 +183,19 @@ searchwp.Highlighting = new function() {
     criteria = criteria.replace(/\W/g, "\\W*");
 
     //var matcher = new SoundexMatcher(criteria);
-    var matcher = new RegexMatcher(criteria, matchCase);
+    var matcher = new searchwp.highlighting.RegexMatcher(criteria, matchCase);
 
     var rangeMatches = self.searcher.search(document, matcher);
 
     /* highlight the matches */
     for (var n in rangeMatches) {
       if (!rangeMatches[n].overlaps) {
-        count += self.highlighter.highlight(document, rangeMatches[n].node, rangeMatches[n].match, {class: styleClassName});
+        var elementCreator = new searchwp.highlighting.DefaultElementCreator("layer", {class: styleClassName});
+        count += self.highlighter.highlight(document, rangeMatches[n].node, rangeMatches[n].match, elementCreator);
       }
     }
 
     return count;
-  }
-
-  /**
-   * RegexMatcher for the NodeSearcher.
-   */
-  function RegexMatcher(criteria, matchCase) {
-    this.regex = new RegExp(criteria, matchCase ? "" : "i");
-
-    this.match = function(str) {
-      var res = str.match(this.regex);
-      if (res) {
-        return res[0];
-      }
-      return null;
-    }
   }
 
   /**

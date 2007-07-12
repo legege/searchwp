@@ -53,10 +53,9 @@ searchwp.highlighting.NodeHighlighter = function(name) {
    * @param document The document
    * @param node The node contained in the document.
    * @param word The word to highlight.
-   * @param attributes An object with the attributes to set to the new
-   *   highlighting element. e.g. {class: "test"}
+   * @param elementCreator An element creator object (see DefaultElementCreator below).
    */
-  this.highlight = function(document, node, word, attributes) {
+  this.highlight = function(document, node, word, elementCreator) {
     initNodeHighlighterMetaData(document);
 
     var text;
@@ -69,7 +68,6 @@ searchwp.highlighting.NodeHighlighter = function(name) {
       node = matchText.splitText(word.length);
       var clone = matchText.cloneNode(true);
 
-      var layer = document.createElement("layer");
       var concatId = this.name + document.nodeHighlighter[this.name].count++;
 
       // Be sure that this id doesn't exist.
@@ -77,16 +75,14 @@ searchwp.highlighting.NodeHighlighter = function(name) {
         concatId = this.name + document.nodeHighlighter[this.name].count++;
       }
 
-      for (var name in attributes) {
-        layer.setAttribute(name, attributes[name]);
-      }
-      layer.setAttribute("id", concatId);
+      var element = elementCreator.createElement(document);
+      element.setAttribute("id", concatId);
 
-      layer.appendChild(clone);
-      matchText.parentNode.replaceChild(layer, matchText);
+      element.appendChild(clone);
+      matchText.parentNode.replaceChild(element, matchText);
 
       // Move to next node
-      node = layer.nextSibling;
+      node = element.nextSibling;
       text = node.data.toLowerCase();
 
       count++;
@@ -103,5 +99,18 @@ searchwp.highlighting.NodeHighlighter = function(name) {
     if (!document.nodeHighlighter[self.name]) {
       document.nodeHighlighter[self.name] = {count: 0};
     }
+  }
+}
+
+searchwp.highlighting.DefaultElementCreator = function(elementName, attributes) {
+  this.elementName = elementName;
+  this.attributes = attributes;
+
+  this.createElement = function(document) {
+    var element = document.createElement(this.elementName);
+    for (var name in attributes) {
+      element.setAttribute(name, this.attributes[name]);
+    }
+    return element;
   }
 }
