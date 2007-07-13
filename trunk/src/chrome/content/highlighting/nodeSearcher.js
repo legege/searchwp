@@ -144,7 +144,7 @@ searchwp.highlighting.NodeSearcher = function() {
  * RegexMatcher for the NodeSearcher.
  */
 searchwp.highlighting.RegexMatcher = function(criteria, matchCase) {
-  this.regex = new RegExp(criteria, matchCase ? "" : "i");
+  this.regex = new RegExp(criteria, matchCase ? "m" : "mi");
 
   this.match = function(str) {
     var res = str.match(this.regex);

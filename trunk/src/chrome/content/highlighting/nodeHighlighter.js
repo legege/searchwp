@@ -53,17 +53,21 @@ searchwp.highlighting.NodeHighlighter = function(name) {
    * @param document The document
    * @param node The node contained in the document.
    * @param word The word to highlight.
+   * @param matchCase If highlighting should match case.
    * @param elementCreator An element creator object (see DefaultElementCreator below).
    */
-  this.highlight = function(document, node, word, elementCreator) {
+  this.highlight = function(document, node, word, matchCase, elementCreator) {
     initNodeHighlighterMetaData(document);
 
-    var text;
-    text = node.data;
+    var text = node.data;
+    if (!matchCase) {
+      text = text.toUpperCase();
+      word = word.toUpperCase();
+    }
 
     var count = 0;
     while (text.indexOf(word) != -1) {
-      var matchText = node.splitText(text.toUpperCase().indexOf(word.toUpperCase()));
+      var matchText = node.splitText(text.indexOf(word));
 
       node = matchText.splitText(word.length);
       var clone = matchText.cloneNode(true);
@@ -83,7 +87,10 @@ searchwp.highlighting.NodeHighlighter = function(name) {
 
       // Move to next node
       node = element.nextSibling;
-      text = node.data.toLowerCase();
+      text = node.data;
+      if (!matchCase) {
+        text = text.toUpperCase();
+      }
 
       count++;
     }

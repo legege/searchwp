@@ -191,7 +191,7 @@ searchwp.Highlighting = new function() {
     for (var n in rangeMatches) {
       if (!rangeMatches[n].overlaps) {
         var elementCreator = new searchwp.highlighting.DefaultElementCreator("layer", {class: styleClassName});
-        count += self.highlighter.highlight(document, rangeMatches[n].node, rangeMatches[n].match, elementCreator);
+        count += self.highlighter.highlight(document, rangeMatches[n].node, rangeMatches[n].match, matchCase, elementCreator);
       }
     }
 
