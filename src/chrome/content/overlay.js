@@ -24,18 +24,18 @@
 
 searchwp.Overlay = new function() {
   var self = this;
-  this.stringBundle = null;
+  var _stringBundle = null;
 
   /**
    * Initializes this extension.
-   * @param event The load event.
+   * @param aEvent The load event.
    */
-  this.onLoad = function(event) {
-    if (event.target != document || !window.getBrowser) {
+  this.onLoad = function(aEvent) {
+    if (aEvent.target != document || !window.getBrowser) {
       return;
     }
 
-    this.stringBundle = document.getElementById("bundle_searchwp");
+    _stringBundle = document.getElementById("bundle-searchwp");
 
     this.preferencesObserver.register();
     window.getBrowser().addProgressListener(this.progressListener,
@@ -53,8 +53,8 @@ searchwp.Overlay = new function() {
       }
     }, 0);
 
-    if (searchwp.Preferences.firstLaunch
-        && !searchwp.TermsToolbar.exist() && !searchwp.Highlighting.exist()) {
+    if (searchwp.Preferences.firstLaunch && !searchwp.TermsToolbar.exist()
+        && !searchwp.Highlighting.exist()) {
       setTimeout(function() {
         searchwp.Overlay.firstLaunchMessage();
       }, 50);
@@ -64,43 +64,34 @@ searchwp.Overlay = new function() {
     searchwp.Highlighting.init();
     searchwp.TermsToolbar.init();
 
-    addEventListener("resize", function(event) { searchwp.Overlay.onResize(event); }, false);
     addEventListener("unload", function(event) { searchwp.Overlay.onUnload(event); }, false);
   }
 
   /**
    * Uninitializes this extension.
-   * @param event The unload event.
+   * @param aEvent The unload event.
    */
-  this.onUnload = function(event) {
-    searchwp.Overlay.preferencesObserver.unregister();
+  this.onUnload = function(aEvent) {
+    this.preferencesObserver.unregister();
     window.getBrowser().removeProgressListener(this.progressListener);
 
     uninit();
   }
 
   /**
-   * Called when the window is resized.
-   * @param event The resize event.
-   */
-  this.onResize = function(event) {
-    searchwp.TermsToolbar.refresh();
-  }
-
-  /**
    * Called when F3/Shift+F3 is pressed.
-   * @param event The event.
+   * @param aEvent The event.
    */
-  this.onFindAgain = function(event) {
+  this.onFindAgain = function(aEvent) {
     var findString = getBrowser().fastFind.searchString;
 
     if (!gFindBar.hidden || gFindBar.hidden && findString != "") {
-      gFindBar.onFindAgainCommand(event.shiftKey);
+      gFindBar.onFindAgainCommand(aEvent.shiftKey);
     }
     else {
-      var hasSearch = searchwp.TermsToolbar.searchAgain(event);
+      var hasSearch = searchwp.TermsToolbar.searchAgain(aEvent);
       if (!hasSearch) {
-        gFindBar.onFindAgainCommand(event.shiftKey);
+        gFindBar.onFindAgainCommand(aEvent.shiftKey);
       }
     }
   }
@@ -119,12 +110,12 @@ searchwp.Overlay = new function() {
     var promptService = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
                                   .getService(Components.interfaces.nsIPromptService);
     var no = promptService.confirmEx(window,
-        this.stringBundle.getString("firstLaunchTitle"),
-        this.stringBundle.getString("firstLaunchMessage"),
+        _stringBundle.getString("firstLaunchTitle"),
+        _stringBundle.getString("firstLaunchMessage"),
           Components.interfaces.nsIPromptService.BUTTON_TITLE_YES * Components.interfaces.nsIPromptService.BUTTON_POS_0
             + Components.interfaces.nsIPromptService.BUTTON_TITLE_NO * Components.interfaces.nsIPromptService.BUTTON_POS_1,
         null, null, null,
-        this.stringBundle.getString("firstLaunchCheckbox"),
+        _stringBundle.getString("firstLaunchCheckbox"),
         showAgain);
     if (!no) {
       BrowserCustomizeToolbar();
@@ -146,59 +137,59 @@ searchwp.Overlay = new function() {
     return toolbox.__searchwp__customizeDone();
   }
 
-  this.searchBox = {
+  this.searchBox = new function() {
     /**
      * Return a reference to the searchbar.
      */
-    get ref() {
+    this.__defineGetter__("ref", function() {
       return document.getElementById("searchbar");
-    },
+    });
 
     /**
      * @return the current searchbox value.
      */
-    get value() {
+    this.__defineGetter__("value", function() {
       var textbox = document.getAnonymousElementByAttribute(this.ref, "class", "searchbar-textbox");
       if (textbox) {
         return textbox.inputField.value;
       }
       return "";
-    },
+    });
 
     /**
      * Sets the value of the searchbox.
-     * @param value The value to set.
+     * @param aValue The value to set.
      */
-    set value(v) {
+    this.__defineSetter__("value", function(aValue) {
       var textbox = document.getAnonymousElementByAttribute(this.ref, "class", "searchbar-textbox");
       if (textbox) {
-        textbox.inputField.value = v;
+        textbox.inputField.value = aValue;
       }
-    },
+    });
 
     /**
      * Determines if the focus is in the searchbox.
      * @return true if the focus is in the searchbox.
      */
-    focused: function() {
+    this.focused = function() {
       if (this.ref) {
         return this.ref.mTextbox.focused;
       }
       return false;
-    },
+    }
 
     /**
      * Determines if the searchbox exists.
      * @return true if the searchbox exists.
      */
-    exist: function() {
+    this.exist = function() {
       return this.ref != null;
-    },
+    }
 
     /**
      * Called when an input event is detected on the searchbox.
      */
-    onInput: function(event) {
+    this.onInput = function(aEvent) {
       var termsData = searchwp.TermsDataFactory.createTermsData(this.value);
       searchwp.TermsToolbar.update(termsData, false);
       searchwp.Highlighting.update(termsData, false);
@@ -208,60 +199,61 @@ searchwp.Overlay = new function() {
   /**
    * Progress Listener to automatically highlight terms on page load.
    */
-  this.progressListener = {
-    QueryInterface: function(iid) {
-      if (iid.equals(Components.interfaces.nsIWebProgressListener) ||
-        iid.equals(Components.interfaces.nsISupportsWeakReference) ||
-        iid.equals(Components.interfaces.nsISupports))
+  this.progressListener = new function() {
+    this.QueryInterface = function(aIID) {
+      if (aIID.equals(Components.interfaces.nsIWebProgressListener) ||
+        aIID.equals(Components.interfaces.nsISupportsWeakReference) ||
+        aIID.equals(Components.interfaces.nsISupports))
         return this;
       throw Components.results.NS_NOINTERFACE;
-    },
+    }
 
-    onProgressChange: function (webProgress, request, curSelfProgress, maxSelfProgress, curTotalProgress, maxTotalProgress) {},
+    this.onProgressChange = function (aWebProgress, aRequest, aCurSelfProgress,
+        aMaxSelfProgress, aCurTotalProgress, aMaxTotalProgress) {}
 
-    onStatusChange: function(webProgress, request, status, message) {},
+    this.onStatusChange = function(aWebProgress, aRequest, aStatus, message) {}
 
-    onSecurityChange: function(webProgress, request, state) {},
+    this.onSecurityChange = function(aWebProgress, aRequest, aState) {}
 
-    onLinkIconAvailable: function(a) {},
+    this.onLinkIconAvailable = function(a) {}
 
-    onStateChange: function (webProgress, request, stateFlags, status) {
-      if (stateFlags & Components.interfaces.nsIWebProgressListener.STATE_STOP) {
+    this.onStateChange = function (aWebProgress, aRequest, aStateFlags, aStatus) {
+      if (aStateFlags & Components.interfaces.nsIWebProgressListener.STATE_STOP) {
         /**
          * XXXLegege (July 15th, 2005): Some users report that the page never stop
          * to load. Make the highlighting asynchrone.
          */
         setTimeout(function() { searchwp.Highlighting.refresh(); }, 0);
       }
-    },
+    }
 
-    onLocationChange: function(progress, request, location) {}
-  },
+    this.onLocationChange = function(aProgress, aRequest, aLocation) {}
+  }
 
   /**
    * Preferences Observer
    */
-  this.preferencesObserver = {
-    register: function() {
-      this.branch = searchwp.Preferences.branch;
+  this.preferencesObserver = new function() {
+    var branch = searchwp.Preferences.branch;
 
-      var pbi = this.branch.QueryInterface(Components.interfaces.nsIPrefBranchInternal);
+    this.register = function() {
+      var pbi = branch.QueryInterface(Components.interfaces.nsIPrefBranchInternal);
       pbi.addObserver("", this, false);
-    },
+    }
 
-    unregister: function() {
-      if (!this.branch) return;
+    this.unregister = function() {
+      if (!branch) return;
 
-      var pbi = this.branch.QueryInterface(Components.interfaces.nsIPrefBranchInternal);
+      var pbi = branch.QueryInterface(Components.interfaces.nsIPrefBranchInternal);
       pbi.removeObserver("", this, false);
-    },
+    }
 
-    observe: function(subject, topic, data) {
-      if (topic != "nsPref:changed") {
+    this.observe = function(aSubject, aTopic, aData) {
+      if (aTopic != "nsPref:changed") {
         return;
       }
 
-      switch (data) {
+      switch (aData) {
         case searchwp.Preferences.PREF_HIGHLIGHT_STATE:
           setTimeout(
             function() {

@@ -22,30 +22,30 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-searchwp.Preferences = {
-  PREF_BRANCH: "extensions.searchwp.",
-  PREF_BEEP_NOT_FOUND: "beepNotFound",
-  PREF_HIGHLIGHTER_COUNT: "highlighterCount",
-  PREF_HIGHLIGHT_MINLENGTH: "highlightMinLength",
-  PREF_HIGHLIGHT_STATE: "highlightState",
-  PREF_HIGHLIGHT_MATCH_CASE: "highlightMatchCase",
-  PREF_FIRST_LAUNCH: "firstLaunch",
-  PREF_MAX_TERM_BUTTONS: "maxTermButtons",
+searchwp.Preferences = new function() {
+  this.PREF_BEEP_NOT_FOUND = "beepNotFound";
+  this.PREF_HIGHLIGHTER_COUNT = "highlighterCount";
+  this.PREF_HIGHLIGHT_MINLENGTH = "highlightMinLength";
+  this.PREF_HIGHLIGHT_STATE = "highlightState";
+  this.PREF_HIGHLIGHT_MATCH_CASE = "highlightMatchCase";
+  this.PREF_FIRST_LAUNCH = "firstLaunch";
+  this.PREF_MAX_TERM_BUTTONS = "maxTermButtons";
 
-  prefService: Components.classes["@mozilla.org/preferences-service;1"]
-      .getService(Components.interfaces.nsIPrefService),
+  var PREF_BRANCH = "extensions.searchwp.";
+  var prefService = Components.classes["@mozilla.org/preferences-service;1"]
+                              .getService(Components.interfaces.nsIPrefService);
 
   /**
    * @return the preferences branch.
    */
-  get branch() {
-    return this.prefService.getBranch(this.PREF_BRANCH);
-  },
+  this.__defineGetter__("branch", function() {
+    return prefService.getBranch(PREF_BRANCH);
+  });
 
   /**
    * @return the state of the highlighting.
    */
-  get highlighted() {
+  this.__defineGetter__("highlighted", function() {
     try {
       return this.branch.getBoolPref(this.PREF_HIGHLIGHT_STATE);
     }
@@ -53,20 +53,20 @@ searchwp.Preferences = {
       this.highlighted = false;
       return false;
     }
-  },
+  });
 
   /**
    * Sets the state of the highlighting.
-   * @param v true or false
+   * @param aValue true or false
    */
-  set highlighted(v) {
-    this.branch.setBoolPref(this.PREF_HIGHLIGHT_STATE, v);
-  },
+  this.__defineSetter__("highlighted", function(aValue) {
+    this.branch.setBoolPref(this.PREF_HIGHLIGHT_STATE, aValue);
+  });
 
   /**
    * @return if highlighting should match case.
    */
-  get highlightMatchCase() {
+  this.__defineGetter__("highlightMatchCase", function() {
     try {
       return this.branch.getBoolPref(this.PREF_HIGHLIGHT_MATCH_CASE);
     }
@@ -74,20 +74,20 @@ searchwp.Preferences = {
       this.highlightMatchCase = false;
       return false;
     }
-  },
+  });
 
   /**
    * Sets if highlighting should match case.
-   * @param v true or false
+   * @param aValue true or false
    */
-  set highlightMatchCase(v) {
-    this.branch.setBoolPref(this.PREF_HIGHLIGHT_MATCH_CASE, v);
-  },
+  this.__defineSetter__("highlightMatchCase", function(aValue) {
+    this.branch.setBoolPref(this.PREF_HIGHLIGHT_MATCH_CASE, aValue);
+  });
 
   /**
    * @return true if it is the first launch after installation.
    */
-  get firstLaunch() {
+  this.__defineGetter__("firstLaunch", function() {
     try {
       return this.branch.getBoolPref(this.PREF_FIRST_LAUNCH);
     }
@@ -95,20 +95,20 @@ searchwp.Preferences = {
       this.firstLaunch = false;
       return false;
     }
-  },
+  });
 
   /**
    * Sets the first launch flag.
-   * @param v true or false
+   * @param aValue true or false
    */
-  set firstLaunch(v) {
-    this.branch.setBoolPref(this.PREF_FIRST_LAUNCH, v);
-  },
+  this.__defineSetter__("firstLaunch", function(aValue) {
+    this.branch.setBoolPref(this.PREF_FIRST_LAUNCH, aValue);
+  });
 
   /**
    * @return the number of highlighter.
    */
-  get highlighterCount() {
+  this.__defineGetter__("highlighterCount", function() {
     try {
       return this.branch.getIntPref(this.PREF_HIGHLIGHTER_COUNT);
     }
@@ -116,12 +116,12 @@ searchwp.Preferences = {
       this.branch.setIntPref(this.PREF_HIGHLIGHTER_COUNT, 4);
       return 4;
     }
-  },
+  });
 
   /**
    * @return the mininum length to highlight a term.
    */
-  get highlightMinLength() {
+  this.__defineGetter__("highlightMinLength", function() {
     try {
       return this.branch.getIntPref(this.PREF_HIGHLIGHT_MINLENGTH);
     }
@@ -129,20 +129,20 @@ searchwp.Preferences = {
       this.branch.setIntPref(this.PREF_HIGHLIGHT_MINLENGTH, 2);
       return 2;
     }
-  },
+  });
 
   /**
    * Sets the mininum length to highlight a term.
-   * @param v The minimum length
+   * @param aValue The minimum length
    */
-  set highlightMinLength(v) {
-    this.branch.setIntPref(this.PREF_HIGHLIGHT_MINLENGTH, v);
-  },
+  this.__defineSetter__("highlightMinLength", function(aValue) {
+    this.branch.setIntPref(this.PREF_HIGHLIGHT_MINLENGTH, aValue);
+  });
 
   /**
    * @return the maximum number of term's button. (-1: unlimited)
    */
-  get maxTermButtons() {
+  this.__defineGetter__("maxTermButtons", function() {
     try {
       return this.branch.getIntPref(this.PREF_MAX_TERM_BUTTONS);
     }
@@ -150,13 +150,13 @@ searchwp.Preferences = {
       this.maxTermButtons = -1;
       return -1;
     }
-  },
+  });
 
   /**
    * Changes the maximum number of term's button.
-   * @param v An integer (-1: unlimited)
+   * @param aValue An integer (-1: unlimited)
    */
-  set maxTermButtons(v) {
-    this.branch.setIntPref(this.PREF_MAX_TERM_BUTTONS, v);
-  }
+  this.__defineGetter__("maxTermButtons", function(aValue) {
+    this.branch.setIntPref(this.PREF_MAX_TERM_BUTTONS, aValue);
+  });
 }

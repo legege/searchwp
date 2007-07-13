@@ -25,12 +25,12 @@
 searchwp.TermsDataFactory = new function() {
 
   /**
-   * @param searchString The search string.
+   * @param aSearchString The search string.
    * @return an array that contains, for each words, the label to display and
    *   the className when the term is highlighted.
    */
-  this.createTermsData = function(searchString) {
-    var terms = parseTerms(searchString);
+  this.createTermsData = function(aSearchString) {
+    var terms = parseTerms(aSearchString);
     var termsData = new Array();
 
     var j = 0;
@@ -53,16 +53,16 @@ searchwp.TermsDataFactory = new function() {
   /**
    * @return true if the 2 termsData are identicals
    */
-  this.compareTermsData = function(termsData1, termsData2) {
-    if (termsData1 && termsData2) {
-      if (termsData1.length == termsData2.length) {
+  this.compareTermsData = function(aTermsData1, aTermsData2) {
+    if (aTermsData1 && aTermsData2) {
+      if (aTermsData1.length == aTermsData2.length) {
         var i = 0;
-        while(i < termsData2.length
-            && termsData2[i].text == termsData1[i].text
-            && termsData2[i].className == termsData1[i].className) {
+        while(i < aTermsData2.length
+            && aTermsData2[i].text == aTermsData1[i].text
+            && aTermsData2[i].className == aTermsData1[i].className) {
           i++;
         }
-        if (i == termsData2.length) { //Identical
+        if (i == aTermsData2.length) { //Identical
           return true;
         }
       }
@@ -73,10 +73,10 @@ searchwp.TermsDataFactory = new function() {
   /**
    * From the Googlebar project: googlebarUtil.js
    *
-   * @param criteria The search string.
+   * @param aCriteria The search string.
    * @return an array of terms.
    */
-  function parseTerms(criteria) {
+  function parseTerms(aCriteria) {
     // quotes only matter when preceded by a space or a quote.
     var terms = new Array();
     var inQuote = false;
@@ -87,10 +87,10 @@ searchwp.TermsDataFactory = new function() {
 
     var val;
 
-    criteria = criteria.replace(/(allinanchor|allintext|allintitle|allinurl|author|bphonebook|cache|define|ext|filetype|group|id|inanchor|info|insubject|intext|intitle|inurl|link|location|movie|msgid|phonebook|related|rphonebook|safesearch|site|source|stocks|store|weather):/g, "");
+    aCriteria = aCriteria.replace(/(allinanchor|allintext|allintitle|allinurl|author|bphonebook|cache|define|ext|filetype|group|id|inanchor|info|insubject|intext|intitle|inurl|link|location|movie|msgid|phonebook|related|rphonebook|safesearch|site|source|stocks|store|weather):/g, "");
 
-    for (var index = 0; index < criteria.length; index++) {
-      var currChar = criteria.charAt(index);
+    for (var index = 0; index < aCriteria.length; index++) {
+      var currChar = aCriteria.charAt(index);
 
       switch (currChar) {
         case '+':
@@ -107,7 +107,7 @@ searchwp.TermsDataFactory = new function() {
             currPtr = index;
           }
           else if (!inQuote && haveTerm) {
-            val = trimString(criteria.substring(currPtr, index));
+            val = trimString(aCriteria.substring(currPtr, index));
 
             if (val[0] != '-' && val != 'OR' && val != 'AND' && !inArray(terms, val)) {
               terms.push(val);
@@ -123,7 +123,7 @@ searchwp.TermsDataFactory = new function() {
 
         case '"':
           if (haveTerm) {
-            val = criteria.substring(currPtr, index);
+            val = aCriteria.substring(currPtr, index);
             if (!inArray(terms, val)) {
               terms.push(val);
             }
@@ -149,7 +149,7 @@ searchwp.TermsDataFactory = new function() {
       prevChar = currChar;
     }
 
-    val = trimString(criteria.substring(currPtr, index));
+    val = trimString(aCriteria.substring(currPtr, index));
 
     if (haveTerm && val[0] != '-' && val != 'OR' && val != 'AND' && !inArray(terms, val)) {
       terms.push(val);
@@ -160,13 +160,13 @@ searchwp.TermsDataFactory = new function() {
 
   /**
    * Determines if a given string is contained in an array.
-   * @param arr The array.
-   * @param str The string.
+   * @param aArr The array.
+   * @param aStr The string.
    * @return true if the string is contained in the array, false if not.
    */
-  function inArray(arr, str) {
-    for (var i = 0; i < arr.length; i++) {
-      if (arr[i].toLowerCase() == trimString(str.toLowerCase())) {
+  function inArray(aArr, aStr) {
+    for (var i = 0; i < aArr.length; i++) {
+      if (aArr[i].toLowerCase() == trimString(aStr.toLowerCase())) {
         return true;
       }
     }
@@ -175,12 +175,13 @@ searchwp.TermsDataFactory = new function() {
 
   /**
    * Trim a string.
+   * @param aString the string.
    * @return the modified string.
    */
-  function trimString(string) {
-    if (!string) {
+  function trimString(aString) {
+    if (!aString) {
       return "";
     }
-    return string.replace(/(^\s+)|(\s+$)/g, '');
+    return aString.replace(/(^\s+)|(\s+$)/g, '');
   }
 }
