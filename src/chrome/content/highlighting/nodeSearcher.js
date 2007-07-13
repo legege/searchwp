@@ -70,7 +70,7 @@ searchwp.highlighting.NodeSearcher = function() {
     if (endIndex - startIndex == 1 && node.childNodes.length > 0) {
       node = node.childNodes[endIndex - 1];
       while (node.childNodes.length == 1) {
-        if (node.nodeName.toLowerCase() in {script:null, style:null, textarea:null, input:null}) {
+        if (node.nodeName.toLowerCase() in {script: null, style: null, textarea: null, input: null}) {
           return; // ignore these elements
         }
         node = node.firstChild;
