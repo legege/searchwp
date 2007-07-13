@@ -24,20 +24,20 @@
 
 searchwp.highlighting.NodeSearcher = function() {
   /**
-   * @param document The Document to search in.
-   * @param matcher An object that has a <code>match</code> function taking
+   * @param aDocument The Document to search in.
+   * @param aMatcher An object that has a <code>match</code> function taking
    *   a string in argument. This function must returns the matched substring if
    *   this searcher should consider this range as a valid result.
    *   (see RegexMatcher below)
    */
-  this.search = function(document, matcher) {
-    var high = document.createRange();
+  this.search = function(aDocument, aMatcher) {
+    var high = aDocument.createRange();
 
-    if (!("body" in document) || !matcher) {
+    if (!("body" in aDocument) || !aMatcher) {
       return [];
     }
 
-    high.selectNodeContents(document.body);
+    high.selectNodeContents(aDocument.body);
 
     var startIndex = 0;
     var endIndex = high.commonAncestorContainer.childNodes.length;
@@ -45,9 +45,9 @@ searchwp.highlighting.NodeSearcher = function() {
 
     /* search-limits */
     var externalCounter = {countMax: 6000, matchMax: 6000, count: 0, matches: rangeMatches};
-    var lastMatch = matcher.match(high.toString());
+    var lastMatch = aMatcher.match(high.toString());
     if (lastMatch) {
-      binaryRangeSearch(high, startIndex, endIndex, matcher, lastMatch, rangeMatches, externalCounter);
+      binaryRangeSearch(high, startIndex, endIndex, aMatcher, lastMatch, rangeMatches, externalCounter);
     }
 
     return rangeMatches;
@@ -57,15 +57,15 @@ searchwp.highlighting.NodeSearcher = function() {
    * Binary Search Function
    * Original code written by rue (http://homepage.mac.com/rue/binary-search-comparison.html)
    */
-  function binaryRangeSearch(high, startIndex, endIndex, matcher, lastMatch, rangeMatches, externalCounter) {
-    if (externalCounter.count++ > externalCounter.countMax || externalCounter.matches.length > externalCounter.matchMax) {
+  function binaryRangeSearch(aHigh, aStartIndex, aEndIndex, aMatcher, aLastMatch, aRangeMatches, aExternalCounter) {
+    if (aExternalCounter.count++ > aExternalCounter.countMax || aExternalCounter.matches.length > aExternalCounter.matchMax) {
       return;
     }
 
     var origNode;
-    var node = origNode = high.startContainer;
-    var origStartIndex = startIndex;
-    var origEndIndex = endIndex;
+    var node = origNode = aHigh.startContainer;
+    var startIndex = aStartIndex;
+    var endIndex = aEndIndex;
 
     if (endIndex - startIndex == 1 && node.childNodes.length > 0) {
       node = node.childNodes[endIndex - 1];
@@ -80,31 +80,31 @@ searchwp.highlighting.NodeSearcher = function() {
       endIndex = node.childNodes.length;
 
       if (endIndex == 0) {
-        rangeMatches.push({node: node, match: lastMatch, overlaps: false});
+        aRangeMatches.push({node: node, match: aLastMatch, overlaps: false});
         return;
       } // this *must* come before we change high's indices (next)
 
-      high.setStart(node, startIndex);
-      high.setEnd(node, endIndex);
+      aHigh.setStart(node, startIndex);
+      aHigh.setEnd(node, endIndex);
     }
 
     var midIndex = startIndex + Math.ceil((endIndex - startIndex) / 2);
     if (midIndex == endIndex || endIndex == 0) {
-      rangeMatches.push({node: node, match: lastMatch, overlaps: false});
+      aRangeMatches.push({node: node, match: aLastMatch, overlaps: false});
       return;
     }
 
-    high.setEnd(node, midIndex);
-    var highString = high.toString();
+    aHigh.setEnd(node, midIndex);
+    var highString = aHigh.toString();
 
-    var newLastMatch = matcher.match(highString);
+    var newLastMatch = aMatcher.match(highString);
     if (newLastMatch) {
       var deeper = true;
-      binaryRangeSearch(high, startIndex, midIndex, matcher, newLastMatch, rangeMatches, externalCounter);
+      binaryRangeSearch(aHigh, startIndex, midIndex, aMatcher, newLastMatch, aRangeMatches, aExternalCounter);
     }
 
     // split range
-    var low = high;
+    var low = aHigh;
     low.setEnd(node, endIndex); // *must* come first: since we altered the end (above), we have to set it back.
     low.setStart(node, midIndex);
 
@@ -112,12 +112,12 @@ searchwp.highlighting.NodeSearcher = function() {
       var highLength = highString.length;
       var lowString = low.toString();
       highString += lowString;
-      var lowMatch = matcher.match(lowString);
+      var lowMatch = aMatcher.match(lowString);
       var overlaps = lowMatch && highString.indexOf(lowMatch) < highLength;
     }
     else {
       var lowString = low.toString();
-      var lowMatch = matcher.match(lowString);
+      var lowMatch = aMatcher.match(lowString);
     }
 
     /*
@@ -129,11 +129,11 @@ searchwp.highlighting.NodeSearcher = function() {
     var subSearchLowerOverlap = false;
     if (lowMatch && (!overlaps || subSearchLowerOverlap)) {
       deeper = true;
-      binaryRangeSearch(low, midIndex, endIndex, matcher, lowMatch, rangeMatches, externalCounter);
+      binaryRangeSearch(low, midIndex, endIndex, aMatcher, lowMatch, aRangeMatches, aExternalCounter);
     }
 
     if (!deeper || overlaps) {
-      rangeMatches.push({node: origNode, startIndex: origStartIndex, endIndex: origEndIndex, match: lastMatch, overlaps: true});
+      aRangeMatches.push({node: origNode, startIndex: aStartIndex, endIndex: aEndIndex, match: aLastMatch, overlaps: true});
     }
 
     return;
@@ -143,11 +143,11 @@ searchwp.highlighting.NodeSearcher = function() {
 /**
  * RegexMatcher for the NodeSearcher.
  */
-searchwp.highlighting.RegexMatcher = function(criteria, matchCase) {
-  this.regex = new RegExp(criteria, matchCase ? "m" : "mi");
+searchwp.highlighting.RegexMatcher = function(aCriteria, aMatchCase) {
+  var _regex = new RegExp(aCriteria, aMatchCase ? "m" : "mi");
 
-  this.match = function(str) {
-    var res = str.match(this.regex);
+  this.match = function(aStr) {
+    var res = aStr.match(_regex);
     if (res) {
       return res[0];
     }

@@ -22,26 +22,26 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-searchwp.highlighting.NodeHighlighter = function(name) {
+searchwp.highlighting.NodeHighlighter = function(aName) {
   var self = this;
-  this.name = name;
+  var _name = aName;
 
   /**
    * Clear the highlighting for a particular document.
-   * @param document The document to clear.
+   * @param aDocument The document to clear.
    */
-  this.clear = function(document) {
-    if (!document) {
+  this.clear = function(aDocument) {
+    if (!aDocument) {
       return;
     }
 
-    initNodeHighlighterMetaData(document);
+    var documentMetaData = getNodeHighlighterMetaData(aDocument);
 
     // Find and remove all highlight span nodes
-    while (document.nodeHighlighter[this.name].count > 0) {
-      var id = this.name + --document.nodeHighlighter[this.name].count;
-      var clone = document.nodeHighlighter[this.name].originalNodes[id];
-      var oldSpan = document.getElementById(id);
+    while (documentMetaData.count > 0) {
+      var id = _name + --documentMetaData.count;
+      var clone = documentMetaData.originalNodes[id];
+      var oldSpan = aDocument.getElementById(id);
       var parent = oldSpan.parentNode;
       parent.replaceChild(clone, oldSpan);
       parent.normalize();
@@ -51,21 +51,23 @@ searchwp.highlighting.NodeHighlighter = function(name) {
   /**
    * Highlight all instances of a word in a particular node of
    * the given document.
-   * @param document The document
-   * @param node The node contained in the document.
-   * @param word The word to highlight.
-   * @param matchCase If highlighting should match case.
-   * @param elementCreator An element creator object (see DefaultElementCreator below).
+   * @param aDocument The document
+   * @param aNode The node contained in the document.
+   * @param aWord The word to highlight.
+   * @param aMatchCase If highlighting should match case.
+   * @param aElementCreator An element creator object (see DefaultElementCreator below).
    */
-  this.highlight = function(document, node, word, matchCase, elementCreator) {
-    if (node.nodeType != Node.TEXT_NODE) {
-      return;
+  this.highlight = function(aDocument, aNode, aWord, aMatchCase, aElementCreator) {
+    if (aNode.nodeType != Node.TEXT_NODE) {
+      return 0;
     }
 
-    initNodeHighlighterMetaData(document);
+    var documentMetaData = getNodeHighlighterMetaData(aDocument);
 
+    var node = aNode;
     var text = node.data;
-    if (!matchCase) {
+    var word = aWord;
+    if (!aMatchCase) {
       text = text.toUpperCase();
       word = word.toUpperCase();
     }
@@ -75,23 +77,23 @@ searchwp.highlighting.NodeHighlighter = function(name) {
       var matchText = node.splitText(text.indexOf(word));
       matchText.splitText(word.length);
 
-      var id = this.name + document.nodeHighlighter[this.name].count++;
+      var id = _name + documentMetaData.count++;
 
       // Check if id already exists.
-      while (document.getElementById(id) != null) {
-        id = this.name + document.nodeHighlighter[this.name].count++;
+      while (aDocument.getElementById(id) != null) {
+        id = _name + documentMetaData.count++;
       }
 
       var childNode = matchText.cloneNode(true);
-      var element = elementCreator.createElement(document, id, childNode);
+      var element = aElementCreator.createElement(aDocument, id, childNode);
       matchText.parentNode.replaceChild(element, matchText);
 
-      document.nodeHighlighter[this.name].originalNodes[id] = childNode.cloneNode(true);
+      documentMetaData.originalNodes[id] = childNode.cloneNode(true);
 
       // Move to next node
       node = element.nextSibling;
       text = node.data;
-      if (!matchCase) {
+      if (!aMatchCase) {
         text = text.toUpperCase();
       }
 
@@ -105,29 +107,30 @@ searchwp.highlighting.NodeHighlighter = function(name) {
     return count;
   }
 
-  function initNodeHighlighterMetaData(document) {
-    if (!document.nodeHighlighter) {
-      document.nodeHighlighter = {};
+  function getNodeHighlighterMetaData(aDocument) {
+    if (!aDocument._nodeHighlighter) {
+      aDocument._nodeHighlighter = {};
     }
 
-    if (!document.nodeHighlighter[self.name]) {
-      document.nodeHighlighter[self.name] = {count: 0, originalNodes: {}};
+    if (!aDocument._nodeHighlighter[_name]) {
+      aDocument._nodeHighlighter[_name] = {count: 0, originalNodes: {}};
     }
+    return aDocument._nodeHighlighter[_name];
   }
 }
 
-searchwp.highlighting.DefaultElementCreator = function(elementName, attributes) {
-  this.elementName = elementName;
-  this.attributes = attributes;
+searchwp.highlighting.DefaultElementCreator = function(aElementName, aAttributes) {
+  var elementName = aElementName;
+  var attributes = aAttributes;
 
-  this.createElement = function(document, id, childNode) {
-    var element = document.createElement(this.elementName);
+  this.createElement = function(aDocument, aId, aChildNode) {
+    var element = aDocument.createElement(elementName);
     for (var name in attributes) {
-      element.setAttribute(name, this.attributes[name]);
+      element.setAttribute(name, attributes[name]);
     }
 
-    element.setAttribute("id", id);
-    element.appendChild(childNode);
+    element.setAttribute("id", aId);
+    element.appendChild(aChildNode);
     return element;
   }
 }

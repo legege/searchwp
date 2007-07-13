@@ -25,21 +25,29 @@
 searchwp.TermsToolbar = new function() {
   var self = this;
 
-  this.lastTermButtonSearch = null;
+  var _stringBundle;
+  var _lastTermButtonSearch;
+  var _termsDataCache;
+  var _nextElemBoxId;
+  var _nextElemPopupId;
+  var _inBox;
+  var _termNotFoundTimeout;
 
   /**
    * Initializes the terms toolbar
    */
   this.init = function() {
-    this.stringBundle = document.getElementById("bundle_searchwp");
+    _stringBundle = document.getElementById("bundle-searchwp");
+
+    addEventListener("resize", function(aEvent) { searchwp.TermsToolbar.onResize(aEvent); }, false);
   }
 
   /**
    * Updates the terms toolbar.
-   * @param termsData An terms array that contains 2 information per term: text, className.
-   * @param forceUpdate If true, the comparaison between the actual terms is not done.
+   * @param aTermsData An terms array that contains 2 information per term: text, className.
+   * @param aForceUpdate If true, the comparaison between the actual terms is not done.
    */
-  this.update = function(termsData, forceUpdate) {
+  this.update = function(aTermsData, aForceUpdate) {
     if (!this.exist()) {
       return;
     }
@@ -53,24 +61,32 @@ searchwp.TermsToolbar = new function() {
       getMenu().className = "chevron";
     }
 
-    if (!forceUpdate && searchwp.TermsDataFactory.compareTermsData(this.termsData, termsData)) {
+    if (!aForceUpdate && searchwp.TermsDataFactory.compareTermsData(_termsDataCache, aTermsData)) {
       return;
     }
-    this.termsData = termsData;
+    _termsDataCache = aTermsData;
     clearTerms();
 
-    for (var term in termsData) {
-      addTerm(termsData[term].text, termsData[term].className);
+    for (var i in aTermsData) {
+      addTerm(aTermsData[i].text, aTermsData[i].className);
     }
 
     updateSeparator();
   }
 
   /**
+   * Called when the window is resized.
+   * @param aEvent The resize event.
+   */
+  this.onResize = function(aEvent) {
+    this.refresh();
+  }
+
+  /**
    * Refresh the terms toolbar.
    */
   this.refresh = function() {
-    this.update(this.termsData, true);
+    this.update(_termsDataCache, true);
   }
 
   /**
@@ -85,14 +101,14 @@ searchwp.TermsToolbar = new function() {
    * the last search action.
    * @return false if the search cannot be performed.
    */
-  this.searchAgain = function(event) {
-    if (!this.lastTermButtonSearch) {
-      if (this.nextElemBoxId + this.nextElemPopupId == 1) { //Only one button
-        if (this.nextElemBoxId == 1) {
-          this.lastTermButtonSearch = getBoxTerms().firstChild;
+  this.searchAgain = function(aEvent) {
+    if (!_lastTermButtonSearch) {
+      if (_nextElemBoxId + _nextElemPopupId == 1) { //Only one button
+        if (_nextElemBoxId == 1) {
+          _lastTermButtonSearch = getBoxTerms().firstChild;
         }
         else {
-          this.lastTermButtonSearch = getPopup().firstChild;
+          _lastTermButtonSearch = getPopup().firstChild;
         }
       }
       else {
@@ -100,26 +116,26 @@ searchwp.TermsToolbar = new function() {
       }
     }
 
-    var findBackwards = event.shiftKey;
-    var matchCase = event.ctrlKey;
+    var findBackwards = aEvent.shiftKey;
+    var matchCase = aEvent.ctrlKey;
 
-    doSearch(this.lastTermButtonSearch, findBackwards, matchCase);
+    doSearch(_lastTermButtonSearch, findBackwards, matchCase);
 
     return true;
   }
 
   /**
    * This method is called when the user click on a term button.
-   * @param event The event to handle.
-   * @param item
+   * @param aEvent The event to handle.
+   * @param aItem
    */
-  this.onTermCommand = function(event, item) {
-    this.lastTermButtonSearch = item;
+  this.onTermCommand = function(aEvent, aItem) {
+    _lastTermButtonSearch = aItem;
 
-    var findBackwards = event.shiftKey;
-    var matchCase = event.ctrlKey;
+    var findBackwards = aEvent.shiftKey;
+    var matchCase = aEvent.ctrlKey;
 
-    doSearch(item, findBackwards, matchCase);
+    doSearch(aItem, findBackwards, matchCase);
   }
 
   /**
@@ -141,14 +157,14 @@ searchwp.TermsToolbar = new function() {
 
   /**
    * Resets the term's icon.
-   * @param item The term button.
+   * @param aItem The term button.
    */
-  this.updateTermStyleClassName = function(item) {
+  this.updateTermStyleClassName = function(aItem) {
     if (searchwp.Preferences.highlighted) {
-      item.className = item.getAttribute("highlightStyleClassName");
+      aItem.className = aItem.getAttribute("highlightStyleClassName");
     }
     else {
-      item.className = "";
+      aItem.className = "";
     }
   }
 
@@ -189,14 +205,14 @@ searchwp.TermsToolbar = new function() {
 
   /**
    * Adds a term to the toolbar.
-   * @param label
-   * @param styleClassName
+   * @param aLabel
+   * @param aStyleClassName
    */
-  function addTerm(label, styleClassName) {
-    var button = addTermButton(self.inBox, label, styleClassName);
+  function addTerm(aLabel, aStyleClassName) {
+    var button = addTermButton(_inBox, aLabel, aStyleClassName);
 
     //The popup menu is hidden.
-    if (self.inBox) {
+    if (_inBox) {
       var itemsWidth = 0;
       for (var j = 0; j < getPalette().childNodes.length; j++) {
         if (getPalette().childNodes[j].nodeName.toLowerCase() in {toolbarspring: null}) {
@@ -207,10 +223,10 @@ searchwp.TermsToolbar = new function() {
       itemsWidth = itemsWidth + getMenu().boxObject.width;
 
       if (itemsWidth > window.innerWidth || (searchwp.Preferences.maxTermButtons > -1
-          && self.nextElemBoxId > searchwp.Preferences.maxTermButtons)) {
+          && _nextElemBoxId > searchwp.Preferences.maxTermButtons)) {
         removeTermButton(button);
-        button = addTermButton(false, label, styleClassName);
-        self.inBox = false;
+        button = addTermButton(false, aLabel, aStyleClassName);
+        _inBox = false;
         getMenu().hidden = false;
       }
     }
@@ -218,28 +234,28 @@ searchwp.TermsToolbar = new function() {
   }
 
   /**
-   * @param inBox
-   * @param label
-   * @param styleClassName
+   * @param aInBox
+   * @param aLabel
+   * @param aStyleClassName
    * @return a reference to a newly created term button.
    */
-  function addTermButton(inBox, label, styleClassName) {
+  function addTermButton(aInBox, aLabel, aStyleClassName) {
     var button = null;
-    if (inBox) {
-      button = document.getElementById("searchwp-terms-box-" + self.nextElemBoxId);
+    if (aInBox) {
+      button = document.getElementById("searchwp-terms-box-" + _nextElemBoxId);
     }
     else {
-      button = document.getElementById("searchwp-terms-popup-" + self.nextElemPopupId);
+      button = document.getElementById("searchwp-terms-popup-" + _nextElemPopupId);
     }
 
     if (!button) {
       button = document.createElement("toolbarbutton");
-      if (inBox) {
-        button.id = "searchwp-terms-box-" + self.nextElemBoxId;
+      if (aInBox) {
+        button.id = "searchwp-terms-box-" + _nextElemBoxId;
         getBoxTerms().appendChild(button);
       }
       else {
-        button.id = "searchwp-terms-popup-" + self.nextElemPopupId;
+        button.id = "searchwp-terms-popup-" + _nextElemPopupId;
         getPopup().appendChild(button);
       }
     }
@@ -247,16 +263,16 @@ searchwp.TermsToolbar = new function() {
       button.hidden = false;
     }
 
-    if (inBox) {
-      self.nextElemBoxId++;
+    if (aInBox) {
+      _nextElemBoxId++;
     }
     else {
-      self.nextElemPopupId++;
+      _nextElemPopupId++;
     }
 
-    button.setAttribute("label", label);
+    button.setAttribute("label", aLabel);
     button.setAttribute("oncommand", "searchwp.TermsToolbar.onTermCommand(event, this)");
-    button.setAttribute("highlightStyleClassName", styleClassName);
+    button.setAttribute("highlightStyleClassName", aStyleClassName);
     self.updateTermStyleClassName(button);
 
     return button;
@@ -264,15 +280,15 @@ searchwp.TermsToolbar = new function() {
 
   /**
    * Remove a term button (the button itself is not truly removed).
-   * @param button The button to remove.
+   * @param aButton The button to remove.
    */
-  function removeTermButton(button) {
-    button.hidden = true;
-    if (button.id.indexOf("searchwp-terms-box") > -1) {
-      self.nextElemBoxId--;
+  function removeTermButton(aButton) {
+    aButton.hidden = true;
+    if (aButton.id.indexOf("searchwp-terms-box") > -1) {
+      _nextElemBoxId--;
     }
     else {
-      self.nextElemPopupId--;
+      _nextElemPopupId--;
     }
   }
 
@@ -280,19 +296,19 @@ searchwp.TermsToolbar = new function() {
    * Deletes all the terms in the toolbar.
    */
   function clearTerms() {
-    while (self.nextElemBoxId > 0) {
+    while (_nextElemBoxId > 0) {
       removeTermButton(document.getElementById("searchwp-terms-box-"
-        + (self.nextElemBoxId - 1)));
+        + (_nextElemBoxId - 1)));
     }
-    self.nextElemBoxId = 0;
+    _nextElemBoxId = 0;
 
-    while (self.nextElemPopupId > 0) {
+    while (_nextElemPopupId > 0) {
       removeTermButton(document.getElementById("searchwp-terms-popup-"
-        + (self.nextElemPopupId - 1)));
+        + (_nextElemPopupId - 1)));
     }
-    self.nextElemPopupId = 0;
+    _nextElemPopupId = 0;
 
-    self.inBox = true;
+    _inBox = true;
     if (searchwp.Preferences.maxTermButtons != 0) {
       getMenu().hidden = true;
     }
@@ -307,7 +323,7 @@ searchwp.TermsToolbar = new function() {
    * Display or hide the separators.
    */
   function updateSeparator() {
-    if (self.nextElemBoxId > 0) {
+    if (_nextElemBoxId > 0) {
       document.getElementById("searchwp-separator-1").hidden = false;
       document.getElementById("searchwp-separator-2").hidden = false;
     }
@@ -319,12 +335,12 @@ searchwp.TermsToolbar = new function() {
 
   /**
    * Search the term in the current document.
-   * @param termButton
-   * @param findBackwards
-   * @param matchCase
+   * @param aTermButton
+   * @param aFindBackwards
+   * @param aMatchCase
    */
-  function doSearch(termButton, findBackwards, matchCase) {
-    var term = termButton.getAttribute("label");
+  function doSearch(aTermButton, aFindBackwards, aMatchCase) {
+    var term = aTermButton.getAttribute("label");
 
     // To handle F3 correctly, we have to clear this find bar search.
     if (gFindBar.hidden && gFindBar.getElement("findbar-textbox").value.length > 0) {
@@ -333,29 +349,29 @@ searchwp.TermsToolbar = new function() {
     }
 
     var fastFind = window.getBrowser().fastFind;
-    fastFind.caseSensitive = matchCase;
+    fastFind.caseSensitive = aMatchCase;
 
     var result;
     if (fastFind.searchString != term) {
       result = fastFind.find(term, false);
     }
     else {
-      result = fastFind.findAgain(findBackwards, false);
+      result = fastFind.findAgain(aFindBackwards, false);
     }
 
     switch (result) {
       case 0: // Found
         break;
       case 1: // Not found
-        setTermNotFound(termButton);
-        searchwp.displayMessage(self.stringBundle.getFormattedString("notFound", [term], 1), true);
+        setTermNotFound(aTermButton);
+        searchwp.displayMessage(_stringBundle.getFormattedString("notFound", [term], 1), true);
         break;
       case 2: // Wrapped
-        if (findBackwards) {
-          searchwp.displayMessage(self.stringBundle.getString("wrappedToBottom"), true);
+        if (aFindBackwards) {
+          searchwp.displayMessage(_stringBundle.getString("wrappedToBottom"), true);
         }
         else {
-          searchwp.displayMessage(self.stringBundle.getString("wrappedToTop"), true);
+          searchwp.displayMessage(_stringBundle.getString("wrappedToTop"), true);
         }
         break;
     }
@@ -363,15 +379,15 @@ searchwp.TermsToolbar = new function() {
 
   /**
    * Change the term's icon to a Not Found icon.
-   * @param item
+   * @param aItem
    */
-  function setTermNotFound(item) {
-    item.className = "searchwp-term-notfound";
+  function setTermNotFound(aItem) {
+    aItem.className = "searchwp-term-notfound";
 
-    if (self.termNotFoundTimeout) {
-      clearTimeout(self.termNotFoundTimeout);
+    if (_termNotFoundTimeout) {
+      clearTimeout(_termNotFoundTimeout);
     }
 
-    self.termNotFoundTimeout = setTimeout(function(e) { searchwp.TermsToolbar.updateTermStyleClassName(e); }, 3000, item);
+    _termNotFoundTimeout = setTimeout(function(aEvent) { searchwp.TermsToolbar.updateTermStyleClassName(aEvent); }, 3000, aItem);
   }
 }

@@ -23,23 +23,22 @@
  * ***** END LICENSE BLOCK ***** */
 
 searchwp.Highlighting = new function() {
-  var self = this;
-  this.stringBundle = null;
-  this.termsDataCache = null;
-
-  this.searcher = new searchwp.highlighting.NodeSearcher;
-  this.highlighter = new searchwp.highlighting.NodeHighlighter("searchwp");
-
   searchwp.loadStyleSheet("chrome://@NAME@/skin/highlighting-user.css");
+
+  var _stringBundle = null;
+  var _termsDataCache = null;
+  var _highlightTimeout;
+  var _searcher = new searchwp.highlighting.NodeSearcher;
+  var _highlighter = new searchwp.highlighting.NodeHighlighter("searchwp");
 
   /**
    * Initialize this class.
    */
   this.init = function() {
-    this.stringBundle = document.getElementById("bundle_searchwp");
+    _stringBundle = document.getElementById("bundle-searchwp");
 
     var tabBox = document.getElementById("content").mTabBox;
-    tabBox.addEventListener("select", function(event) { searchwp.Highlighting.refresh() }, false);
+    tabBox.addEventListener("select", function(aEvent) { searchwp.Highlighting.refresh() }, false);
 
     if (this.getHighlightButton()) {
       this.getHighlightButton().setAttribute("checked", searchwp.Preferences.highlighted);
@@ -53,9 +52,9 @@ searchwp.Highlighting = new function() {
   /**
    * Updates the highlighting according to the terms.
    */
-  this.update = function(termsData, force) {
-    if (force || !searchwp.TermsDataFactory.compareTermsData(this.termsDataCache, termsData)) {
-      this.termsDataCache = termsData;
+  this.update = function(aTermsData, aForce) {
+    if (aForce || !searchwp.TermsDataFactory.compareTermsData(_termsDataCache, aTermsData)) {
+      _termsDataCache = aTermsData;
       setRefreshTimeout();
     }
   }
@@ -113,10 +112,10 @@ searchwp.Highlighting = new function() {
    * Sets a refresh for the highlighting in 500ms.
    */
   function setRefreshTimeout() {
-    if (self.highlightTimeout) {
-      clearTimeout(self.highlightTimeout);
+    if (_highlightTimeout) {
+      clearTimeout(_highlightTimeout);
     }
-    self.highlightTimeout = setTimeout(function() { searchwp.Highlighting.refresh(); }, 500);
+    _highlightTimeout = setTimeout(function() { searchwp.Highlighting.refresh(); }, 500);
   }
 
   /**
@@ -125,7 +124,7 @@ searchwp.Highlighting = new function() {
   function highlight() {
     unhighlight();
 
-    var termsData = self.termsDataCache;
+    var termsData = _termsDataCache;
     if (termsData) {
       var count = 0;
       for (var term in termsData) {
@@ -136,13 +135,13 @@ searchwp.Highlighting = new function() {
       }
 
       if (count > 1) {
-        searchwp.displayMessage(self.stringBundle.getFormattedString("highlightCountN", [count], 1), false);
+        searchwp.displayMessage(_stringBundle.getFormattedString("highlightCountN", [count], 1), false);
       }
       else if (count == 1) {
-        searchwp.displayMessage(self.stringBundle.getFormattedString("highlightCount1", [count], 1), false);
+        searchwp.displayMessage(_stringBundle.getFormattedString("highlightCount1", [count], 1), false);
       }
       else {
-        searchwp.displayMessage(self.stringBundle.getString("highlightCount0"), false);
+        searchwp.displayMessage(_stringBundle.getString("highlightCount0"), false);
       }
     }
   }
@@ -154,43 +153,38 @@ searchwp.Highlighting = new function() {
     highlightBrowserWindow();
   }
 
-  function highlightBrowserWindow(word, styleClassName, matchCase, win) {
+  function highlightBrowserWindow(aWord, aStyleClassName, aMatchCase, aWindow) {
     var count = 0;
 
-    if (!win) {
-      win = window._content;
+    if (!aWindow) {
+      aWindow = window.content;
     }
 
-    for (var i = 0; win.frames && i < win.frames.length; i++) {
-      count += highlightBrowserWindow(word, styleClassName, matchCase, win.frames[i]);
+    for (var i = 0; aWindow.frames && i < aWindow.frames.length; i++) {
+      count += highlightBrowserWindow(aWord, aStyleClassName, aMatchCase, aWindow.frames[i]);
     }
 
-    var document = win.document;
-    if (!document || document && !("body" in document)) {
+    var doc = aWindow.document;
+    if (!doc || doc && !("body" in doc)) {
       return count;
     }
 
-    if (!styleClassName || !word) {
-      self.highlighter.clear(document);
+    if (!aStyleClassName || !aWord) {
+      _highlighter.clear(doc);
       return count;
     }
-
-    // Characters remaining are then escaped so that the regexp does not use
-    // wildcards or return unexpected matches.
 
     // Escape some RegExp characters
-    var criteria = word.replace(/\s*/, "");
+    var criteria = aWord.replace(/\s*/, "");
     criteria = criteria.replace(/\W/g, "\\W*");
-    
-    //criteria = "\\d{3}-\\d{3}-\\d{4}";
 
     //var matcher = new SoundexMatcher(criteria);
-    var matcher = new searchwp.highlighting.RegexMatcher(criteria, matchCase);
+    var matcher = new searchwp.highlighting.RegexMatcher(criteria, aMatchCase);
 
-    var rangeMatches = self.searcher.search(document, matcher);
+    var rangeMatches = _searcher.search(doc, matcher);
 
     /* highlight the matches */
-    var elementCreator = new searchwp.highlighting.DefaultElementCreator("layer", {class: styleClassName});
+    var elementCreator = new searchwp.highlighting.DefaultElementCreator("layer", {class: aStyleClassName});
     for (var n in rangeMatches) {
       var node = rangeMatches[n].node;
       var match = rangeMatches[n].match;
@@ -208,7 +202,7 @@ searchwp.Highlighting = new function() {
           for (var i = startIndex; i < endIndex; i++) {
             var childNode = node.childNodes[i];
             if (childNode.nodeType == Node.ELEMENT_NODE) {
-              var textNode = document.createTextNode(childNode.textContent)
+              var textNode = doc.createTextNode(childNode.textContent)
               node.replaceChild(textNode, childNode);
             }
           }
@@ -224,7 +218,7 @@ searchwp.Highlighting = new function() {
         }
       }*/
       if (!rangeMatches[n].overlaps) {
-        count += self.highlighter.highlight(document, node, match, matchCase, elementCreator);
+        count += _highlighter.highlight(doc, node, match, aMatchCase, elementCreator);
       }
     }
 
@@ -234,14 +228,14 @@ searchwp.Highlighting = new function() {
   /**
    * SoundexMatcher for the NodeSearcher.
    */
-  function SoundexMatcher(criteria) {
-    this.soundex = soundex(criteria);
+  function SoundexMatcher(aCriteria) {
+    var _soundex = soundex(aCriteria);
 
     this.match = function(str) {
       var matches = str.match(/\b\w+\b/gi);
       if (matches) {
         for (var i = 0; i < matches.length; i++) {
-          if (soundex(matches[i]) == this.soundex) {
+          if (soundex(matches[i]) == _soundex) {
             return matches[i];
           }
         }
