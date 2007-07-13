@@ -30,15 +30,15 @@ searchwp.playBeep = function() {
             .beep();
 }
 
-searchwp.displayMessage = function(message, beep) {
+searchwp.displayMessage = function(aMessage, aBeep) {
   var xulBrowserWindow = window.XULBrowserWindow;
 
   if (!xulBrowserWindow) {
     return;
   }
 
-  xulBrowserWindow.setOverLink(message, null);
-  if (beep) {
+  xulBrowserWindow.setOverLink(aMessage, null);
+  if (aBeep) {
     this.playBeep();
   }
 
@@ -50,17 +50,17 @@ searchwp.displayMessage = function(message, beep) {
     if (window.XULBrowserWindow.overLink == text) {
       window.XULBrowserWindow.setOverLink("", null);
     }
-  }, 3000, message);
+  }, 3000, aMessage);
 
   return;
 }
 
-searchwp.loadStyleSheet = function(fileURI) {
+searchwp.loadStyleSheet = function(aFileURI) {
   var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"]
-      .getService(Components.interfaces.nsIStyleSheetService);
+                      .getService(Components.interfaces.nsIStyleSheetService);
   var ios = Components.classes["@mozilla.org/network/io-service;1"]
-      .getService(Components.interfaces.nsIIOService);
-  var uri = ios.newURI(fileURI, null, null);
+                      .getService(Components.interfaces.nsIIOService);
+  var uri = ios.newURI(aFileURI, null, null);
   if(!sss.sheetRegistered(uri, sss.USER_SHEET)) {
     sss.loadAndRegisterSheet(uri, sss.USER_SHEET);
   }
