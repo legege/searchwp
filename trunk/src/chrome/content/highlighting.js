@@ -181,6 +181,8 @@ searchwp.Highlighting = new function() {
     // Escape some RegExp characters
     var criteria = word.replace(/\s*/, "");
     criteria = criteria.replace(/\W/g, "\\W*");
+    
+    //criteria = "\\d{3}-\\d{3}-\\d{4}";
 
     //var matcher = new SoundexMatcher(criteria);
     var matcher = new searchwp.highlighting.RegexMatcher(criteria, matchCase);
@@ -188,10 +190,41 @@ searchwp.Highlighting = new function() {
     var rangeMatches = self.searcher.search(document, matcher);
 
     /* highlight the matches */
+    var elementCreator = new searchwp.highlighting.DefaultElementCreator("layer", {class: styleClassName});
     for (var n in rangeMatches) {
+      var node = rangeMatches[n].node;
+      var match = rangeMatches[n].match;
+      // This code is for overlapping word. e.g. te<b>s</b>t. It's not working very well...
+      /*if (rangeMatches[n].overlaps) {
+        var startIndex = rangeMatches[n].startIndex;
+        var endIndex = rangeMatches[n].endIndex;
+        if (endIndex - startIndex == 1) {
+          var childNode = node.childNodes[startIndex];
+          childNode.innerHTML = childNode.textContent;
+          node = childNode.firstChild;
+          
+        }
+        else {
+          for (var i = startIndex; i < endIndex; i++) {
+            var childNode = node.childNodes[i];
+            if (childNode.nodeType == Node.ELEMENT_NODE) {
+              var textNode = document.createTextNode(childNode.textContent)
+              node.replaceChild(textNode, childNode);
+            }
+          }
+          node.normalize();
+          for (var i = 0; i < node.childNodes.length; i++) {
+            var childNode = node.childNodes[i];
+            var index = childNode.textContent.indexOf(match);
+            if (childNode.nodeType == Node.TEXT_NODE && index != -1) {
+              node = childNode.splitText(index);
+              break;
+            }
+          }
+        }
+      }*/
       if (!rangeMatches[n].overlaps) {
-        var elementCreator = new searchwp.highlighting.DefaultElementCreator("layer", {class: styleClassName});
-        count += self.highlighter.highlight(document, rangeMatches[n].node, rangeMatches[n].match, matchCase, elementCreator);
+        count += self.highlighter.highlight(document, node, match, matchCase, elementCreator);
       }
     }
 

@@ -39,10 +39,11 @@ searchwp.highlighting.NodeHighlighter = function(name) {
 
     // Find and remove all highlight span nodes
     while (document.nodeHighlighter[this.name].count > 0) {
-      var concatId = this.name + --document.nodeHighlighter[this.name].count;
-      var oldSpan = document.getElementById(concatId);
+      var id = this.name + --document.nodeHighlighter[this.name].count;
+      var clone = document.nodeHighlighter[this.name].originalNodes[id];
+      var oldSpan = document.getElementById(id);
       var parent = oldSpan.parentNode;
-      parent.replaceChild(oldSpan.childNodes[0], oldSpan);
+      parent.replaceChild(clone, oldSpan);
       parent.normalize();
     }
   }
@@ -57,6 +58,10 @@ searchwp.highlighting.NodeHighlighter = function(name) {
    * @param elementCreator An element creator object (see DefaultElementCreator below).
    */
   this.highlight = function(document, node, word, matchCase, elementCreator) {
+    if (node.nodeType != Node.TEXT_NODE) {
+      return;
+    }
+
     initNodeHighlighterMetaData(document);
 
     var text = node.data;
@@ -68,22 +73,20 @@ searchwp.highlighting.NodeHighlighter = function(name) {
     var count = 0;
     while (text.indexOf(word) != -1) {
       var matchText = node.splitText(text.indexOf(word));
+      matchText.splitText(word.length);
 
-      node = matchText.splitText(word.length);
-      var clone = matchText.cloneNode(true);
+      var id = this.name + document.nodeHighlighter[this.name].count++;
 
-      var concatId = this.name + document.nodeHighlighter[this.name].count++;
-
-      // Be sure that this id doesn't exist.
-      while (document.getElementById(concatId) != null) {
-        concatId = this.name + document.nodeHighlighter[this.name].count++;
+      // Check if id already exists.
+      while (document.getElementById(id) != null) {
+        id = this.name + document.nodeHighlighter[this.name].count++;
       }
 
-      var element = elementCreator.createElement(document);
-      element.setAttribute("id", concatId);
-
-      element.appendChild(clone);
+      var childNode = matchText.cloneNode(true);
+      var element = elementCreator.createElement(document, id, childNode);
       matchText.parentNode.replaceChild(element, matchText);
+
+      document.nodeHighlighter[this.name].originalNodes[id] = childNode.cloneNode(true);
 
       // Move to next node
       node = element.nextSibling;
@@ -93,6 +96,10 @@ searchwp.highlighting.NodeHighlighter = function(name) {
       }
 
       count++;
+
+      if (text == word) {
+        break;
+      }
     }
 
     return count;
@@ -104,7 +111,7 @@ searchwp.highlighting.NodeHighlighter = function(name) {
     }
 
     if (!document.nodeHighlighter[self.name]) {
-      document.nodeHighlighter[self.name] = {count: 0};
+      document.nodeHighlighter[self.name] = {count: 0, originalNodes: {}};
     }
   }
 }
@@ -113,11 +120,14 @@ searchwp.highlighting.DefaultElementCreator = function(elementName, attributes) 
   this.elementName = elementName;
   this.attributes = attributes;
 
-  this.createElement = function(document) {
+  this.createElement = function(document, id, childNode) {
     var element = document.createElement(this.elementName);
     for (var name in attributes) {
       element.setAttribute(name, this.attributes[name]);
     }
+
+    element.setAttribute("id", id);
+    element.appendChild(childNode);
     return element;
   }
 }
