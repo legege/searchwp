@@ -2,10 +2,14 @@
 
 == SearchWP 1.1 (not yet released) ==
 
+=== Beta 1 ===
  * New: Highlighting count
  * New: Highlighting match case
  * Improvement: SearchWP uses FastFind instead of WebBrowserFinder. FastFind is better and contains less bugs.
  * Ready for Firefox 3.0, not compatible with Firefox 2.x and lower
  * Development: New ANT Build script
- 
 
+=== Beta 2 ===
+ * Completely refactored.
+ * Highlighting improved: e.g. test-search now matches test.search, test*search...
+ * New: SoundEx highlighting (to be improved, not available in the xpi version)
