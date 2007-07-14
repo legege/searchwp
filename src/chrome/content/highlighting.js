@@ -26,7 +26,7 @@ searchwp.Highlighting = new function() {
   searchwp.loadStyleSheet("chrome://@NAME@/skin/highlighting-user.css");
 
   var _stringBundle = null;
-  var _termsDataCache = null;
+  var _termsDataCacheCurrent = [];
   var _highlightTimeout;
   var _searcher = new searchwp.highlighting.NodeSearcher;
   var _highlighter = new searchwp.highlighting.NodeHighlighter("searchwp");
@@ -53,8 +53,9 @@ searchwp.Highlighting = new function() {
    * Updates the highlighting according to the terms.
    */
   this.update = function(aTermsData, aForce) {
-    if (aForce || !searchwp.TermsDataFactory.compareTermsData(_termsDataCache, aTermsData)) {
-      _termsDataCache = aTermsData;
+    if (aForce || !searchwp.TermsDataFactory.compare(_termsDataCacheCurrent, aTermsData)) {
+      _termsDataCacheCurrent = aTermsData;
+
       setRefreshTimeout();
     }
   }
@@ -64,6 +65,7 @@ searchwp.Highlighting = new function() {
    */
   this.refresh = function() {
     if (searchwp.Preferences.highlighted) {
+      unhighlight();
       highlight();
     }
     else {
@@ -122,9 +124,7 @@ searchwp.Highlighting = new function() {
    * Hightlight the current page.
    */
   function highlight() {
-    unhighlight();
-
-    var termsData = _termsDataCache;
+    var termsData = _termsDataCacheCurrent;
     if (termsData) {
       var count = 0;
       for (var term in termsData) {
@@ -178,7 +178,6 @@ searchwp.Highlighting = new function() {
     var criteria = aWord.replace(/\s*/, "");
     criteria = criteria.replace(/\W/g, "\\W*");
 
-    //var matcher = new SoundexMatcher(criteria);
     var matcher = new searchwp.highlighting.RegexMatcher(criteria, aMatchCase);
 
     var rangeMatches = _searcher.search(doc, matcher);
@@ -188,35 +187,6 @@ searchwp.Highlighting = new function() {
     for (var n in rangeMatches) {
       var node = rangeMatches[n].node;
       var match = rangeMatches[n].match;
-      // This code is for overlapping word. e.g. te<b>s</b>t. It's not working very well...
-      /*if (rangeMatches[n].overlaps) {
-        var startIndex = rangeMatches[n].startIndex;
-        var endIndex = rangeMatches[n].endIndex;
-        if (endIndex - startIndex == 1) {
-          var childNode = node.childNodes[startIndex];
-          childNode.innerHTML = childNode.textContent;
-          node = childNode.firstChild;
-          
-        }
-        else {
-          for (var i = startIndex; i < endIndex; i++) {
-            var childNode = node.childNodes[i];
-            if (childNode.nodeType == Node.ELEMENT_NODE) {
-              var textNode = doc.createTextNode(childNode.textContent)
-              node.replaceChild(textNode, childNode);
-            }
-          }
-          node.normalize();
-          for (var i = 0; i < node.childNodes.length; i++) {
-            var childNode = node.childNodes[i];
-            var index = childNode.textContent.indexOf(match);
-            if (childNode.nodeType == Node.TEXT_NODE && index != -1) {
-              node = childNode.splitText(index);
-              break;
-            }
-          }
-        }
-      }*/
       if (!rangeMatches[n].overlaps) {
         count += _highlighter.highlight(doc, node, match, aMatchCase, elementCreator);
       }

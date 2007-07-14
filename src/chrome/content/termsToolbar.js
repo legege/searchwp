@@ -61,7 +61,7 @@ searchwp.TermsToolbar = new function() {
       getMenu().className = "chevron";
     }
 
-    if (!aForceUpdate && searchwp.TermsDataFactory.compareTermsData(_termsDataCache, aTermsData)) {
+    if (!aForceUpdate && searchwp.TermsDataFactory.compare(_termsDataCache, aTermsData)) {
       return;
     }
     _termsDataCache = aTermsData;
