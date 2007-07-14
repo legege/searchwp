@@ -176,7 +176,7 @@ searchwp.Highlighting = new function() {
 
     // Escape some RegExp characters
     var criteria = aWord.replace(/\s*/, "");
-    criteria = criteria.replace(/\W/g, "\\W*");
+    criteria = criteria.replace(/(\w)\W(\w)/g, "$1\\W+$2");
 
     var matcher = new searchwp.highlighting.RegexMatcher(criteria, aMatchCase);
 

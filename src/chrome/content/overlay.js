@@ -25,6 +25,7 @@
 searchwp.Overlay = new function() {
   var self = this;
   var _stringBundle = null;
+  var _oldCustomizeDone;
 
   /**
    * Initializes this extension.
@@ -47,9 +48,9 @@ searchwp.Overlay = new function() {
        Also, we cannot replace the customizeDone function without a setTimeout. */
     setTimeout(function() {
       var toolbox = document.getElementById("navigator-toolbox");
-      if (toolbox.customizeDone != searchwp.Overlay.customizeDone) {
-        toolbox.__searchwp__customizeDone = toolbox.customizeDone;
-        toolbox.customizeDone = searchwp.Overlay.customizeDone;
+      if (toolbox.customizeDone != searchwp.Overlay.onCustomizeDone) {
+        _oldCustomizeDone = toolbox.customizeDone;
+        toolbox.customizeDone = searchwp.Overlay.onCustomizeDone;
       }
     }, 0);
 
@@ -60,7 +61,7 @@ searchwp.Overlay = new function() {
       }, 50);
     }
 
-    init();
+    this.init();
     searchwp.Highlighting.init();
     searchwp.TermsToolbar.init();
 
@@ -75,7 +76,48 @@ searchwp.Overlay = new function() {
     this.preferencesObserver.unregister();
     window.getBrowser().removeProgressListener(this.progressListener);
 
-    uninit();
+    this.uninit();
+  }
+
+  /**
+   * Called when the customization of the toolbar is finised.
+   * @return the original method.
+   */
+  this.onCustomizeDone = function() {
+    searchwp.Overlay.init();
+    searchwp.Preferences.highlighted = false;
+    searchwp.Overlay.searchBox.onInput();
+    return _oldCustomizeDone();
+  }
+
+  /**
+   * init
+   */
+  this.init = function() {
+    if (!this.searchBox.exist()) {
+      return;
+    }
+
+    this.searchBox.ref.addEventListener("input",
+      function(aEvent) { searchwp.Overlay.searchBox.onInput(aEvent); }, false, true);
+
+    /* XXXLegege: For SearchBox Sync, we have to listen the "oninput" event
+       because it appears that we cannot fire/catch an "input" event on the
+       searchbar. */
+    this.searchBox.ref.addEventListener("oninput",
+      function(aEvent) { searchwp.Overlay.searchBox.onInput(aEvent); }, false, true);
+  }
+
+  /**
+   * uninit
+   */
+  this.uninit = function() {
+    if (!this.searchBox.exist()) {
+      return;
+    }
+
+    this.searchBox.ref.removeEventListener("input", function(event) { searchwp.Overlay.searchBox.onInput(event); }, false);
+    this.searchBox.ref.removeEventListener("oninput", function(event) { searchwp.Overlay.searchBox.onInput(event); }, false);
   }
 
   /**
@@ -122,19 +164,6 @@ searchwp.Overlay = new function() {
     }
 
     searchwp.Preferences.firstLaunch = showAgain.value;
-  }
-
-  /**
-   * Called when the customization of the toolbar is finised.
-   * @return the original method.
-   */
-  this.customizeDone = function() {
-    searchwp.Overlay._init();
-    searchwp.Preferences.highlighted = false;
-    searchwp.Overlay.searchBox.onInput();
-
-    var toolbox = document.getElementById("navigator-toolbox");
-    return toolbox.__searchwp__customizeDone();
   }
 
   this.searchBox = new function() {
@@ -282,36 +311,6 @@ searchwp.Overlay = new function() {
           break;
       }
     }
-  }
-
-  /**
-   * init
-   */
-  function init() {
-    if (!self.searchBox.exist()) {
-      return;
-    }
-
-    self.searchBox.ref.addEventListener("input",
-      function(event) { searchwp.Overlay.searchBox.onInput(event); }, false, true);
-
-    /* XXXLegege: For SearchBox Sync, we have to listen the "oninput" event
-       because it appears that we cannot fire/catch an "input" event on the
-       searchbar. */
-    self.searchBox.ref.addEventListener("oninput",
-      function(event) { searchwp.Overlay.searchBox.onInput(event); }, false, true);
-  }
-
-  /**
-   * uninit
-   */
-  function uninit() {
-    if (!self.searchBox.exist()) {
-      return;
-    }
-
-    self.searchBox.ref.removeEventListener("input", function(event) { searchwp.Overlay.searchBox.onInput(event); }, false);
-    self.searchBox.ref.removeEventListener("oninput", function(event) { searchwp.Overlay.searchBox.onInput(event); }, false);
   }
 }
 
