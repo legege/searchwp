@@ -1,6 +1,7 @@
 <!ENTITY toolbar.terms.label "關鍵字工具列">
 <!ENTITY button.highlight.label "高亮度標示">
 <!ENTITY button.highlight.tooltiptext "高亮度標示所有關鍵字">
+<!ENTITY button.highlight.matchcase.label "大小寫符合">
 <!ENTITY pref.title "選項">
 <!ENTITY pref.termstoolbar.label "關鍵字工具列">
 <!ENTITY pref.termstoolbar.addition.label "關鍵字添加方式:">

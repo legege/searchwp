@@ -1,13 +1,14 @@
-<!ENTITY toolbar.terms.label "Panel nástrojov podmienok">
+<!ENTITY toolbar.terms.label "Panel nástrojov výrazov">
 <!ENTITY button.highlight.label "Zvýrazniť">
 <!ENTITY button.highlight.tooltiptext "Zvýrazniť všetky podmienky">
+<!ENTITY button.highlight.matchcase.label "Porovnať úlohy">
 <!ENTITY pref.title "Možnosti">
-<!ENTITY pref.termstoolbar.label "Panel nástrojov podmienok">
+<!ENTITY pref.termstoolbar.label "Panel nástrojov výrazov">
 <!ENTITY pref.termstoolbar.addition.label "Slová musia byť pridané v:">
-<!ENTITY pref.termstoolbar.addition.o1.label "paneli nástrojov podmienok,pokiaľ je tam dostatok miesta a potom v ponuke.">
-<!ENTITY pref.termstoolbar.addition.o2.label.before "panel nástrojov podmienok na">
+<!ENTITY pref.termstoolbar.addition.o1.label "paneli nástrojov výrazov,pokiaľ je tam dostatok miesta a potom v ponuke.">
+<!ENTITY pref.termstoolbar.addition.o2.label.before "panel nástrojov výrazov na">
 <!ENTITY pref.termstoolbar.addition.o2.label.after "slová a potom v ponuke.">
 <!ENTITY pref.termstoolbar.addition.o3.label "jednoduchá ponuka.">
 <!ENTITY pref.highlighting.label "Zvýraznenie">
-<!ENTITY pref.highlightMinlength.label "Minimálna dĺžka pre slová , ktoré mjú byť zvýraznené:">
+<!ENTITY pref.highlightMinlength.label "Minimálna dĺžka pre slová , ktoré majú byť zvýraznené:">
 <!ENTITY pref.highlightMinlength.accesskey "M">

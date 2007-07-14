@@ -1,6 +1,7 @@
 <!ENTITY toolbar.terms.label "검색어 도구 막대">
 <!ENTITY button.highlight.label "강조">
 <!ENTITY button.highlight.tooltiptext "모든 검색어 강조하기">
+<!ENTITY button.highlight.matchcase.label "Match case">
 <!ENTITY pref.title "설정">
 <!ENTITY pref.termstoolbar.label "검색어 도구 막대">
 <!ENTITY pref.termstoolbar.addition.label "검색 막대에 입력된 검색어를">

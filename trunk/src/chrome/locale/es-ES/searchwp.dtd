@@ -1,6 +1,7 @@
 <!ENTITY toolbar.terms.label "Barra de términos">
 <!ENTITY button.highlight.label "Marcar">
 <!ENTITY button.highlight.tooltiptext "Marcar todos los términos">
+<!ENTITY button.highlight.matchcase.label "Coincidir mayúsculas">
 <!ENTITY pref.title "Opciones">
 <!ENTITY pref.termstoolbar.label "Barra de términos">
 <!ENTITY pref.termstoolbar.addition.label "Las palabras se añadirán en:">

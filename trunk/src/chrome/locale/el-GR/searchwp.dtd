@@ -1,6 +1,7 @@
 <!ENTITY toolbar.terms.label "Εργαλειοθήκη όρων">
 <!ENTITY button.highlight.label "Επισήμανση">
 <!ENTITY button.highlight.tooltiptext "Επισήμανση όλων των όρων">
+<!ENTITY button.highlight.matchcase.label "Ταίριασμα χαρακτήρα">
 <!ENTITY pref.title "Επιλογές">
 <!ENTITY pref.termstoolbar.label "Εργαλειοθήκη όρων">
 <!ENTITY pref.termstoolbar.addition.label "Οι λέξεις θα προστεθούν :">

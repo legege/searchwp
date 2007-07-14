@@ -1,6 +1,7 @@
 <!ENTITY toolbar.terms.label "Панель искомых значений">
 <!ENTITY button.highlight.label "Подсветка">
 <!ENTITY button.highlight.tooltiptext "Подсветить искомые значения">
+<!ENTITY button.highlight.matchcase.label "С учетом регистра">
 <!ENTITY pref.title "Настройки">
 <!ENTITY pref.termstoolbar.label "Панель искомых значений">
 <!ENTITY pref.termstoolbar.addition.label "Добавлять слова:">

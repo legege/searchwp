@@ -1,6 +1,7 @@
 <!ENTITY toolbar.terms.label "关键词工具栏">
 <!ENTITY button.highlight.label "高亮显示">
 <!ENTITY button.highlight.tooltiptext "高亮显示所有关键词">
+<!ENTITY button.highlight.matchcase.label "匹配情况">
 <!ENTITY pref.title "选项">
 <!ENTITY pref.termstoolbar.label "关键词工具栏">
 <!ENTITY pref.termstoolbar.addition.label "将关键词添加到:">
