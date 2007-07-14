@@ -156,7 +156,7 @@ searchwp.Preferences = new function() {
    * Changes the maximum number of term's button.
    * @param aValue An integer (-1: unlimited)
    */
-  this.__defineGetter__("maxTermButtons", function(aValue) {
+  this.__defineSetter__("maxTermButtons", function(aValue) {
     this.branch.setIntPref(this.PREF_MAX_TERM_BUTTONS, aValue);
   });
 }
