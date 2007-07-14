@@ -37,9 +37,9 @@ searchwp.highlighting.NodeHighlighter = function(aName) {
 
     var documentMetaData = getNodeHighlighterMetaData(aDocument);
 
-    // Find and remove all highlight span nodes
+    // Find and remove all highlight nodes
     while (documentMetaData.count > 0) {
-      var id = _name + --documentMetaData.count;
+      var id = generateIdPrefix() + --documentMetaData.count;
       var clone = documentMetaData.originalNodes[id];
       var oldSpan = aDocument.getElementById(id);
       var parent = oldSpan.parentNode;
@@ -51,7 +51,7 @@ searchwp.highlighting.NodeHighlighter = function(aName) {
   /**
    * Highlight all instances of a word in a particular node of
    * the given document.
-   * @param aDocument The document
+   * @param aDocument The document.
    * @param aNode The node contained in the document.
    * @param aWord The word to highlight.
    * @param aMatchCase If highlighting should match case.
@@ -77,11 +77,11 @@ searchwp.highlighting.NodeHighlighter = function(aName) {
       var matchText = node.splitText(text.indexOf(word));
       matchText.splitText(word.length);
 
-      var id = _name + documentMetaData.count++;
+      var id = generateIdPrefix() + documentMetaData.count++;
 
       // Check if id already exists.
       while (aDocument.getElementById(id) != null) {
-        id = _name + documentMetaData.count++;
+        id = generateIdPrefix() + documentMetaData.count++;
       }
 
       var childNode = matchText.cloneNode(true);
@@ -116,6 +116,10 @@ searchwp.highlighting.NodeHighlighter = function(aName) {
       aDocument._nodeHighlighter[_name] = {count: 0, originalNodes: {}};
     }
     return aDocument._nodeHighlighter[_name];
+  }
+
+  function generateIdPrefix() {
+    return _name;
   }
 }
 

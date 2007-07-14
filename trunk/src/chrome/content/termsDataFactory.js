@@ -53,7 +53,7 @@ searchwp.TermsDataFactory = new function() {
   /**
    * @return true if the 2 termsData are identicals
    */
-  this.compareTermsData = function(aTermsData1, aTermsData2) {
+  this.compare = function(aTermsData1, aTermsData2) {
     if (aTermsData1 && aTermsData2) {
       if (aTermsData1.length == aTermsData2.length) {
         var i = 0;
