@@ -1,0 +1,14 @@
+<!ENTITY toolbar.terms.label "Barre d&apos;outils des termes">
+<!ENTITY button.highlight.label "Surligner">
+<!ENTITY button.highlight.tooltiptext "Surligner tous les termes">
+<!ENTITY button.highlight.matchcase.label "Respecter la casse">
+<!ENTITY pref.title "Options">
+<!ENTITY pref.termstoolbar.label "Barre des termes">
+<!ENTITY pref.termstoolbar.addition.label "Les mots doivent être ajouté dans...">
+<!ENTITY pref.termstoolbar.addition.o1.label "la barre des termes tant que l&apos;espace nécessaire est disponible, puis dans un menu.">
+<!ENTITY pref.termstoolbar.addition.o2.label.before "la barre des termes jusqu&apos;à concurrence de ">
+<!ENTITY pref.termstoolbar.addition.o2.label.after "mots, puis dans un menu.">
+<!ENTITY pref.termstoolbar.addition.o3.label "un unique menu.">
+<!ENTITY pref.highlighting.label "Surlignement">
+<!ENTITY pref.highlightMinlength.label "Longueur minimum des mots pour qu&apos;ils soient surlignés :">
+<!ENTITY pref.highlightMinlength.accesskey "L">

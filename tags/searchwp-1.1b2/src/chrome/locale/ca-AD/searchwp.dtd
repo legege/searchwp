@@ -1,0 +1,13 @@
+<!ENTITY toolbar.terms.label "Barra de termes">
+<!ENTITY button.highlight.label "Ressalta">
+<!ENTITY button.highlight.tooltiptext "Ressalta tots els termes">
+<!ENTITY pref.title "Opcions">
+<!ENTITY pref.termstoolbar.label "Terms toolbar">
+<!ENTITY pref.termstoolbar.addition.label "The words have to be added in:">
+<!ENTITY pref.termstoolbar.addition.o1.label "the terms toolbar as long as there is enough space and then in a menu.">
+<!ENTITY pref.termstoolbar.addition.o2.label.before "the terms toolbar up to ">
+<!ENTITY pref.termstoolbar.addition.o2.label.after "words and then in a menu.">
+<!ENTITY pref.termstoolbar.addition.o3.label "a single menu.">
+<!ENTITY pref.highlighting.label "Highlithing">
+<!ENTITY pref.highlightMinlength.label "Minimum length for the words to be highlighted:">
+<!ENTITY pref.highlightMinlength.accesskey "L">

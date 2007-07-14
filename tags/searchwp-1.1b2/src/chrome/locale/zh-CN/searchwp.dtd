@@ -1,0 +1,14 @@
+<!ENTITY toolbar.terms.label "关键词工具栏">
+<!ENTITY button.highlight.label "高亮显示">
+<!ENTITY button.highlight.tooltiptext "高亮显示所有关键词">
+<!ENTITY button.highlight.matchcase.label "匹配情况">
+<!ENTITY pref.title "选项">
+<!ENTITY pref.termstoolbar.label "关键词工具栏">
+<!ENTITY pref.termstoolbar.addition.label "将关键词添加到:">
+<!ENTITY pref.termstoolbar.addition.o1.label "只要有足够空间就添加到关键词工具栏，否则添加到菜单">
+<!ENTITY pref.termstoolbar.addition.o2.label.before "一直添加到关键词工具栏，超过">
+<!ENTITY pref.termstoolbar.addition.o2.label.after "个关键词后添加到菜单">
+<!ENTITY pref.termstoolbar.addition.o3.label "添加到单独的菜单">
+<!ENTITY pref.highlighting.label "高亮显示">
+<!ENTITY pref.highlightMinlength.label "需要高亮显示的关键词最小长度为:">
+<!ENTITY pref.highlightMinlength.accesskey "L">

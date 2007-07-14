@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://@NAME@/skin/overlay.css" ?>
+<?xml-stylesheet href="chrome://@NAME@/skin/highlighting-agent.css" ?>
+
+<!DOCTYPE overlay SYSTEM "chrome://@NAME@/locale/searchwp.dtd">
+
+<overlay id="searchwpOverlay"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <stringbundleset id="stringbundleset">
+    <stringbundle id="bundle-searchwp" src="chrome://@NAME@/locale/searchwp.properties" />
+  </stringbundleset>
+
+  <keyset id="mainKeyset">
+    <key id="key_findAgainSWP" keycode="VK_F3" oncommand="searchwp.Overlay.onFindAgain(event);" />
+    <key id="key_findAgainSWP_2" keycode="VK_F3" modifiers="control" oncommand="searchwp.Overlay.onFindAgain(event);" />
+    <key id="key_findPreviousSWP" keycode="VK_F3" modifiers="shift" oncommand="searchwp.Overlay.onFindAgain(event);" />
+    <key id="key_highlight" keycode="VK_F8" oncommand="searchwp.Highlighting.toggleHighlight();" />
+  </keyset>
+
+  <script type="application/x-javascript" src="chrome://@NAME@/content/highlighting/package-info.js" />
+  <script type="application/x-javascript" src="chrome://@NAME@/content/highlighting/nodeHighlighter.js" />
+  <script type="application/x-javascript" src="chrome://@NAME@/content/highlighting/nodeSearcher.js" />
+
+  <script type="application/x-javascript" src="chrome://@NAME@/content/package-info.js" />
+  <script type="application/x-javascript" src="chrome://@NAME@/content/fixKeyset.js" />
+  <script type="application/x-javascript" src="chrome://@NAME@/content/preferences.js" />
+  <script type="application/x-javascript" src="chrome://@NAME@/content/highlighting.js" />
+  <script type="application/x-javascript" src="chrome://@NAME@/content/termsToolbar.js" />
+  <script type="application/x-javascript" src="chrome://@NAME@/content/termsDataFactory.js" />
+  <script type="application/x-javascript" src="chrome://@NAME@/content/overlay.js" />
+
+  <toolbarpalette id="BrowserToolbarPalette">
+    <toolbaritem id="searchwp-terms-container">
+      <label id="searchwp-terms-title" value="&toolbar.terms.label;" />
+      <toolbarseparator id="searchwp-separator-1" hidden="true" />
+      <hbox id="searchwp-terms-box" align="center">
+        <toolbarbutton id="searchwp-terms-box-0" hidden="true" />
+        <toolbarbutton id="searchwp-terms-box-1" hidden="true" />
+        <toolbarbutton id="searchwp-terms-box-2" hidden="true" />
+        <toolbarbutton id="searchwp-terms-box-3" hidden="true" />
+        <toolbarbutton id="searchwp-terms-box-4" hidden="true" />
+        <toolbarbutton id="searchwp-terms-box-5" hidden="true" />
+        <toolbarbutton id="searchwp-terms-box-6" hidden="true" />
+        <toolbarbutton id="searchwp-terms-box-7" hidden="true" />
+      </hbox>
+      <toolbarbutton id="searchwp-terms-menu" type="menu" container="true" hidden="true"
+          class="chevron">
+        <menupopup id="searchwp-terms-popup" class="menu-iconic">
+          <toolbarbutton id="searchwp-terms-popup-0" hidden="true" />
+          <toolbarbutton id="searchwp-terms-popup-1" hidden="true" />
+          <toolbarbutton id="searchwp-terms-popup-2" hidden="true" />
+          <toolbarbutton id="searchwp-terms-popup-3" hidden="true" />
+        </menupopup>
+      </toolbarbutton>
+      <toolbarseparator id="searchwp-separator-2" hidden="true" />
+    </toolbaritem>
+
+    <toolbaritem id="searchwp-highlight-container" align="center">
+      <toolbarbutton id="searchwp-highlight-button"
+          class="chromeclass-toolbar-additional"
+          label="&button.highlight.label;"
+          tooltiptext="&button.highlight.tooltiptext;"
+          oncommand="searchwp.Highlighting.toggleHighlight(); event.stopPropagation();"
+          type="menu-button"
+          autocheck="false"
+          disabled="false">
+        <menupopup>
+          <menuitem id="searchwp-highlight-match-case"
+              label="&button.highlight.matchcase.label;"
+              type="checkbox"
+              autocheck="false"
+              oncommand="searchwp.Highlighting.changeMatchCase(); event.stopPropagation();" />
+        </menupopup>
+      </toolbarbutton>
+    </toolbaritem>
+  </toolbarpalette>
+
+</overlay>

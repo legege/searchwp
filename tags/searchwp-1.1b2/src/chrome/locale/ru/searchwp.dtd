@@ -1,0 +1,14 @@
+<!ENTITY toolbar.terms.label "Панель искомых значений">
+<!ENTITY button.highlight.label "Подсветка">
+<!ENTITY button.highlight.tooltiptext "Подсветить искомые значения">
+<!ENTITY button.highlight.matchcase.label "С учетом регистра">
+<!ENTITY pref.title "Настройки">
+<!ENTITY pref.termstoolbar.label "Панель искомых значений">
+<!ENTITY pref.termstoolbar.addition.label "Добавлять слова:">
+<!ENTITY pref.termstoolbar.addition.o1.label "на панель на столько, на сколько позволяет пространство, затем выводить ввиде меню.">
+<!ENTITY pref.termstoolbar.addition.o2.label.before "на панель в количестве не более">
+<!ENTITY pref.termstoolbar.addition.o2.label.after "штук, затем выводить ввиде меню.">
+<!ENTITY pref.termstoolbar.addition.o3.label "ввиде меню.">
+<!ENTITY pref.highlighting.label "Подсветка">
+<!ENTITY pref.highlightMinlength.label "Минимальная длина подсвечиваемых слов">
+<!ENTITY pref.highlightMinlength.accesskey "Д">

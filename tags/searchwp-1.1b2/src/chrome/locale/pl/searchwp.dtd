@@ -1,0 +1,14 @@
+<!ENTITY toolbar.terms.label "Pasek słów">
+<!ENTITY button.highlight.label "Podświetl">
+<!ENTITY button.highlight.tooltiptext "Podświetla wszystkie znalezione słowa">
+<!ENTITY button.highlight.matchcase.label "Rozróżniaj wielkość liter">
+<!ENTITY pref.title "Opcje">
+<!ENTITY pref.termstoolbar.label "Pasek słów">
+<!ENTITY pref.termstoolbar.addition.label "Szukane słowa wyświetl jako przyciski w następujący sposób:">
+<!ENTITY pref.termstoolbar.addition.o1.label "wyświetl tyle przycisków ile jest miejsca na pasku, pozostałe w menu">
+<!ENTITY pref.termstoolbar.addition.o2.label.before "wyświetl do">
+<!ENTITY pref.termstoolbar.addition.o2.label.after "przycisków, pozostałe w menu">
+<!ENTITY pref.termstoolbar.addition.o3.label "wyświetl jeden przycisk z rozwijanym menu">
+<!ENTITY pref.highlighting.label "Podświetlanie">
+<!ENTITY pref.highlightMinlength.label "Minimalna długość podświetlanych słów:">
+<!ENTITY pref.highlightMinlength.accesskey "D">
