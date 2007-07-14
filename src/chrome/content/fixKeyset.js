@@ -23,10 +23,10 @@
  * ***** END LICENSE BLOCK ***** */
 
 // need to correct some XUL elements without IDs
-searchwp.fixFirefoxKeyset = function() { 
+searchwp.fixFirefoxKeyset = function() {
   var mainKeyset = document.getElementById("mainKeyset");
   var elements = mainKeyset.getElementsByAttribute("keycode", "VK_F3");
-  
+
   if (elements.length == 2) {
     if (!elements[0].getAttribute("id") && !elements[1].getAttribute("id")
         && elements[0].getAttribute("command") == "cmd_findAgain"

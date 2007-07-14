@@ -1,6 +1,7 @@
 <!ENTITY toolbar.terms.label "Alatna traka pojmova">
 <!ENTITY button.highlight.label "Istakni">
 <!ENTITY button.highlight.tooltiptext "Istakni sve pojmove">
+<!ENTITY button.highlight.matchcase.label "Match case">
 <!ENTITY pref.title "Opcije">
 <!ENTITY pref.termstoolbar.label "Alatna traka pojmova">
 <!ENTITY pref.termstoolbar.addition.label "Riječi će se dodati u:">

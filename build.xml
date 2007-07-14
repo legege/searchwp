@@ -12,6 +12,7 @@
 
   <property name="src.dir" value="src" />
   <property name="src.chrome.dir" value="${src.dir}/chrome" />
+  <property name="src.chrome.locale.dir" value="${src.dir}/chrome/locale" />
   <property name="target.dir" value="target" />
   <property name="target.xpi.dir" value="${target.dir}/${extension.id}" />
 
@@ -46,6 +47,12 @@
     <checksum algorithm="SHA1" file="${target.dir}/${extension.name}-${extension.version}.xpi" />
   </target>
 
+  <target name="replace-locale-id" description="Replace all extension.id in chrome/locale">
+    <replace dir="${src.chrome.locale.dir}">
+      <replacefilter token="${extension.id}" value="@ID@" />
+    </replace>
+  </target>
+  
   <target name="clean" description="Clean the target directory">
     <delete dir="${target.dir}" />
   </target>

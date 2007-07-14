@@ -1,6 +1,7 @@
 <!ENTITY toolbar.terms.label "Zoekwoordenwerkbalk">
 <!ENTITY button.highlight.label "Markeren">
 <!ENTITY button.highlight.tooltiptext "Markeer alle zoekwoorden">
+<!ENTITY button.highlight.matchcase.label "Match case">
 <!ENTITY pref.title "Opties">
 <!ENTITY pref.termstoolbar.label "Zoekwoordenwerkbalk">
 <!ENTITY pref.termstoolbar.addition.label "De woorden moeten worden toegevoegd in:">

@@ -1,6 +1,7 @@
 <!ENTITY toolbar.terms.label "Suchbegriffs-Symbolleiste">
 <!ENTITY button.highlight.label "Hervorheben">
 <!ENTITY button.highlight.tooltiptext "Alle Suchbegriffe hervorheben">
+<!ENTITY button.highlight.matchcase.label "Match case">
 <!ENTITY pref.title "Einstellungen">
 <!ENTITY pref.termstoolbar.label "Suchbegriffs-Symbolleiste">
 <!ENTITY pref.termstoolbar.addition.label "Wörter anzeigen">

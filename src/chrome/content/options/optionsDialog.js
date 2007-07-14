@@ -26,7 +26,7 @@ searchwp.options.OptionsDialog = new function() {
   this.onLoad = function() {
     document.getElementById("highlightMinlength").value = searchwp.Preferences.highlightMinLength;
     document.getElementById("termstoolbar-addition-upto").value = ""
-    
+
     var maxTermsButtons = searchwp.Preferences.maxTermButtons;
     if (maxTermsButtons < 0) {
       document.getElementById("termstoolbar-addition").value = "option1";
@@ -47,7 +47,7 @@ searchwp.options.OptionsDialog = new function() {
     if (highlightMinLength > 0) {
       searchwp.Preferences.highlightMinLength = highlightMinLength;
     }
-  
+
     // Terms toolbar options
     var additionOption = document.getElementById("termstoolbar-addition").value;
     switch (additionOption) {
@@ -62,10 +62,10 @@ searchwp.options.OptionsDialog = new function() {
         searchwp.Preferences.maxTermButtons = -1;
         break;
     }
-    
+
     return true;
   }
-  
+
   this.onTTAdditionSelect = function() {
     if (document.getElementById("termstoolbar-addition").value == "option2") {
       var maxTermsButtons = searchwp.Preferences.maxTermButtons;

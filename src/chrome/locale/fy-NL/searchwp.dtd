@@ -1,6 +1,7 @@
 <!ENTITY toolbar.terms.label "Sykwurden wurkbalke">
 <!ENTITY button.highlight.label "Markeare">
 <!ENTITY button.highlight.tooltiptext "Markearje alle sykwurden">
+<!ENTITY button.highlight.matchcase.label "Lyk oan lytse en grutte letters">
 <!ENTITY pref.title "Opsjes">
 <!ENTITY pref.termstoolbar.label "Termen arkbalke">
 <!ENTITY pref.termstoolbar.addition.label "De wurden moatte tafoege wurde yn:">
