@@ -1,0 +1,8 @@
+#summary Screenshots of SearchWP in action
+#labels Featured
+
+http://searchwp.googlecode.com/svn/meta/searchwp-05.png
+
+http://searchwp.googlecode.com/svn/meta/searchwp-05-highlight.png
+
+http://searchwp.googlecode.com/svn/meta/searchwp-05-jumptoword.png
