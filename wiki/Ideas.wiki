@@ -4,13 +4,14 @@ Your feedback is important to me. I'll try to add new features regularly as time
 
 = New features =
  * Enable making a word list not to mark or display (like in, the, at, a)
- * Integrate with the quicksearch (search as you type from the searchbox)
 
  * Make it possible to find words "loosely", kind of like Google does? For instance, "test-search" would be able to find "test-search", "test search", "testsearch", and so on in the page.
 
  * Instead of having the search terms be repeated in the chrome as buttons, it would make more sense (both aesthetically and usability-wise) if the actual search text turn into buttons whenever a search was performed. Clicking on those buttons would behave as expected, whereas editing mode would be activated by clicking in-between the buttons, clicking before the list of terms, or after them. The buttons would be transformed back to standard text in this situation. Of course, Ctrl+K would also work. Alt+click could also be a good way to avoid the buttons (just like highlighting linked text).
 
  * Audible alert in addition to highlighting the word.
+
+ * Integrate with the quicksearch (search as you type from the searchbox)
 
 = Improvements =
 
