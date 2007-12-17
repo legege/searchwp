@@ -1,4 +1,5 @@
 #summary A list of potential features and improvements
+#labels Featured
 
 Your feedback is important to me. I'll try to add new features regularly as time permits.
 
