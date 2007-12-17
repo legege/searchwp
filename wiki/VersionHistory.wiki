@@ -1,4 +1,5 @@
 #summary Change Log
+#labels Featured
 
 == SearchWP 1.1 (not yet released) ==
 
