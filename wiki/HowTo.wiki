@@ -9,6 +9,58 @@
  * *How do I change highlighting colors?*
   You have to change the userContent.css file. Here is an example. You can also change buttons' icon with the userChrome.css file, but this is a little bit trickier.
 
+userChrome.css
+{{{
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"); 
+
+#searchwp-terms-box > toolbarbutton.searchwp-term-highlight1 > .toolbarbutton-icon,
+#searchwp-terms-popup > toolbarbutton.searchwp-term-highlight1 > .toolbarbutton-icon {
+  background-image: url("chrome://searchwp/skin/icons/search-yellow.png");
+}
+
+#searchwp-terms-box > toolbarbutton.searchwp-term-highlight2 > .toolbarbutton-icon,
+#searchwp-terms-popup > toolbarbutton.searchwp-term-highlight2 > .toolbarbutton-icon {
+  background-image: url("chrome://searchwp/skin/icons/search-aqua.png");
+}
+
+#searchwp-terms-box > toolbarbutton.searchwp-term-highlight3 > .toolbarbutton-icon,
+#searchwp-terms-popup > toolbarbutton.searchwp-term-highlight3 > .toolbarbutton-icon {
+  background-image: url("chrome://searchwp/skin/icons/search-chartreuse.png");
+}
+
+#searchwp-terms-box > toolbarbutton.searchwp-term-highlight4 > .toolbarbutton-icon,
+#searchwp-terms-popup > toolbarbutton.searchwp-term-highlight4 > .toolbarbutton-icon {
+  background-image: url("chrome://searchwp/skin/icons/search-coral.png");
+}
+}}}
+
+userContent.css
+{{{
+.searchwp-term-highlight1,
+.searchwp-term-highlight2,
+.searchwp-term-highlight3,
+.searchwp-term-highlight4,
+.searchwp-term-highlight5 {
+  color: black !important;
+}
+
+.searchwp-term-highlight1 {
+  background-color: #ffff00 !important;
+}
+
+.searchwp-term-highlight2 {
+  background-color: #00ffff !important;
+}
+
+.searchwp-term-highlight3 {
+  background-color: #00ff00 !important;
+}
+
+.searchwp-term-highlight4 {
+  background-color: #ff7777 !important;
+}
+}}}
+
  * *Whenever a term is shown in the SearchWP area, an extra "term" displays, called "undefined".*
   Uninstall the McAfee SiteAdvisor add-on. It causes many problems not only with SearchWP but with other add-ons too.
 
