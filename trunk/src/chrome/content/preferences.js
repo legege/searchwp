@@ -12,13 +12,11 @@
  * License.
  *
  * The Original Code is SearchWP.
-
- * The Initial Developer of the Original Code is Georges-Etienne Legendre.
- * Portions created by Georges-Etienne Legendre are Copyright (C) 2004-2007.
- * All Rights Reserved.
  *
- * Contributor(s):
- *  Georges-Etienne Legendre <legege@legege.com> <http://legege.com>
+ * The Initial Developer of the Original Code is 
+ *  Georges-Etienne Legendre <legege@legege.com> <http://legege.com>.
+ * Portions created by the Initial Developer are Copyright (C) 2004-2008.
+ * All Rights Reserved.
  *
  * ***** END LICENSE BLOCK ***** */
 
@@ -29,9 +27,8 @@ searchwp.Preferences = new function() {
   this.PREF_HIGHLIGHT_STATE = "highlightState";
   this.PREF_HIGHLIGHT_MATCH_CASE = "highlightMatchCase";
   this.PREF_FIRST_LAUNCH = "firstLaunch";
-  this.PREF_MAX_TERM_BUTTONS = "maxTermButtons";
 
-  var PREF_BRANCH = "extensions.searchwp.";
+  var PREF_BRANCH = "extensions.@NAME@.";
   var prefService = Components.classes["@mozilla.org/preferences-service;1"]
                               .getService(Components.interfaces.nsIPrefService);
 
@@ -137,26 +134,5 @@ searchwp.Preferences = new function() {
    */
   this.__defineSetter__("highlightMinLength", function(aValue) {
     this.branch.setIntPref(this.PREF_HIGHLIGHT_MINLENGTH, aValue);
-  });
-
-  /**
-   * @return the maximum number of term's button. (-1: unlimited)
-   */
-  this.__defineGetter__("maxTermButtons", function() {
-    try {
-      return this.branch.getIntPref(this.PREF_MAX_TERM_BUTTONS);
-    }
-    catch (e) {
-      this.maxTermButtons = -1;
-      return -1;
-    }
-  });
-
-  /**
-   * Changes the maximum number of term's button.
-   * @param aValue An integer (-1: unlimited)
-   */
-  this.__defineSetter__("maxTermButtons", function(aValue) {
-    this.branch.setIntPref(this.PREF_MAX_TERM_BUTTONS, aValue);
   });
 }

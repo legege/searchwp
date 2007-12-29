@@ -10,14 +10,13 @@
     <em:targetApplication>
       <Description>
         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
-        <em:minVersion>3.0a6</em:minVersion>
+        <em:minVersion>3.0b2</em:minVersion>
         <em:maxVersion>3.0.0.*</em:maxVersion>
       </Description>
     </em:targetApplication>
 
     <!-- Front End MetaData -->
     <em:name>SearchWP</em:name>
-    <em:description>Buttons bar for the search box</em:description>
     <em:creator>Georges-Etienne Legendre</em:creator>
     <em:homepageURL>http://legege.com/mozilla/</em:homepageURL>
     <em:optionsURL>chrome://@NAME@/content/options/optionsDialog.xul</em:optionsURL>

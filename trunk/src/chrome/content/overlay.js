@@ -12,13 +12,11 @@
  * License.
  *
  * The Original Code is SearchWP.
-
- * The Initial Developer of the Original Code is Georges-Etienne Legendre.
- * Portions created by Georges-Etienne Legendre are Copyright (C) 2004-2007.
- * All Rights Reserved.
  *
- * Contributor(s):
- *  Georges-Etienne Legendre <legege@legege.com> <http://legege.com>
+ * The Initial Developer of the Original Code is 
+ *  Georges-Etienne Legendre <legege@legege.com> <http://legege.com>.
+ * Portions created by the Initial Developer are Copyright (C) 2004-2008.
+ * All Rights Reserved.
  *
  * ***** END LICENSE BLOCK ***** */
 
@@ -54,16 +52,17 @@ searchwp.Overlay = new function() {
       }
     }, 0);
 
-    if (searchwp.Preferences.firstLaunch && !searchwp.TermsToolbar.exist()
-        && !searchwp.Highlighting.exist()) {
+    if (searchwp.Preferences.firstLaunch && !searchwp.Highlighting.exist()) {
       setTimeout(function() {
-        searchwp.Overlay.firstLaunchMessage();
+        searchwp.Overlay.firstLaunch();
       }, 50);
     }
 
-    this.init();
+    // Add platform CSS selection
+    var win = document.getElementById("main-window");
+    win.setAttribute("searchwp-moz-platform", navigator.platform);
+
     searchwp.Highlighting.init();
-    searchwp.TermsToolbar.init();
 
     addEventListener("unload", function(event) { searchwp.Overlay.onUnload(event); }, false);
   }
@@ -75,8 +74,51 @@ searchwp.Overlay = new function() {
   this.onUnload = function(aEvent) {
     this.preferencesObserver.unregister();
     window.getBrowser().removeProgressListener(this.progressListener);
+  }
 
-    this.uninit();
+  /**
+   * @return the searchbox
+   */
+  this.__defineGetter__("searchbox", function() {
+    var searchbar = document.getElementById("searchbar");
+    return document.getAnonymousElementByAttribute(searchbar, "anonid", "searchbar-textbox");
+  });
+
+  /**
+   * firstLaunch
+   */
+  this.firstLaunch = function() {
+    if (typeof(BrowserCustomizeToolbar) != "function") {
+      return;
+    }
+
+    // Adding the highlight button to the toolbar
+    // http://developer.mozilla.org/en/docs/Code_snippets:Toolbar#Adding_button_by_default
+    try {
+      var nav = document.getElementById("nav-bar");
+      var curSet = firefoxnav.currentSet;
+      if (curSet.indexOf("searchwp-highlight-container") == -1) {
+        var set;
+        // Place the button before the searchbox
+        if (curSet.indexOf("search-container") != -1) {
+          set = curSet.replace(/search-container/, "search-container,searchwp-highlight-container");
+        }
+        else { // at the end
+          set = nav.currentSet + ",searchwp-highlight-container";
+        }
+        nav.setAttribute("currentset", set);
+        nav.currentSet = set;
+        document.persist("nav-bar", "currentset");
+        // If you don't do the following call, funny things happen
+        try {
+          BrowserToolboxCustomizeDone(true);
+        }
+        catch (e) { }
+      }
+    }
+    catch(e) { }
+
+    searchwp.Preferences.firstLaunch = false;
   }
 
   /**
@@ -84,40 +126,8 @@ searchwp.Overlay = new function() {
    * @return the original method.
    */
   this.onCustomizeDone = function() {
-    searchwp.Overlay.init();
     searchwp.Preferences.highlighted = false;
-    searchwp.Overlay.searchBox.onInput();
     return _oldCustomizeDone();
-  }
-
-  /**
-   * init
-   */
-  this.init = function() {
-    if (!this.searchBox.exist()) {
-      return;
-    }
-
-    this.searchBox.ref.addEventListener("input",
-      function(aEvent) { searchwp.Overlay.searchBox.onInput(aEvent); }, false, true);
-
-    /* XXXLegege: For SearchBox Sync, we have to listen the "oninput" event
-       because it appears that we cannot fire/catch an "input" event on the
-       searchbar. */
-    this.searchBox.ref.addEventListener("oninput",
-      function(aEvent) { searchwp.Overlay.searchBox.onInput(aEvent); }, false, true);
-  }
-
-  /**
-   * uninit
-   */
-  this.uninit = function() {
-    if (!this.searchBox.exist()) {
-      return;
-    }
-
-    this.searchBox.ref.removeEventListener("input", function(event) { searchwp.Overlay.searchBox.onInput(event); }, false);
-    this.searchBox.ref.removeEventListener("oninput", function(event) { searchwp.Overlay.searchBox.onInput(event); }, false);
   }
 
   /**
@@ -131,97 +141,10 @@ searchwp.Overlay = new function() {
       gFindBar.onFindAgainCommand(aEvent.shiftKey);
     }
     else {
-      var hasSearch = searchwp.TermsToolbar.searchAgain(aEvent);
+      var hasSearch = this.searchbox.repeatTokenClick(aEvent);
       if (!hasSearch) {
         gFindBar.onFindAgainCommand(aEvent.shiftKey);
       }
-    }
-  }
-
-  /**
-   * firstLaunchMessage
-   */
-  this.firstLaunchMessage = function() {
-    var showAgain = {value: false};
-
-    if (typeof(BrowserCustomizeToolbar) != "function") {
-      return;
-    }
-
-    // confirm deletion
-    var promptService = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
-                                  .getService(Components.interfaces.nsIPromptService);
-    var no = promptService.confirmEx(window,
-        _stringBundle.getString("firstLaunchTitle"),
-        _stringBundle.getString("firstLaunchMessage"),
-          Components.interfaces.nsIPromptService.BUTTON_TITLE_YES * Components.interfaces.nsIPromptService.BUTTON_POS_0
-            + Components.interfaces.nsIPromptService.BUTTON_TITLE_NO * Components.interfaces.nsIPromptService.BUTTON_POS_1,
-        null, null, null,
-        _stringBundle.getString("firstLaunchCheckbox"),
-        showAgain);
-    if (!no) {
-      BrowserCustomizeToolbar();
-    }
-
-    searchwp.Preferences.firstLaunch = showAgain.value;
-  }
-
-  this.searchBox = new function() {
-    /**
-     * Return a reference to the searchbar.
-     */
-    this.__defineGetter__("ref", function() {
-      return document.getElementById("searchbar");
-    });
-
-    /**
-     * @return the current searchbox value.
-     */
-    this.__defineGetter__("value", function() {
-      var textbox = document.getAnonymousElementByAttribute(this.ref, "class", "searchbar-textbox");
-      if (textbox) {
-        return textbox.inputField.value;
-      }
-      return "";
-    });
-
-    /**
-     * Sets the value of the searchbox.
-     * @param aValue The value to set.
-     */
-    this.__defineSetter__("value", function(aValue) {
-      var textbox = document.getAnonymousElementByAttribute(this.ref, "class", "searchbar-textbox");
-      if (textbox) {
-        textbox.inputField.value = aValue;
-      }
-    });
-
-    /**
-     * Determines if the focus is in the searchbox.
-     * @return true if the focus is in the searchbox.
-     */
-    this.focused = function() {
-      if (this.ref) {
-        return this.ref.mTextbox.focused;
-      }
-      return false;
-    }
-
-    /**
-     * Determines if the searchbox exists.
-     * @return true if the searchbox exists.
-     */
-    this.exist = function() {
-      return this.ref != null;
-    }
-
-    /**
-     * Called when an input event is detected on the searchbox.
-     */
-    this.onInput = function(aEvent) {
-      var termsData = searchwp.TermsDataFactory.createTermsData(this.value);
-      searchwp.TermsToolbar.update(termsData, false);
-      searchwp.Highlighting.update(termsData, false);
     }
   }
 
@@ -238,7 +161,7 @@ searchwp.Overlay = new function() {
     }
 
     this.onProgressChange = function (aWebProgress, aRequest, aCurSelfProgress,
-        aMaxSelfProgress, aCurTotalProgress, aMaxTotalProgress) {}
+                                      aMaxSelfProgress, aCurTotalProgress, aMaxTotalProgress) {}
 
     this.onStatusChange = function(aWebProgress, aRequest, aStatus, message) {}
 
@@ -250,7 +173,7 @@ searchwp.Overlay = new function() {
       if (aStateFlags & Components.interfaces.nsIWebProgressListener.STATE_STOP) {
         /**
          * XXXLegege (July 15th, 2005): Some users report that the page never stop
-         * to load. Make the highlighting asynchrone.
+         * to load. The solution is to make the highlighting asynchrone.
          */
         setTimeout(function() { searchwp.Highlighting.refresh(); }, 0);
       }
@@ -284,30 +207,27 @@ searchwp.Overlay = new function() {
 
       switch (aData) {
         case searchwp.Preferences.PREF_HIGHLIGHT_STATE:
-          setTimeout(
-            function() {
-              var item = searchwp.Highlighting.getHighlightButton();
-              if (item) {
-                item.checked = searchwp.Preferences.highlighted;
-              }
-            }, 0);
-          searchwp.Highlighting.refresh();
+          setTimeout(function() {
+            var item = searchwp.Highlighting.highlightButton;
+            if (item) {
+              item.setAttribute("checked", searchwp.Preferences.highlighted);
+            }
+            searchwp.Highlighting.refresh();
+          }, 0);
           break;
         case searchwp.Preferences.PREF_HIGHLIGHT_MATCH_CASE:
-          setTimeout(
-            function() {
-              var item = searchwp.Highlighting.getHighlightMatchCase();
-              if (item) {
-                item.setAttribute("checked", searchwp.Preferences.highlightMatchCase);
-              }
-            }, 0);
-          searchwp.Highlighting.refresh();
+          setTimeout(function() {
+            var item = searchwp.Highlighting.highlightButton;
+            if (item) {
+              item.setAttribute("matchcase", searchwp.Preferences.highlightMatchCase);
+            }
+            searchwp.Highlighting.refresh();
+          }, 0);
           break;
         case searchwp.Preferences.PREF_HIGHLIGHT_MINLENGTH:
-          searchwp.Overlay.searchBox.onInput();
-          break;
-        case searchwp.Preferences.PREF_MAX_TERM_BUTTONS:
-          searchwp.TermsToolbar.refresh();
+          setTimeout(function() {
+            searchwp.Highlighting.refresh();
+          }, 0);
           break;
       }
     }
