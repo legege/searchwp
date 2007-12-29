@@ -1,14 +1,5 @@
-<!ENTITY toolbar.terms.label "Suchbegriffs-Symbolleiste">
 <!ENTITY button.highlight.label "Hervorheben">
-<!ENTITY button.highlight.tooltiptext "Alle Suchbegriffe hervorheben">
-<!ENTITY button.highlight.matchcase.label "Match case">
 <!ENTITY pref.title "Einstellungen">
-<!ENTITY pref.termstoolbar.label "Suchbegriffs-Symbolleiste">
-<!ENTITY pref.termstoolbar.addition.label "Wörter anzeigen">
-<!ENTITY pref.termstoolbar.addition.o1.label "in der Suchbegriffs-Symbolleiste, solange Platz ist, dann in einem Menü">
-<!ENTITY pref.termstoolbar.addition.o2.label.before "in der Suchbegriffs-Symbolleiste bei bis zu">
-<!ENTITY pref.termstoolbar.addition.o2.label.after "Wörtern, dann in einem Menü">
-<!ENTITY pref.termstoolbar.addition.o3.label "nur in einem Menü">
 <!ENTITY pref.highlighting.label "Hervorhebung">
 <!ENTITY pref.highlightMinlength.label "Mindestzeichenlänge für hervorzuhebende Wörter:">
 <!ENTITY pref.highlightMinlength.accesskey "L">

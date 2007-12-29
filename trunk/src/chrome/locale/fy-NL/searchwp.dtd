@@ -1,14 +1,5 @@
-<!ENTITY toolbar.terms.label "Sykwurden wurkbalke">
 <!ENTITY button.highlight.label "Markeare">
-<!ENTITY button.highlight.tooltiptext "Markearje alle sykwurden">
-<!ENTITY button.highlight.matchcase.label "Lyk oan lytse en grutte letters">
 <!ENTITY pref.title "Opsjes">
-<!ENTITY pref.termstoolbar.label "Termen arkbalke">
-<!ENTITY pref.termstoolbar.addition.label "De wurden moatte tafoege wurde yn:">
-<!ENTITY pref.termstoolbar.addition.o1.label "de termen arkbalke sa lang as der genôch romte en dan yn in menu">
-<!ENTITY pref.termstoolbar.addition.o2.label.before "de termen arkbalke oant">
-<!ENTITY pref.termstoolbar.addition.o2.label.after "wurden an dan yn in menu">
-<!ENTITY pref.termstoolbar.addition.o3.label "in inkeld menu">
 <!ENTITY pref.highlighting.label "Opljochtsje">
 <!ENTITY pref.highlightMinlength.label "Minimum lengte foar de wurden om op te ljochtsjen">
 <!ENTITY pref.highlightMinlength.accesskey "L">

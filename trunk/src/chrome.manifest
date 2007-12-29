@@ -3,24 +3,24 @@ skin @NAME@ classic/1.0 jar:chrome/@NAME@.jar!/skin/classic/
 
 # locale @NAME@ ca-AD jar:chrome/@NAME@.jar!/locale/ca-AD/
 # locale @NAME@ cs-CZ jar:chrome/@NAME@.jar!/locale/cs-CZ/
-locale @NAME@ de jar:chrome/@NAME@.jar!/locale/de/
-locale @NAME@ el-GR jar:chrome/@NAME@.jar!/locale/el-GR/
+# locale @NAME@ de jar:chrome/@NAME@.jar!/locale/de/
+# locale @NAME@ el-GR jar:chrome/@NAME@.jar!/locale/el-GR/
 locale @NAME@ en jar:chrome/@NAME@.jar!/locale/en/
-locale @NAME@ es-ES jar:chrome/@NAME@.jar!/locale/es-ES/
+# locale @NAME@ es-ES jar:chrome/@NAME@.jar!/locale/es-ES/
 locale @NAME@ fr jar:chrome/@NAME@.jar!/locale/fr/
-locale @NAME@ fy-NL jar:chrome/@NAME@.jar!/locale/fy-NL/
-locale @NAME@ hr jar:chrome/@NAME@.jar!/locale/hr/
+# locale @NAME@ fy-NL jar:chrome/@NAME@.jar!/locale/fy-NL/
+# locale @NAME@ hr jar:chrome/@NAME@.jar!/locale/hr/
 # locale @NAME@ hu jar:chrome/@NAME@.jar!/locale/hu/
-locale @NAME@ it jar:chrome/@NAME@.jar!/locale/it/
-locale @NAME@ ja jar:chrome/@NAME@.jar!/locale/ja/
-locale @NAME@ ko jar:chrome/@NAME@.jar!/locale/ko/
-locale @NAME@ nl jar:chrome/@NAME@.jar!/locale/nl/
-locale @NAME@ pl jar:chrome/@NAME@.jar!/locale/pl/
+# locale @NAME@ it jar:chrome/@NAME@.jar!/locale/it/
+# locale @NAME@ ja jar:chrome/@NAME@.jar!/locale/ja/
+# locale @NAME@ ko jar:chrome/@NAME@.jar!/locale/ko/
+# locale @NAME@ nl jar:chrome/@NAME@.jar!/locale/nl/
+# locale @NAME@ pl jar:chrome/@NAME@.jar!/locale/pl/
 # locale @NAME@ pt-BR jar:chrome/@NAME@.jar!/locale/pt-BR/
-locale @NAME@ ru jar:chrome/@NAME@.jar!/locale/ru/
-locale @NAME@ sk jar:chrome/@NAME@.jar!/locale/sk/
-locale @NAME@ zh-CN jar:chrome/@NAME@.jar!/locale/zh-CN/
-locale @NAME@ zh-TW jar:chrome/@NAME@.jar!/locale/zh-TW/
+# locale @NAME@ ru jar:chrome/@NAME@.jar!/locale/ru/
+# locale @NAME@ sk jar:chrome/@NAME@.jar!/locale/sk/
+# locale @NAME@ zh-CN jar:chrome/@NAME@.jar!/locale/zh-CN/
+# locale @NAME@ zh-TW jar:chrome/@NAME@.jar!/locale/zh-TW/
 
 overlay chrome://browser/content/browser.xul chrome://@NAME@/content/overlay.xul
 

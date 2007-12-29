@@ -12,33 +12,17 @@
  * License.
  *
  * The Original Code is SearchWP.
-
- * The Initial Developer of the Original Code is Georges-Etienne Legendre.
- * Portions created by Georges-Etienne Legendre are Copyright (C) 2004-2007.
- * All Rights Reserved.
  *
- * Contributor(s):
- *  Georges-Etienne Legendre <legege@legege.com> <http://legege.com>
+ * The Initial Developer of the Original Code is 
+ *  Georges-Etienne Legendre <legege@legege.com> <http://legege.com>.
+ * Portions created by the Initial Developer are Copyright (C) 2004-2008.
+ * All Rights Reserved.
  *
  * ***** END LICENSE BLOCK ***** */
 
 searchwp.options.OptionsDialog = new function() {
   this.onLoad = function() {
     document.getElementById("highlightMinlength").value = searchwp.Preferences.highlightMinLength;
-    document.getElementById("termstoolbar-addition-upto").value = ""
-
-    var maxTermsButtons = searchwp.Preferences.maxTermButtons;
-    if (maxTermsButtons < 0) {
-      document.getElementById("termstoolbar-addition").value = "option1";
-    }
-    else if (maxTermsButtons > 0) {
-      document.getElementById("termstoolbar-addition").value = "option2";
-      document.getElementById("termstoolbar-addition-upto").value = maxTermsButtons;
-      document.getElementById("termstoolbar-addition-upto").disabled = false;
-    }
-    else {
-      document.getElementById("termstoolbar-addition").value = "option3";
-    }
   }
 
   this.onAccept = function() {
@@ -48,39 +32,6 @@ searchwp.options.OptionsDialog = new function() {
       searchwp.Preferences.highlightMinLength = highlightMinLength;
     }
 
-    // Terms toolbar options
-    var additionOption = document.getElementById("termstoolbar-addition").value;
-    switch (additionOption) {
-      case "option2":
-        searchwp.Preferences.maxTermButtons = document.getElementById("termstoolbar-addition-upto").value;
-        break;
-      case "option3":
-        searchwp.Preferences.maxTermButtons = 0;
-        break;
-      case "option1":
-      default:
-        searchwp.Preferences.maxTermButtons = -1;
-        break;
-    }
-
     return true;
-  }
-
-  this.onTTAdditionSelect = function() {
-    if (document.getElementById("termstoolbar-addition").value == "option2") {
-      var maxTermsButtons = searchwp.Preferences.maxTermButtons;
-      if (maxTermsButtons > 0) {
-        document.getElementById("termstoolbar-addition-upto").value = maxTermsButtons;
-      }
-      else {
-        document.getElementById("termstoolbar-addition-upto").value = 4;
-      }
-
-      document.getElementById("termstoolbar-addition-upto").disabled = false;
-    }
-    else {
-      document.getElementById("termstoolbar-addition-upto").value = "";
-      document.getElementById("termstoolbar-addition-upto").disabled = true;
-    }
   }
 }
