@@ -12,13 +12,11 @@
  * License.
  *
  * The Original Code is SearchWP.
-
- * The Initial Developer of the Original Code is Georges-Etienne Legendre.
- * Portions created by Georges-Etienne Legendre are Copyright (C) 2004-2007.
- * All Rights Reserved.
  *
- * Contributor(s):
- *  Georges-Etienne Legendre <legege@legege.com> <http://legege.com>
+ * The Initial Developer of the Original Code is 
+ *  Georges-Etienne Legendre <legege@legege.com> <http://legege.com>.
+ * Portions created by the Initial Developer are Copyright (C) 2004-2008.
+ * All Rights Reserved.
  *
  * ***** END LICENSE BLOCK ***** */
 

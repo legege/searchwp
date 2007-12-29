@@ -1,14 +1,5 @@
-<!ENTITY toolbar.terms.label "Εργαλειοθήκη όρων">
 <!ENTITY button.highlight.label "Επισήμανση">
-<!ENTITY button.highlight.tooltiptext "Επισήμανση όλων των όρων">
-<!ENTITY button.highlight.matchcase.label "Ταίριασμα χαρακτήρα">
 <!ENTITY pref.title "Επιλογές">
-<!ENTITY pref.termstoolbar.label "Εργαλειοθήκη όρων">
-<!ENTITY pref.termstoolbar.addition.label "Οι λέξεις θα προστεθούν :">
-<!ENTITY pref.termstoolbar.addition.o1.label "Σε όσο χώρο υπάρχει στην εργαλειοθήκη και οι υπόλοιπες σε μενού.">
-<!ENTITY pref.termstoolbar.addition.o2.label.before "Μέχρι">
-<!ENTITY pref.termstoolbar.addition.o2.label.after "λέξεις στην εργαλειοθήκη όρων και οι υπόλοιπες σε μενού.">
-<!ENTITY pref.termstoolbar.addition.o3.label "Μόνο σε ένα μενού.">
 <!ENTITY pref.highlighting.label "Επισήμανση">
 <!ENTITY pref.highlightMinlength.label "Ελάχιστο μήκος των λέξεων που θα επισημανθούν(σε χαρακτήρες) :">
 <!ENTITY pref.highlightMinlength.accesskey "Ε">

@@ -1,14 +1,5 @@
-<!ENTITY toolbar.terms.label "言葉ツールバー">
 <!ENTITY button.highlight.label "強調">
-<!ENTITY button.highlight.tooltiptext "すべての言葉を強調">
-<!ENTITY button.highlight.matchcase.label "大文字と小文字の一致">
 <!ENTITY pref.title "オプション">
-<!ENTITY pref.termstoolbar.label "言葉ツールバー">
-<!ENTITY pref.termstoolbar.addition.label "言葉が追加されるべき位置:">
-<!ENTITY pref.termstoolbar.addition.o1.label "十分な空きが存在する限り言葉ツールバーで、あとはメニュー。">
-<!ENTITY pref.termstoolbar.addition.o2.label.before "言葉ツールバーには">
-<!ENTITY pref.termstoolbar.addition.o2.label.after "語以下で、あとはメニュー。">
-<!ENTITY pref.termstoolbar.addition.o3.label "単一のメニュー。">
 <!ENTITY pref.highlighting.label "強調表示">
 <!ENTITY pref.highlightMinlength.label "強調される言葉の最短の長さ:">
 <!ENTITY pref.highlightMinlength.accesskey "L">

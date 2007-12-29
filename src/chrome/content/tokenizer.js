@@ -32,7 +32,7 @@ searchwp.Tokenizer = new function() {
   }
 
   /**
-   * @return true if the 2 termsData are identicals
+   * @return true if the 2 tokens array are identicals
    */
   this.compare = function(aTokensArray1, aTokensArray2) {
     if (aTokensArray1 && aTokensArray2) {

@@ -1,14 +1,5 @@
-<!ENTITY toolbar.terms.label "Lemmi di SearchWP">
 <!ENTITY button.highlight.label "Evidenziature di SearchWP">
-<!ENTITY button.highlight.tooltiptext "Evidenzia tutti i lemmi digitati nella barra di ricerca">
-<!ENTITY button.highlight.matchcase.label "Maiuscole/minuscole">
 <!ENTITY pref.title "Opzioni di SearchWP">
-<!ENTITY pref.termstoolbar.label "Lemmi nelle barre degli strumenti">
-<!ENTITY pref.termstoolbar.addition.label "Visualizzare i lemmi digitati nelle barre degli strumenti:">
-<!ENTITY pref.termstoolbar.addition.o1.label "dove si è posizionata l&apos;icona &apos;Lemmi di SearchWP&apos; finché c&apos;è abbastanza spazio e poi in un menu">
-<!ENTITY pref.termstoolbar.addition.o2.label.before "dove si è posizionata l&apos;icona &apos;Lemmi di SearchWP&apos; fino a">
-<!ENTITY pref.termstoolbar.addition.o2.label.after "lemmi e poi in un menu">
-<!ENTITY pref.termstoolbar.addition.o3.label "dove si è posizionata l&apos;icona &apos;Lemmi di SearchWP&apos;, ma solo in un menu">
 <!ENTITY pref.highlighting.label "Evidenziatura dei lemmi">
 <!ENTITY pref.highlightMinlength.label "Numero minimo di caratteri affinché i lemmi siano evidenziati:">
 <!ENTITY pref.highlightMinlength.accesskey "N">

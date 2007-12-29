@@ -1,14 +1,5 @@
-<!ENTITY toolbar.terms.label "關鍵字工具列">
 <!ENTITY button.highlight.label "高亮度標示">
-<!ENTITY button.highlight.tooltiptext "高亮度標示所有關鍵字">
-<!ENTITY button.highlight.matchcase.label "大小寫符合">
 <!ENTITY pref.title "選項">
-<!ENTITY pref.termstoolbar.label "關鍵字工具列">
-<!ENTITY pref.termstoolbar.addition.label "關鍵字添加方式:">
-<!ENTITY pref.termstoolbar.addition.o1.label "盡量將關鍵字添加到關鍵字工具列，空間不足時才添加到下拉選單。">
-<!ENTITY pref.termstoolbar.addition.o2.label.before "當添加的關鍵字超過">
-<!ENTITY pref.termstoolbar.addition.o2.label.after "個時改為添加到下拉選單中。">
-<!ENTITY pref.termstoolbar.addition.o3.label "以下拉選單顯示關鍵字。">
 <!ENTITY pref.highlighting.label "高亮度標示">
 <!ENTITY pref.highlightMinlength.label "需要標示的關鍵字最小長度:">
 <!ENTITY pref.highlightMinlength.accesskey "L">
