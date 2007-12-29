@@ -1,0 +1,143 @@
+@import url("chrome://global/skin/");
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+@namespace html url("http://www.w3.org/1999/xhtml");
+
+.searchbox-tokens-layer,
+.searchbox-tokens-layer > *,
+.searchbox-token,
+.searchbox-token > * {
+  margin: 0;
+  padding: 0;
+  cursor: text;
+}
+
+.searchbox-tokens-layer {
+  -moz-box-align: center;
+}
+
+.searchbox-tokens-container {
+  -moz-margin-start: 1px;
+  -moz-margin-end: 1px;
+}
+
+.searchbox-token {
+  border: 1px solid #a4bdec;
+  background: #dee7f8;
+  -moz-border-radius: 1em;
+  color: #000;
+  padding: 0 4px;
+  -moz-margin-start: 3px !important;
+  -moz-margin-end: 3px !important;
+}
+
+.searchbox-token:hover {
+  border-color: #6d95e0;
+  background: #bbcef1;
+  cursor: pointer !important;
+}
+
+.searchbox-token:hover:active {
+  border-color: #608ce0;
+  background: #a0c9ff;
+}
+
+.searchbox-token[highlight="term-1"] {
+  background-color: #fbed73;
+  border-color: #e1d467;
+}
+
+.searchbox-token[highlight="term-1"]:hover {
+  background-color: #fbe313;
+  border-color: #dac400;
+}
+
+.searchbox-token[highlight="term-1"]:hover:active {
+  background-color: #f1d700;
+  border-color: #d1ba00;
+}
+
+.searchbox-token[highlight="term-2"] {
+  background-color: #ffb18c;
+  border-color: #e69169;
+}
+
+.searchbox-token[highlight="term-2"]:hover {
+  background-color: #ff9766;
+  border-color: #dd7b4f;
+}
+
+.searchbox-token[highlight="term-2"]:hover:active {
+  background-color: #fe7f44;
+  border-color: #da6630;
+}
+
+.searchbox-token[highlight="term-3"] {
+  background-color: #ffd281;
+  border-color: #e6bd76;
+}
+
+.searchbox-token[highlight="term-3"]:hover {
+  background-color: #ffbf4c;
+  border-color: #dfa338;
+}
+
+.searchbox-token[highlight="term-3"]:hover:active {
+  background-color: #ffb122;
+  border-color: #db9400;
+}
+
+.searchbox-token[highlight="term-4"] {
+  background-color: #c3f991;
+  border-color: #b1e084;
+}
+
+.searchbox-token[highlight="term-4"]:hover {
+  background-color: #9af941;
+  border-color: #7bd72a;
+}
+
+.searchbox-token[highlight="term-4"]:hover:active {
+  background-color: #75f800;
+  border-color: #59d700;
+}
+
+.searchbox-token[highlight="term-5"] {
+  background-color: #e9b8ff;
+  border-color: #d1a5e5;
+}
+
+.searchbox-token[highlight="term-5"]:hover {
+  background-color: #e09bff;
+  border-color: #c180de;
+}
+
+.searchbox-token[highlight="term-5"]:hover:active {
+  background-color: #da86fe;
+  border-color: #bc6edf;
+}
+
+.searchbox-token[notfound="true"],
+.searchbox-token[notfound="true"]:hover,
+.searchbox-token[notfound="true"]:hover:active {
+  background-color: #c6c6c6;
+  border-color: #b3b3b3;
+}
+
+.searchbox-tokens-overflow {
+  -moz-margin-start: .5em;
+}
+
+.searchbox-tokens-overflow-button {
+  list-style-image: url("chrome://@NAME@/skin/ellipsis.png");
+  cursor: pointer;
+  padding: 1px;
+}
+
+.searchbox-tokens-overflow-popup-container {
+  padding: 1px;
+}
+
+.searchbox-tokens-overflow-popup-container .searchbox-token {
+  margin: 2px;
+  display: inline;
+}

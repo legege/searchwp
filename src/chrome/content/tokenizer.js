@@ -12,57 +12,36 @@
  * License.
  *
  * The Original Code is SearchWP.
-
- * The Initial Developer of the Original Code is Georges-Etienne Legendre.
- * Portions created by Georges-Etienne Legendre are Copyright (C) 2004-2007.
- * All Rights Reserved.
  *
- * Contributor(s):
- *  Georges-Etienne Legendre <legege@legege.com> <http://legege.com>
+ * The Initial Developer of the Original Code is 
+ *  Georges-Etienne Legendre <legege@legege.com> <http://legege.com>.
+ * Portions created by the Initial Developer are Copyright (C) 2004-2008.
+ * All Rights Reserved.
  *
  * ***** END LICENSE BLOCK ***** */
 
-searchwp.TermsDataFactory = new function() {
+searchwp.Tokenizer = new function() {
 
   /**
    * @param aSearchString The search string.
    * @return an array that contains, for each words, the label to display and
    *   the className when the term is highlighted.
    */
-  this.createTermsData = function(aSearchString) {
-    var terms = parseTerms(aSearchString);
-    var termsData = new Array();
-
-    var j = 0;
-    for (var i = 0; i < terms.length; i++) {
-      if (terms[i].length > 0) {
-        // Restrict the length to highlight
-        var termClassName = "searchwp-term-disabled";
-        if (terms[i].length >= searchwp.Preferences.highlightMinLength) {
-          termClassName = "searchwp-term-highlight" + ((j % searchwp.Preferences.highlighterCount) + 1);
-          j++;
-        }
-
-        termsData.push({text: terms[i], className: termClassName});
-      }
-    }
-
-    return termsData;
+  this.createTokensArray = function(aSearchString) {
+    return parseTerms(aSearchString);
   }
 
   /**
    * @return true if the 2 termsData are identicals
    */
-  this.compare = function(aTermsData1, aTermsData2) {
-    if (aTermsData1 && aTermsData2) {
-      if (aTermsData1.length == aTermsData2.length) {
+  this.compare = function(aTokensArray1, aTokensArray2) {
+    if (aTokensArray1 && aTokensArray2) {
+      if (aTokensArray1.length == aTokensArray2.length) {
         var i = 0;
-        while(i < aTermsData2.length
-            && aTermsData2[i].text == aTermsData1[i].text
-            && aTermsData2[i].className == aTermsData1[i].className) {
+        while(i < aTokensArray2.length && aTokensArray2[i] == aTokensArray1[i]) {
           i++;
         }
-        if (i == aTermsData2.length) { //Identical
+        if (i == aTokensArray2.length) { //Identical
           return true;
         }
       }

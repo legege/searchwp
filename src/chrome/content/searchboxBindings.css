@@ -1,0 +1,9 @@
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+.searchbar-textbox {
+  -moz-binding: url("chrome://@NAME@/content/searchbox.xml#searchbox") !important;
+}
+
+.searchbox-token {
+  -moz-binding: url("chrome://@NAME@/content/searchbox.xml#searchbox-token") !important;
+}

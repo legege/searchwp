@@ -1,22 +1,23 @@
-.searchwp-term-highlight1,
-.searchwp-term-highlight2,
-.searchwp-term-highlight3,
-.searchwp-term-highlight4 {
+.searchwp-term {
   color: black;
 }
 
-.searchwp-term-highlight1 {
-  background-color: #ffff77;
+.searchwp-term[highlight="term-1"] {
+  background-color: #fbed73;
 }
 
-.searchwp-term-highlight2 {
-  background-color: #c3fffe;
+.searchwp-term[highlight="term-2"] {
+  background-color: #ffb18c;
 }
 
-.searchwp-term-highlight3 {
-  background-color: #99ff99;
+.searchwp-term[highlight="term-3"] {
+  background-color: #ffd281;
 }
 
-.searchwp-term-highlight4 {
-  background-color: #ff9999;
+.searchwp-term[highlight="term-4"] {
+  background-color: #c3f991;
+}
+
+.searchwp-term[highlight="term-5"] {
+  background-color: #e9b8ff;
 }

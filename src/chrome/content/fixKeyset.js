@@ -22,7 +22,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-// need to correct some XUL elements without IDs
+// need to fix some XUL elements without IDs
 searchwp.fixFirefoxKeyset = function() {
   var mainKeyset = document.getElementById("mainKeyset");
   var elements = mainKeyset.getElementsByAttribute("keycode", "VK_F3");
