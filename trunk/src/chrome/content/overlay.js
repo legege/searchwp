@@ -141,7 +141,11 @@ searchwp.Overlay = new function() {
       gFindBar.onFindAgainCommand(aEvent.shiftKey);
     }
     else {
-      var hasSearch = this.searchbox.repeatTokenClick(aEvent);
+      var hasSearch = false;
+      if (typeof(this.searchbox.repeatTokenClick) == "function") {
+        hasSearch = this.searchbox.repeatTokenClick(aEvent);
+      }
+
       if (!hasSearch) {
         gFindBar.onFindAgainCommand(aEvent.shiftKey);
       }
@@ -234,4 +238,4 @@ searchwp.Overlay = new function() {
   }
 }
 
-addEventListener("load", function(event) { searchwp.Overlay.onLoad(event); }, false);
+addEventListener("load", function(aEvent) { searchwp.Overlay.onLoad(aEvent); }, false);

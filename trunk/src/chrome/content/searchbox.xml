@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
 
+<!DOCTYPE bindings SYSTEM "chrome://@NAME@/locale/searchwp.dtd">
+
 <!-- ***** BEGIN LICENSE BLOCK *****
    - Version: MPL 1.1
    -
@@ -63,9 +65,11 @@
                              onunderflow="cropped = false;" />
             </xul:hbox>
             <!-- Tokens overflow -->
-            <xul:hbox anonid="tokens-overflow" class="searchbox-tokens-overflow" flex="1" mousethrough="always" hidden="true" align="right">
+            <xul:hbox anonid="tokens-overflow" class="searchbox-tokens-overflow" flex="1"
+                      mousethrough="always" align="right" hidden="true">
               <xul:image class="searchbox-tokens-overflow-button" mousethrough="never"
-                         onclick="openOverflowPopup(event);" />
+                         onclick="openOverflowPopup(event);"
+                         tooltiptext="&searchbox.tokens.overflow.tooltiptext;" />
             </xul:hbox>
           </xul:stack>
         </xul:hbox>
@@ -114,7 +118,7 @@
         <setter><![CDATA[
           this._tokenized = val;
 
-          this.tokensOverflowLayer.hidden = !val || !(val && !this._cropped);
+          this.tokensOverflowLayer.hidden = true;
           this.tokensLayer.hidden = !val;
 
           if (val) {
@@ -148,7 +152,7 @@
           event.initEvent('ValueChange', true, true);
           this.mInputElt.dispatchEvent(event);
 
-          this._syncValue();
+          this.rebuildTokens();
           if (this.empty) {
             this.tokenized = false;
           }
@@ -188,13 +192,7 @@
         ]]></body>
       </method>
 
-      <method name="refreshTokens">
-        <body><![CDATA[
-          this._syncValue();
-        ]]></body>
-      </method>
-
-      <method name="_syncValue">
+      <method name="rebuildTokens">
         <body><![CDATA[
           this._lastClickedToken = null;
 
@@ -210,6 +208,7 @@
           for (var i = 0, j = 0; i < termsArray.length; i++) {
             var node = this.tokenProto.cloneNode(true);
             node.value = termsArray[i];
+            node.setAttribute("tooltiptext", this.stringbundle.getFormattedString("tokenTooltiptext", [termsArray[i]], 1));
             this.tokensContainer.appendChild(node);
 
             if (searchwp.Preferences.highlighted
@@ -232,7 +231,7 @@
     </implementation>
 
     <handlers>
-      <handler event="input" action="this._syncValue()" />
+      <handler event="input" action="this.rebuildTokens()" />
 
       <handler event="focus" phase="capturing"><![CDATA[
         if (!this._focused) {
@@ -244,7 +243,7 @@
       <handler event="blur" phase="capturing"><![CDATA[
         if (this._focused && !this._dontBlur) {
           this._focused = false;
-          this._syncValue();
+          this.rebuildTokens();
           this.tokenized = true;
         }
       ]]></handler>
@@ -273,7 +272,7 @@
       <handler event="mousedown" phase="capturing"><![CDATA[
         event.stopPropagation();
       ]]></handler>
-        
+
       <handler event="click" button="0" phase="capturing"><![CDATA[
         event.stopPropagation();
 
@@ -316,7 +315,7 @@
             searchwp.displayMessage(stringbundle.getFormattedString("notFound", [this.value], 1), true);
             break;
           case 2: // Wrapped
-            if (aFindBackwards) {
+            if (findBackwards) {
               searchwp.displayMessage(stringbundle.getString("wrappedToBottom"), true);
             }
             else {
