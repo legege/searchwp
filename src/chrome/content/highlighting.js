@@ -67,7 +67,9 @@ searchwp.Highlighting = new function() {
       unhighlight();
     }
 
-    searchwp.Overlay.searchbox.refreshTokens();
+    if (typeof(searchwp.Overlay.searchbox.rebuildTokens) == "function") {
+      searchwp.Overlay.searchbox.rebuildTokens();
+    }
   }
 
   /**
