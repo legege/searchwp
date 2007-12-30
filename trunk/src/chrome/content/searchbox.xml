@@ -57,16 +57,15 @@
                           xbl:inherits="tooltiptext=inputtooltiptext,onfocus,onblur,value,type,maxlength,disabled,size,readonly,userAction" />
             </xul:hbox>
             <!-- Tokens layer -->
-            <xul:hbox anonid="tokens-layer" class="searchbox-tokens-layer" flex="1" onclick="focus(event); inputField.select();">
+            <xul:hbox anonid="tokens-layer" class="searchbox-tokens-layer" flex="1" mousethrough="always">
               <xul:scrollbox anonid="tokens-container" class="searchbox-tokens-container" flex="1"
                              onoverflow="cropped = true;"
                              onunderflow="cropped = false;" />
-              <xul:hbox anonid="tokens-overflow"
-                        class="searchbox-tokens-overflow"
-                        hidden="true">
-                <xul:image class="searchbox-tokens-overflow-button"
-                           onclick="openOverflowPopup(event);" />
-              </xul:hbox>
+            </xul:hbox>
+            <!-- Tokens overflow -->
+            <xul:hbox anonid="tokens-overflow" class="searchbox-tokens-overflow" flex="1" mousethrough="always" hidden="true" align="right">
+              <xul:image class="searchbox-tokens-overflow-button" mousethrough="never"
+                         onclick="openOverflowPopup(event);" />
             </xul:hbox>
           </xul:stack>
         </xul:hbox>
@@ -91,26 +90,33 @@
       ]]></constructor>
 
       <field name="stringbundle">document.getAnonymousElementByAttribute(this, "anonid", "searchwp-stringbundle");</field>
+      <field name="textboxInputBox">document.getAnonymousElementByAttribute(this, "anonid", "textbox-input-box");</field>
       <field name="inputLayer">document.getAnonymousElementByAttribute(this, "anonid", "input-layer");</field>
       <field name="tokensLayer">document.getAnonymousElementByAttribute(this, "anonid", "tokens-layer");</field>
       <field name="tokensContainer">document.getAnonymousElementByAttribute(this, "anonid", "tokens-container");</field>
-      <field name="tokensOverflowEllipsis">document.getAnonymousElementByAttribute(this, "anonid", "tokens-overflow");</field>
+      <field name="tokensOverflowLayer">document.getAnonymousElementByAttribute(this, "anonid", "tokens-overflow");</field>
       <field name="tokensOverflowPopup">document.getAnonymousElementByAttribute(this, "anonid", "tokens-overflow-popup");</field>
       <field name="tokensOverflowPopupContainer">document.getAnonymousElementByAttribute(this, "anonid", "tokens-overflow-popup-container");</field>
 
       <field name="tokenProto"><![CDATA[
         var node = document.createElement("label");
         node.className = "searchbox-token";
+        node.setAttribute("mousethrough", "never");
         node;
       ]]></field>
 
       <field name="_focused" />
       <field name="_tokenized">false</field>
+      <field name="_cropped">false</field>
       <field name="_lastClickedToken" />
 
       <property name="tokenized" onget="return this._tokenized">
         <setter><![CDATA[
           this._tokenized = val;
+
+          this.tokensOverflowLayer.hidden = !val || !(val && !this._cropped);
+          this.tokensLayer.hidden = !val;
+
           if (val) {
             this.setAttribute("tokenized", "true");
             this.inputLayer.style.setProperty("opacity", "0", "important");
@@ -120,7 +126,6 @@
             this.inputLayer.style.removeProperty("opacity");
           }
 
-          this.tokensLayer.hidden = !val;
           return val;
         ]]></setter>
       </property>
@@ -129,8 +134,8 @@
                 onget="return document.getBindingParent(this).hasAttribute('empty')"/>
 
       <property name="cropped"
-                onget="return !this.tokensOverflowEllipsis.hidden;"
-                onset="this.tokensOverflowEllipsis.hidden = !val; return val;" />
+                onget="return this._cropped;"
+                onset="this._cropped = val; this.tokensOverflowLayer.hidden = !val; return val;" />
 
       <property name="value"
                 onget="return this.inputField.value;">
@@ -165,11 +170,7 @@
 
           var popup = document.getAnonymousElementByAttribute(this, "anonid", "tokens-overflow-popup");
           popup.hidden = false;
-
-          // Tell the popup to consume dismiss clicks, to avoid bug 395314
-          //popup.popupBoxObject.setConsumeRollupEvent(Components.interfaces.nsIPopupBoxObject.ROLLUP_CONSUME);
-
-          popup.openPopup(this.tokensOverflowEllipsis, 'after_start');
+          popup.openPopup(this.tokensOverflowLayer, 'after_end');
         ]]></body>
       </method>
 
@@ -195,28 +196,34 @@
 
       <method name="_syncValue">
         <body><![CDATA[
-          this.contentIsCropped = false;
           this._lastClickedToken = null;
 
-          var container = this.tokensContainer;
-          while (container.hasChildNodes()) {
-            container.removeChild(container.firstChild);
-          }          
+          while (this.tokensContainer.hasChildNodes()) {
+            this.tokensContainer.removeChild(this.tokensContainer.firstChild);
+          }
+
+          while (this.tokensOverflowPopupContainer.hasChildNodes()) {
+            this.tokensOverflowPopupContainer.removeChild(this.tokensOverflowPopupContainer.firstChild);
+          }
+
+          var termsArray = searchwp.Tokenizer.createTokensArray(this.value);
+          for (var i = 0, j = 0; i < termsArray.length; i++) {
+            var node = this.tokenProto.cloneNode(true);
+            node.value = termsArray[i];
+            this.tokensContainer.appendChild(node);
+
+            if (searchwp.Preferences.highlighted
+                && termsArray[i].length >= searchwp.Preferences.highlightMinLength) {
+              var criteria = "term-" + ((j++ % searchwp.Preferences.highlighterCount) + 1);
+              node.setAttribute("highlight", criteria);
+            }
+            
+            var close = node.cloneNode(true);
+            this.tokensOverflowPopupContainer.appendChild(close);
+            
+          }
 
           if (!this.empty) {
-            var termsArray = searchwp.Tokenizer.createTokensArray(this.value);
-            for (var i = 0, j = 0; i < termsArray.length; i++) {
-              var node = this.tokenProto.cloneNode(true);
-              node.value = termsArray[i];
-              container.appendChild(node);
-
-              if (searchwp.Preferences.highlighted
-                  && termsArray[i].length >= searchwp.Preferences.highlightMinLength) {
-                var criteria = "term-" + ((j++ % searchwp.Preferences.highlighterCount) + 1);
-                node.setAttribute("highlight", criteria);
-              }
-            }
-
             searchwp.Highlighting.update(termsArray);
           }
         ]]></body>
@@ -263,6 +270,10 @@
     </implementation>
 
     <handlers>
+      <handler event="mousedown" phase="capturing"><![CDATA[
+        event.stopPropagation();
+      ]]></handler>
+        
       <handler event="click" button="0" phase="capturing"><![CDATA[
         event.stopPropagation();
 
