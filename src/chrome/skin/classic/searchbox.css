@@ -47,6 +47,7 @@
   background: #dee7f8;
   -moz-border-radius: .9em;
   color: #000;
+  text-align: center;
   padding: 0 .33em;
   -moz-margin-start: .22em !important;
   -moz-margin-end: .22em !important;
@@ -152,12 +153,12 @@
 
 .searchbox-tokens-overflow-button {
   list-style-image: url("chrome://@NAME@/skin/ellipsis.png");
+  padding: 2px;
   cursor: pointer;
-  -moz-padding-end: 2px;
 }
 
 .searchbox-tokens-overflow-popup {
-  border: 1px;
+  border: 1px solid;
 }
 
 .searchbox-tokens-overflow-popup-container {
