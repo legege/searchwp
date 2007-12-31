@@ -114,7 +114,6 @@
       <field name="_focused" />
       <field name="_tokenized">false</field>
       <field name="_cropped">false</field>
-      <field name="_lastClickedToken" />
 
       <property name="tokenized" onget="return this._tokenized">
         <setter><![CDATA[
@@ -195,24 +194,8 @@
         ]]></body>
       </method>
 
-      <method name="repeatTokenClick">
-        <parameter name="aEvent" />
-        <body><![CDATA[
-          if (this._lastClickedToken) {
-            var evt = document.createEvent("MouseEvents");
-            evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0,
-                               aEvent.ctrlKey, aEvent.altKey, aEvent.shiftKey,
-                               aEvent.metaKey, aEvent.button, null);
-            return this._lastClickedToken.dispatchEvent(evt);
-          }
-          return false;
-        ]]></body>
-      </method>
-
       <method name="rebuildTokens">
         <body><![CDATA[
-          this._lastClickedToken = null;
-
           while (this.tokensContainer.hasChildNodes()) {
             this.tokensContainer.removeChild(this.tokensContainer.firstChild);
           }
@@ -290,8 +273,6 @@
 
       <handler event="click" button="0" phase="capturing"><![CDATA[
         event.stopPropagation();
-
-        document.getBindingParent(this)._lastClickedToken = this;
 
         var findBackwards = event.shiftKey;
         var matchCase = event.ctrlKey;

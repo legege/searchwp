@@ -22,12 +22,12 @@
 
 searchwp.options.OptionsDialog = new function() {
   this.onLoad = function() {
-    document.getElementById("highlightMinlength").value = searchwp.Preferences.highlightMinLength;
+    document.getElementById("highlightMinlength").selectedIndex = searchwp.Preferences.highlightMinLength - 1;
   }
 
   this.onAccept = function() {
     // Highlighting options
-    var highlightMinLength = document.getElementById("highlightMinlength").value;
+    var highlightMinLength = document.getElementById("highlightMinlength").selectedIndex + 1;
     if (highlightMinLength > 0) {
       searchwp.Preferences.highlightMinLength = highlightMinLength;
     }
