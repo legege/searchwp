@@ -179,7 +179,9 @@ searchwp.Overlay = new function() {
          * XXXLegege (July 15th, 2005): Some users report that the page never stop
          * to load. The solution is to make the highlighting asynchrone.
          */
-        setTimeout(function() { searchwp.Highlighting.refresh(); }, 0);
+        setTimeout(function() {
+          searchwp.Highlighting.refresh();
+        }, 0);
       }
     }
 
@@ -217,6 +219,10 @@ searchwp.Overlay = new function() {
               item.setAttribute("checked", searchwp.Preferences.highlighted);
             }
             searchwp.Highlighting.refresh();
+
+            if (typeof(searchwp.Overlay.searchbox.rebuildTokens) == "function") {
+              searchwp.Overlay.searchbox.rebuildTokens();
+            }
           }, 0);
           break;
         case searchwp.Preferences.PREF_HIGHLIGHT_MATCH_CASE:
@@ -231,6 +237,10 @@ searchwp.Overlay = new function() {
         case searchwp.Preferences.PREF_HIGHLIGHT_MINLENGTH:
           setTimeout(function() {
             searchwp.Highlighting.refresh();
+
+            if (typeof(searchwp.Overlay.searchbox.rebuildTokens) == "function") {
+              searchwp.Overlay.searchbox.rebuildTokens();
+            }
           }, 0);
           break;
       }

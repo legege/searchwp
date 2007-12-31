@@ -66,10 +66,6 @@ searchwp.Highlighting = new function() {
     else {
       unhighlight();
     }
-
-    if (typeof(searchwp.Overlay.searchbox.rebuildTokens) == "function") {
-      searchwp.Overlay.searchbox.rebuildTokens();
-    }
   }
 
   /**

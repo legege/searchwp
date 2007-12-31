@@ -67,7 +67,8 @@
             <!-- Tokens overflow -->
             <xul:hbox anonid="tokens-overflow" class="searchbox-tokens-overflow" flex="1"
                       mousethrough="always" align="right" hidden="true">
-              <xul:image class="searchbox-tokens-overflow-button" mousethrough="never"
+              <xul:image anonid="tokens-overflow-button" class="searchbox-tokens-overflow-button"
+                         mousethrough="never"
                          onclick="openOverflowPopup(event);"
                          tooltiptext="&searchbox.tokens.overflow.tooltiptext;" />
             </xul:hbox>
@@ -99,6 +100,7 @@
       <field name="tokensLayer">document.getAnonymousElementByAttribute(this, "anonid", "tokens-layer");</field>
       <field name="tokensContainer">document.getAnonymousElementByAttribute(this, "anonid", "tokens-container");</field>
       <field name="tokensOverflowLayer">document.getAnonymousElementByAttribute(this, "anonid", "tokens-overflow");</field>
+      <field name="tokensOverflowButton">document.getAnonymousElementByAttribute(this, "anonid", "tokens-overflow-button");</field>
       <field name="tokensOverflowPopup">document.getAnonymousElementByAttribute(this, "anonid", "tokens-overflow-popup");</field>
       <field name="tokensOverflowPopupContainer">document.getAnonymousElementByAttribute(this, "anonid", "tokens-overflow-popup-container");</field>
 
@@ -172,6 +174,21 @@
           }
           aEvent.stopPropagation();
 
+          // Adjust token visibility
+          var tokensScrollBoxObject = this.tokensContainer.boxObject.QueryInterface(Components.interfaces.nsIScrollBoxObject);
+          var rightLimitX = tokensScrollBoxObject.x + tokensScrollBoxObject.width - this.tokensOverflowButton.boxObject.width;
+
+          for (var i = 0; i < this.tokensContainer.childNodes.length; i++) {
+            var tokenNode = this.tokensContainer.childNodes[i];
+            var tokenPopupNode = this.tokensOverflowPopupContainer.childNodes[i];
+            if ((tokenNode.boxObject.x + tokenNode.boxObject.width) > rightLimitX) {
+              tokenPopupNode.style.display = "-moz-box";
+            }
+            else {
+              tokenPopupNode.style.display = "none";
+            }
+          }
+
           var popup = document.getAnonymousElementByAttribute(this, "anonid", "tokens-overflow-popup");
           popup.hidden = false;
           popup.openPopup(this.tokensOverflowLayer, 'after_end');
@@ -204,30 +221,29 @@
             this.tokensOverflowPopupContainer.removeChild(this.tokensOverflowPopupContainer.firstChild);
           }
 
-          var termsArray = searchwp.Tokenizer.createTokensArray(this.value);
-          for (var i = 0, j = 0; i < termsArray.length; i++) {
-            var node = this.tokenProto.cloneNode(true);
-            node.value = termsArray[i];
-            node.setAttribute("tooltiptext", this.stringbundle.getFormattedString("tokenTooltiptext", [termsArray[i]], 1));
-            this.tokensContainer.appendChild(node);
-
-            if (searchwp.Preferences.highlighted
-                && termsArray[i].length >= searchwp.Preferences.highlightMinLength) {
-              var criteria = "term-" + ((j++ % searchwp.Preferences.highlighterCount) + 1);
-              node.setAttribute("highlight", criteria);
-            }
-            
-            var close = node.cloneNode(true);
-            this.tokensOverflowPopupContainer.appendChild(close);
-            
-          }
-
           if (!this.empty) {
+            var tokensScrollBoxObject = this.tokensContainer.boxObject.QueryInterface(Components.interfaces.nsIScrollBoxObject);
+            
+            var termsArray = searchwp.Tokenizer.createTokensArray(this.value);
+            for (var i = 0, j = 0; i < termsArray.length; i++) {
+              var tokenNode = this.tokenProto.cloneNode(true);
+              tokenNode.value = termsArray[i];
+              tokenNode.setAttribute("tooltiptext", this.stringbundle.getFormattedString("tokenTooltiptext", [termsArray[i]], 1));
+
+              if (searchwp.Preferences.highlighted && termsArray[i].length >= searchwp.Preferences.highlightMinLength) {
+                var criteria = "term-" + ((j++ % searchwp.Preferences.highlighterCount) + 1);
+                tokenNode.setAttribute("highlight", criteria);
+              }
+              this.tokensContainer.appendChild(tokenNode);
+
+              var tokenPopupNode = tokenNode.cloneNode(true);
+              this.tokensOverflowPopupContainer.appendChild(tokenPopupNode);
+            }
+
             searchwp.Highlighting.update(termsArray);
           }
         ]]></body>
       </method>
-
     </implementation>
 
     <handlers>
@@ -243,7 +259,6 @@
       <handler event="blur" phase="capturing"><![CDATA[
         if (this._focused && !this._dontBlur) {
           this._focused = false;
-          this.rebuildTokens();
           this.tokenized = true;
         }
       ]]></handler>
