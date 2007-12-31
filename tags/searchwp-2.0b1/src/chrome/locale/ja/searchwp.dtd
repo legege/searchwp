@@ -1,0 +1,5 @@
+<!ENTITY button.highlight.label "強調">
+<!ENTITY pref.title "オプション">
+<!ENTITY pref.highlighting.label "強調表示">
+<!ENTITY pref.highlightMinlength.label "強調される言葉の最短の長さ:">
+<!ENTITY pref.highlightMinlength.accesskey "L">

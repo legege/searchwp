@@ -1,0 +1,5 @@
+<!ENTITY button.highlight.label "Markeren">
+<!ENTITY pref.title "Opties">
+<!ENTITY pref.highlighting.label "Markeren">
+<!ENTITY pref.highlightMinlength.label "Minimumlengte van woorden om te worden gemarkeerd:">
+<!ENTITY pref.highlightMinlength.accesskey "M">

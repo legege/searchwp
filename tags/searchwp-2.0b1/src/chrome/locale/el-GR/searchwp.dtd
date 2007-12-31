@@ -1,0 +1,5 @@
+<!ENTITY button.highlight.label "Επισήμανση">
+<!ENTITY pref.title "Επιλογές">
+<!ENTITY pref.highlighting.label "Επισήμανση">
+<!ENTITY pref.highlightMinlength.label "Ελάχιστο μήκος των λέξεων που θα επισημανθούν(σε χαρακτήρες) :">
+<!ENTITY pref.highlightMinlength.accesskey "Ε">

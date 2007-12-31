@@ -1,0 +1,5 @@
+<!ENTITY button.highlight.label "Destacar">
+<!ENTITY pref.title "Opções">
+<!ENTITY pref.highlighting.label "Highlithing">
+<!ENTITY pref.highlightMinlength.label "Minimum length for the words to be highlighted:">
+<!ENTITY pref.highlightMinlength.accesskey "L">

@@ -1,0 +1,5 @@
+<!ENTITY button.highlight.label "Zvýrazniť">
+<!ENTITY pref.title "Možnosti">
+<!ENTITY pref.highlighting.label "Zvýraznenie">
+<!ENTITY pref.highlightMinlength.label "Minimálna dĺžka pre slová , ktoré majú byť zvýraznené:">
+<!ENTITY pref.highlightMinlength.accesskey "M">
