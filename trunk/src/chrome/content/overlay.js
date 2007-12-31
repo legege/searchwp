@@ -88,15 +88,11 @@ searchwp.Overlay = new function() {
    * firstLaunch
    */
   this.firstLaunch = function() {
-    if (typeof(BrowserCustomizeToolbar) != "function") {
-      return;
-    }
-
     // Adding the highlight button to the toolbar
     // http://developer.mozilla.org/en/docs/Code_snippets:Toolbar#Adding_button_by_default
     try {
       var nav = document.getElementById("nav-bar");
-      var curSet = firefoxnav.currentSet;
+      var curSet = nav.currentSet;
       if (curSet.indexOf("searchwp-highlight-container") == -1) {
         var set;
         // Place the button before the searchbox
@@ -128,28 +124,6 @@ searchwp.Overlay = new function() {
   this.onCustomizeDone = function() {
     searchwp.Preferences.highlighted = false;
     return _oldCustomizeDone();
-  }
-
-  /**
-   * Called when F3/Shift+F3 is pressed.
-   * @param aEvent The event.
-   */
-  this.onFindAgain = function(aEvent) {
-    var findString = getBrowser().fastFind.searchString;
-
-    if (!gFindBar.hidden || gFindBar.hidden && findString != "") {
-      gFindBar.onFindAgainCommand(aEvent.shiftKey);
-    }
-    else {
-      var hasSearch = false;
-      if (typeof(this.searchbox.repeatTokenClick) == "function") {
-        hasSearch = this.searchbox.repeatTokenClick(aEvent);
-      }
-
-      if (!hasSearch) {
-        gFindBar.onFindAgainCommand(aEvent.shiftKey);
-      }
-    }
   }
 
   /**

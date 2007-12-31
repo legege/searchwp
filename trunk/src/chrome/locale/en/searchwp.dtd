@@ -4,6 +4,5 @@
 <!ENTITY button.highlight.tooltiptext "Turn on and off highlighting with or without case matching">
 
 <!ENTITY pref.title "Options">
-<!ENTITY pref.highlighting.label "Highlighting">
 <!ENTITY pref.highlightMinlength.label "Minimum length for the words to be highlighted:">
 <!ENTITY pref.highlightMinlength.accesskey "L">

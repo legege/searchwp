@@ -34,13 +34,6 @@
     <stringbundle id="bundle-searchwp" src="chrome://@NAME@/locale/searchwp.properties" />
   </stringbundleset>
 
-  <keyset id="mainKeyset">
-    <key id="key_findAgainSWP" keycode="VK_F3" oncommand="searchwp.Overlay.onFindAgain(event);" />
-    <key id="key_findAgainSWP_2" keycode="VK_F3" modifiers="control" oncommand="searchwp.Overlay.onFindAgain(event);" />
-    <key id="key_findPreviousSWP" keycode="VK_F3" modifiers="shift" oncommand="searchwp.Overlay.onFindAgain(event);" />
-    <key id="key_highlight" keycode="VK_F8" oncommand="searchwp.Highlighting.toggleHighlight();" />
-  </keyset>
-
   <script type="application/x-javascript" src="chrome://@NAME@/content/highlighting/package-info.js" />
   <script type="application/x-javascript" src="chrome://@NAME@/content/highlighting/nodeHighlighter.js" />
   <script type="application/x-javascript" src="chrome://@NAME@/content/highlighting/nodeSearcher.js" />

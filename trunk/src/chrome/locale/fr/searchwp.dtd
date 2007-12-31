@@ -1,6 +1,8 @@
+<!ENTITY searchbox.tokens.overflow.tooltiptext "Plus de boutons rapides de recherche...">
+
 <!ENTITY button.highlight.label "Surligner">
 <!ENTITY button.highlight.tooltiptext "Surligner tous les termes en respectant ou non la case">
+
 <!ENTITY pref.title "Options">
-<!ENTITY pref.highlighting.label "Surlignement">
-<!ENTITY pref.highlightMinlength.label "Longueur minimum des mots pour qu&apos;ils soient surlignés :">
+<!ENTITY pref.highlightMinlength.label "Longueur minimale des mots pour qu&apos;ils soient surlignés :">
 <!ENTITY pref.highlightMinlength.accesskey "L">
