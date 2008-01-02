@@ -59,7 +59,8 @@
                           xbl:inherits="tooltiptext=inputtooltiptext,onfocus,onblur,value,type,maxlength,disabled,size,readonly,userAction" />
             </xul:hbox>
             <!-- Tokens layer -->
-            <xul:hbox anonid="tokens-layer" class="searchbox-tokens-layer" flex="1" mousethrough="always">
+            <xul:hbox anonid="tokens-layer" class="searchbox-tokens-layer" flex="1" mousethrough="always"
+                      onclick="focus();">
               <xul:scrollbox anonid="tokens-container" class="searchbox-tokens-container" flex="1"
                              onoverflow="cropped = true;"
                              onunderflow="cropped = false;" />
