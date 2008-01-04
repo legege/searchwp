@@ -38,7 +38,7 @@ searchwp.Overlay = new function() {
 
     this.preferencesObserver.register();
     window.getBrowser().addProgressListener(this.progressListener,
-        Components.interfaces.nsIWebProgress.NOTIFY_STATE_DOCUMENT);
+                                            Components.interfaces.nsIWebProgress.NOTIFY_STATE_DOCUMENT);
 
     /* XXXLegege: Unfortunately, there is no event on the termisation of the
        toolbox customization. All EventListeners of the searchbar are lost when
@@ -64,7 +64,7 @@ searchwp.Overlay = new function() {
 
     searchwp.Highlighting.init();
 
-    addEventListener("unload", function(event) { searchwp.Overlay.onUnload(event); }, false);
+    addEventListener("unload", function(aEvent) { searchwp.Overlay.onUnload(aEvent); }, false);
   }
 
   /**
@@ -81,7 +81,10 @@ searchwp.Overlay = new function() {
    */
   this.__defineGetter__("searchbox", function() {
     var searchbar = document.getElementById("searchbar");
-    return document.getAnonymousElementByAttribute(searchbar, "anonid", "searchbar-textbox");
+    if (searchbar) {
+      return document.getAnonymousElementByAttribute(searchbar, "anonid", "searchbar-textbox");
+    }
+    return null;
   });
 
   /**
@@ -133,8 +136,9 @@ searchwp.Overlay = new function() {
     this.QueryInterface = function(aIID) {
       if (aIID.equals(Components.interfaces.nsIWebProgressListener) ||
         aIID.equals(Components.interfaces.nsISupportsWeakReference) ||
-        aIID.equals(Components.interfaces.nsISupports))
+        aIID.equals(Components.interfaces.nsISupports)) {
         return this;
+      }
       throw Components.results.NS_NOINTERFACE;
     }
 
