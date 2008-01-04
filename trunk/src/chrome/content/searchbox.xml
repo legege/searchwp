@@ -150,8 +150,8 @@
           this.inputField.value = val;
           this.mIgnoreInput = false;
 
-          var event = document.createEvent('Events');
-          event.initEvent('ValueChange', true, true);
+          var event = document.createEvent("Events");
+          event.initEvent("ValueChange", true, true);
           this.mInputElt.dispatchEvent(event);
 
           this.rebuildTokens();
