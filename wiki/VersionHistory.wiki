@@ -1,19 +1,30 @@
 #summary Change Log
 #labels Featured
 
-== SearchWP 1.1 (not yet released) ==
+== SearchWP 2.0 ==
 
-=== Beta 1 ===
+=== Beta 2 (January 5th, 2008) ===
+ * The overflow ellipsis was not always displayed when needed.
+ * Spacing adjustment to facilitate the selection.
+
+=== Beta 1 (December 31st, 2007) ===
+ * Jump-to-word buttons are now integrated in the search box. 
+ * Consistent with the new theme on Mac OS X.
+ * Automatically add the highlight button to the toolbar on installation. 
+
+== SearchWP 1.1 ==
+
+=== Beta 2 (July 13th, 2007) ===
+ * Completely refactored.
+ * Highlighting improved: e.g. test-search now matches test.search, test*search...
+ * New: SoundEx highlighting (to be improved, not available in the xpi version)
+
+=== Beta 1 (July 7th, 2007) ===
  * New: Highlighting count
  * New: Highlighting match case
  * Improvement: SearchWP uses FastFind instead of WebBrowserFinder. FastFind is better and contains less bugs.
  * Ready for Firefox 3.0, not compatible with Firefox 2.x and lower
  * Development: New ANT Build script
-
-=== Beta 2 ===
- * Completely refactored.
- * Highlighting improved: e.g. test-search now matches test.search, test*search...
- * New: SoundEx highlighting (to be improved, not available in the xpi version)
 
 == SearchWP 1.0 (January 7th, 2007) ==
 
