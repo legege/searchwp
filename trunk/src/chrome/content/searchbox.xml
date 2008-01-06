@@ -118,6 +118,10 @@
 
       <property name="tokenized" onget="return this._tokenized">
         <setter><![CDATA[
+          if (val == this._tokenized) {
+            return val;
+          }
+
           this._tokenized = val;
 
           this.tokensOverflowLayer.hidden = true;
@@ -207,7 +211,7 @@
 
           if (!this.empty) {
             var tokensScrollBoxObject = this.tokensContainer.boxObject.QueryInterface(Components.interfaces.nsIScrollBoxObject);
-            
+
             var termsArray = searchwp.Tokenizer.createTokensArray(this.value);
             for (var i = 0, j = 0; i < termsArray.length; i++) {
               var tokenNode = this.tokenProto.cloneNode(true);
