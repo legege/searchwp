@@ -1,0 +1,5 @@
+<!ENTITY button.highlight.label "Marcar">
+<!ENTITY pref.title "Opciones">
+<!ENTITY pref.highlighting.label "Resaltado">
+<!ENTITY pref.highlightMinlength.label "Longitud mínima de las palabras para ser resaltadas">
+<!ENTITY pref.highlightMinlength.accesskey "L">

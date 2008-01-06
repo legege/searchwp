@@ -1,0 +1,5 @@
+<!ENTITY button.highlight.label "Evidenziature di SearchWP">
+<!ENTITY pref.title "Opzioni di SearchWP">
+<!ENTITY pref.highlighting.label "Evidenziatura dei lemmi">
+<!ENTITY pref.highlightMinlength.label "Numero minimo di caratteri affinché i lemmi siano evidenziati:">
+<!ENTITY pref.highlightMinlength.accesskey "N">

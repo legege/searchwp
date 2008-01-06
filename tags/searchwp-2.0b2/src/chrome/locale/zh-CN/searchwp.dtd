@@ -1,0 +1,5 @@
+<!ENTITY button.highlight.label "高亮显示">
+<!ENTITY pref.title "选项">
+<!ENTITY pref.highlighting.label "高亮显示">
+<!ENTITY pref.highlightMinlength.label "需要高亮显示的关键词最小长度为:">
+<!ENTITY pref.highlightMinlength.accesskey "L">

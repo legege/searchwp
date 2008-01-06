@@ -1,0 +1,80 @@
+/* ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is SearchWP.
+ *
+ * The Initial Developer of the Original Code is 
+ *  Georges-Etienne Legendre <legege@legege.com> <http://legege.com>.
+ * Portions created by the Initial Developer are Copyright (C) 2004-2008.
+ * All Rights Reserved.
+ *
+ * ***** END LICENSE BLOCK ***** */
+
+/* Highlight Button */
+#searchwp-highlight-button {
+  list-style-image: url("chrome://@NAME@/skin/highlight.png");
+  -moz-image-region: rect(0px 16px 16px 0px);
+}
+
+#searchwp-highlight-button:hover {
+  -moz-image-region: rect(16px 16px 32px 0px);
+}
+
+#searchwp-highlight-button:hover:active {
+  -moz-image-region: rect(32px 16px 48px 0px);
+}
+
+#searchwp-highlight-button[matchcase="true"] {
+  -moz-image-region: rect(0px 32px 16px 16px);
+}
+
+#searchwp-highlight-button[matchcase="true"]:hover {
+  -moz-image-region: rect(16px 32px 32px 16px);
+}
+
+#searchwp-highlight-button[matchcase="true"]:hover:active {
+  -moz-image-region: rect(32px 32px 48px 16px);
+}
+
+/* Highlight Button for OSX */
+window[searchwp-moz-platform*="Mac"] #searchwp-highlight-button {
+  list-style-image: url("chrome://@NAME@/skin/highlight-mac.png");
+  -moz-image-region: rect(0px, 28px, 23px, 0px);
+}
+
+window[searchwp-moz-platform*="Mac"] #searchwp-highlight-button:hover:active { 
+  -moz-image-region: rect(23px, 28px, 46px, 0px);
+  background-color: transparent;
+  border-color: transparent;
+}
+
+window[searchwp-moz-platform*="Mac"] #searchwp-highlight-button[checked="true"] {
+  -moz-image-region: rect(0px, 56px, 23px, 28px);
+  background-color: transparent;
+  border-color: transparent;
+}
+
+window[searchwp-moz-platform*="Mac"] #searchwp-highlight-button[checked="true"]:hover:active {
+  -moz-image-region: rect(23px, 56px, 46px, 28px);
+}
+
+window[searchwp-moz-platform*="Mac"] #searchwp-highlight-button[checked="true"][matchcase="true"] {
+  -moz-image-region: rect(0px, 84px, 23px, 56px);
+  background-color: transparent;
+  border-color: transparent;
+}
+
+window[searchwp-moz-platform*="Mac"] #searchwp-highlight-button[checked="true"][matchcase="true"]:hover:active {
+  -moz-image-region: rect(23px, 84px, 46px, 56px);
+}
+
