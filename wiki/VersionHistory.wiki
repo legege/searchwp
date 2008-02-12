@@ -3,6 +3,11 @@
 
 == SearchWP 2.0 ==
 
+=== Beta 3 (February 11th, 2008) ===
+ * Removing the 2 states highlighting button (for matching case highlighting, use ALT or CTRL key)
+ * Updated locales: de-DE, el-GR, es-ES, it-IT, ja-JP, pl-PL, pt-BR
+ * Compatible with Firefox 3.0b3
+
 === Beta 2 (January 5th, 2008) ===
  * The overflow ellipsis was not always displayed when needed.
  * Spacing adjustment to facilitate the selection.
