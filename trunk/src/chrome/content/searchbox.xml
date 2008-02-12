@@ -115,18 +115,24 @@
                 onset="this._cropped = val; this.tokensOverflowLayer.hidden = !val; return val;" />
 
       <property name="value"
-                onget="return this.hasAttribute('empty') ? '' : this.inputField.value;">
+                onget="return document.getBindingParent(this).hasAttribute('empty') ? '' : this.inputField.value;">
         <setter><![CDATA[
           this.mIgnoreInput = true;
           if (val) {
             // clear the emptyText _before_ setting a new non-empty value
-            this._clearEmptyText();
+            try {
+              this._clearEmptyText();
+            }
+            catch (e) {}
             this.inputField.value = val;
           }
           else {
             // display the emptyText _after_ setting a value that's an empty string
             this.inputField.value = val;
-            this._updateVisibleText();
+            try {
+              this._updateVisibleText();
+            }
+            catch (e) {}
           }
           this.mIgnoreInput = false;
 
