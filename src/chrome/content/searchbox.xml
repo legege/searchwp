@@ -49,18 +49,18 @@
           </children>
         </xul:hbox>
 
-        <xul:hbox anonid="textbox-input-box" class="textbox-input-box"
-                  flex="1" xbl:inherits="tooltiptext=inputtooltiptext">
+        <xul:hbox anonid="textbox-input-box" class="textbox-input-box" flex="1" xbl:inherits="context,spellcheck,tooltiptext=inputtooltiptext">
           <children />
           <xul:stack flex="1" class="textbox-stack">
             <!-- Input textbox layer -->
             <xul:hbox anonid="input-layer" class="textbox-input-layer" flex="1">
-              <html:input anonid="input" class="autocomplete-textbox textbox-input" flex="1" allowevents="true"
+              <html:input anonid="input" class="autocomplete-textbox textbox-input"
+                          flex="1" allowevents="true"
                           xbl:inherits="tooltiptext=inputtooltiptext,onfocus,onblur,value,type,maxlength,disabled,size,readonly,userAction" />
             </xul:hbox>
             <!-- Tokens layer -->
             <xul:hbox anonid="tokens-layer" class="searchbox-tokens-layer" flex="1" mousethrough="always"
-                      onclick="focus();">
+                      onclick="focus();" hidden="true">
               <xul:scrollbox anonid="tokens-container" class="searchbox-tokens-container" flex="1"
                              onoverflow="cropped = true;"
                              onunderflow="cropped = false;" />
@@ -91,10 +91,6 @@
     </content>
   
     <implementation>
-      <constructor><![CDATA[
-        this.tokenized = true;
-      ]]></constructor>
-
       <field name="stringbundle">document.getAnonymousElementByAttribute(this, "anonid", "searchwp-stringbundle");</field>
       <field name="textboxInputBox">document.getAnonymousElementByAttribute(this, "anonid", "textbox-input-box");</field>
       <field name="inputLayer">document.getAnonymousElementByAttribute(this, "anonid", "input-layer");</field>
@@ -112,60 +108,39 @@
         node;
       ]]></field>
 
-      <field name="_focused" />
-      <field name="_tokenized">false</field>
       <field name="_cropped">false</field>
-
-      <property name="tokenized" onget="return this._tokenized">
-        <setter><![CDATA[
-          if (val == this._tokenized) {
-            return val;
-          }
-
-          this._tokenized = val;
-
-          this.tokensOverflowLayer.hidden = true;
-          this.tokensLayer.hidden = !val;
-
-          if (val) {
-            this.setAttribute("tokenized", "true");
-            this.inputLayer.style.setProperty("opacity", "0", "important");
-          }
-          else {
-            this.removeAttribute("tokenized");
-            this.inputLayer.style.removeProperty("opacity");
-          }
-
-          return val;
-        ]]></setter>
-      </property>
-
-      <property name="empty" readonly="true"
-                onget="return document.getBindingParent(this).hasAttribute('empty')"/>
 
       <property name="cropped"
                 onget="return this._cropped;"
                 onset="this._cropped = val; this.tokensOverflowLayer.hidden = !val; return val;" />
 
       <property name="value"
-                onget="return this.inputField.value;">
+                onget="return this.hasAttribute('empty') ? '' : this.inputField.value;">
         <setter><![CDATA[
           this.mIgnoreInput = true;
-          this.inputField.value = val;
-          this.mIgnoreInput = false;
-
-          var event = document.createEvent("Events");
-          event.initEvent("ValueChange", true, true);
-          this.mInputElt.dispatchEvent(event);
-
-          this.rebuildTokens();
-          if (this.empty) {
-            this.tokenized = false;
+          if (val) {
+            // clear the emptyText _before_ setting a new non-empty value
+            this._clearEmptyText();
+            this.inputField.value = val;
           }
           else {
-            this.tokenized = !this._focused;
+            // display the emptyText _after_ setting a value that's an empty string
+            this.inputField.value = val;
+            this._updateVisibleText();
           }
+          this.mIgnoreInput = false;
 
+          var event = document.createEvent('Events');
+          event.initEvent('ValueChange', true, true);
+          this.inputField.dispatchEvent(event);
+
+          this.rebuildTokens();
+          if (val && !this.hasAttribute("focused")) {
+            this._showTokens();
+          }
+          else {
+            this._hideTokens();
+          }
           return val;
         ]]></setter>
       </property>
@@ -209,7 +184,7 @@
             this.tokensOverflowPopupContainer.removeChild(this.tokensOverflowPopupContainer.firstChild);
           }
 
-          if (!this.empty) {
+          if (this.value) {
             var tokensScrollBoxObject = this.tokensContainer.boxObject.QueryInterface(Components.interfaces.nsIScrollBoxObject);
 
             var termsArray = searchwp.Tokenizer.createTokensArray(this.value);
@@ -230,6 +205,31 @@
 
             searchwp.Highlighting.update(termsArray);
           }
+          else {
+            searchwp.Highlighting.update();
+          }
+        ]]></body>
+      </method>
+
+      <method name="_showTokens">
+        <body><![CDATA[
+          if (!this.hasAttribute("tokenized") && this.value) {
+            this.tokensLayer.hidden = false;
+            this.tokensOverflowLayer.hidden = true;
+            this.inputLayer.style.setProperty("opacity", "0", "important");
+            this.setAttribute("tokenized", true);
+          }
+        ]]></body>
+      </method>
+
+      <method name="_hideTokens">
+        <body><![CDATA[
+          if (this.hasAttribute("tokenized")) {
+            this.tokensLayer.hidden = true;
+            this.tokensOverflowLayer.hidden = true;
+            this.inputLayer.style.removeProperty("opacity");
+            this.removeAttribute("tokenized");
+          }
         ]]></body>
       </method>
     </implementation>
@@ -237,19 +237,21 @@
     <handlers>
       <handler event="input" action="this.rebuildTokens()" />
 
-      <handler event="focus" phase="capturing"><![CDATA[
-        if (!this._focused) {
-          this._focused = true;
-          this.tokenized = false;
-        }
-      ]]></handler>
+      <handler event="focus" phase="capturing">
+        this._hideTokens();
+      </handler>
 
-      <handler event="blur" phase="capturing"><![CDATA[
-        if (this._focused && !this._dontBlur) {
-          this._focused = false;
-          this.tokenized = true;
-        }
-      ]]></handler>
+      <handler event="blur" phase="capturing">
+        this._showTokens();
+      </handler>
+
+      <handler event="dragover" phase="capturing">
+        this._hideTokens();
+      </handler>
+
+      <handler event="dragexit" phase="capturing">
+        this._showTokens();
+      </handler>
     </handlers>
   </binding>
 
