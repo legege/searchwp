@@ -1,8 +1,6 @@
 <!ENTITY searchbox.tokens.overflow.tooltiptext "More fast search buttons...">
-
 <!ENTITY button.highlight.label "Highlight">
 <!ENTITY button.highlight.tooltiptext "Turn on and off highlighting with or without case matching">
-
 <!ENTITY pref.title "Options">
 <!ENTITY pref.highlightMinlength.label "Minimum length for the words to be highlighted:">
 <!ENTITY pref.highlightMinlength.accesskey "L">
