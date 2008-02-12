@@ -3,7 +3,7 @@ skin @NAME@ classic/1.0 jar:chrome/@NAME@.jar!/skin/classic/
 
 # locale @NAME@ ca-AD jar:chrome/@NAME@.jar!/locale/ca-AD/
 # locale @NAME@ cs-CZ jar:chrome/@NAME@.jar!/locale/cs-CZ/
-locale @NAME@ de jar:chrome/@NAME@.jar!/locale/de/
+locale @NAME@ de-DE jar:chrome/@NAME@.jar!/locale/de/
 locale @NAME@ el-GR jar:chrome/@NAME@.jar!/locale/el-GR/
 locale @NAME@ en-US jar:chrome/@NAME@.jar!/locale/en/
 locale @NAME@ es-ES jar:chrome/@NAME@.jar!/locale/es-ES/
