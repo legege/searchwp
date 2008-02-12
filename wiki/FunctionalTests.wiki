@@ -1,0 +1,17 @@
+#summary Describe a list of functional tests for this extension
+
+(Work in progress...)
+
+=== Test: Empty content shows the empty value ===
+ # Install the new version of Firefox
+ # Verify that the default search engine name is displayed in the search box (ex: Google). There should not be any button in the search box.
+
+== Highlighting ==
+
+=== Test: Matching case highlighting ===
+ # Ensure that the highlighting is disabled.
+ # Search for "TEST" from the searchbox.
+ # Click on the highlighting button.
+ # Words highlighted are not necessarily matching case of searched text.
+ # ALT+Click on the highlighting button.
+ # Only words matching case of the searched text are highlighted.
