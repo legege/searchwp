@@ -70,13 +70,14 @@ searchwp.Highlighting = new function() {
 
   /**
    * Toggles on and off the highlighting and the match case highlighting.
+   *
+   * @param aEvent the event object.
    */
-  this.toggleHighlight = function() {
-    if (searchwp.Preferences.highlighted && !searchwp.Preferences.highlightMatchCase) {
-      searchwp.Preferences.highlightMatchCase = true;
-    }
-    else {
-      searchwp.Preferences.highlightMatchCase = false;
+  this.toggleHighlight = function(aEvent) {
+    var matchCase = aEvent.altKey || aEvent.ctrlKey;
+
+    searchwp.Preferences.highlightMatchCase = matchCase;
+    if (!searchwp.Preferences.highlighted || !matchCase) {
       searchwp.Preferences.highlighted = !searchwp.Preferences.highlighted;
     }
   }

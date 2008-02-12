@@ -50,7 +50,7 @@
                      class="toolbarbutton-1 chromeclass-toolbar-additional"
                      label="&button.highlight.label;"
                      tooltiptext="&button.highlight.tooltiptext;"
-                     oncommand="searchwp.Highlighting.toggleHighlight(); event.stopPropagation();"
+                     oncommand="searchwp.Highlighting.toggleHighlight(event); event.stopPropagation();"
                      autocheck="false" />
     </toolbaritem>
   </toolbarpalette>

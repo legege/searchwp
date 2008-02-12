@@ -288,7 +288,7 @@
         event.stopPropagation();
 
         var findBackwards = event.shiftKey;
-        var matchCase = event.ctrlKey;
+        var matchCase = event.altKey || event.ctrlKey;
 
         // To handle F3 correctly, we have to clear this find bar search.
         if (gFindBar.hidden && gFindBar.getElement("findbar-textbox").value.length > 0) {
