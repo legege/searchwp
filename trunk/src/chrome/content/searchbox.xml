@@ -115,7 +115,7 @@
                 onset="this._cropped = val; this.tokensOverflowLayer.hidden = !val; return val;" />
 
       <property name="value"
-                onget="return document.getBindingParent(this).hasAttribute('empty') ? '' : this.inputField.value;">
+                onget="return (document.getBindingParent(this).hasAttribute('empty') || this.hasAttribute('empty')) ? '' : this.inputField.value;">
         <setter><![CDATA[
           this.mIgnoreInput = true;
           if (val) {
