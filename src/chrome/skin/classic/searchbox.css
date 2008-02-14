@@ -49,8 +49,8 @@
   color: #000;
   text-align: center;
   padding: 0 .33em;
-  -moz-margin-start: .22em !important;
-  -moz-margin-end: .22em !important;
+  -moz-margin-start: .28em !important;
+  -moz-margin-end: .28em !important;
 }
 
 .searchbox-token:hover {
