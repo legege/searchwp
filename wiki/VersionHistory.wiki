@@ -1,7 +1,7 @@
 #summary Change Log
 #labels Featured
 
-== SearchWP 2.0 ==
+== SearchWP 2.0 (February 29th, 2008) ==
 
 === Beta 3 (February 11th, 2008) ===
  * Removing the 2 states highlighting button (for matching case highlighting, use ALT or CTRL key)
