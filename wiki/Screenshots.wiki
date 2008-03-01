@@ -1,8 +1,12 @@
 #summary Screenshots of SearchWP in action
 #labels Featured
 
-http://searchwp.googlecode.com/svn/meta/searchwp-05.png
+== Windows == 
+http://searchwp.googlecode.com/svn/meta/searchwp-2.0-win.png
+http://searchwp.googlecode.com/svn/meta/searchwp-2.0-win-highlight.png
 
-http://searchwp.googlecode.com/svn/meta/searchwp-05-highlight.png
+== Mac OS X == 
+http://searchwp.googlecode.com/svn/meta/searchwp-2.0-osx.png
+http://searchwp.googlecode.com/svn/meta/searchwp-2.0-osx-highlight.png
 
-http://searchwp.googlecode.com/svn/meta/searchwp-05-jumptoword.png
+ * Video: [http://video.google.com/videoplay?docid=-6212809882398677899 SearchWP Quick Look on Mac OS X]
