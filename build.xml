@@ -71,7 +71,7 @@
   <target name="run" description="Run the application or create the profile" depends="profile-env-init">
     <echo level="verbose">Please note: Launching the application only works when it was not already running...</echo>
     <exec executable="${mozapp.exec}" spawn="true">
-      <arg line="-p ${mozapp.profile.name}" />
+      <arg line="-no-remote -p ${mozapp.profile.name}" />
     </exec>
   </target>
 
