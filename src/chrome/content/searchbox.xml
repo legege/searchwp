@@ -17,7 +17,7 @@
    -
    - The Original Code is SearchWP.
    -
-   - The Initial Developer of the Original Code is 
+   - The Initial Developer of the Original Code is
    -  Georges-Etienne Legendre <legege@legege.com> <http://legege.com>.
    - Portions created by the Initial Developer are Copyright (C) 2004-2008.
    - All Rights Reserved.
@@ -34,7 +34,7 @@
 
   <!-- SearchBox Binding -->
   <binding id="searchbox"
-           extends="chrome://browser/content/search/search.xml#searchbar-textbox">    
+           extends="chrome://browser/content/search/search.xml#searchbar-textbox">
     <resources>
       <stylesheet src="chrome://@NAME@/skin/searchbox.css" />
     </resources>
@@ -49,14 +49,15 @@
           </children>
         </xul:hbox>
 
-        <xul:hbox anonid="textbox-input-box" class="textbox-input-box" flex="1" xbl:inherits="context,spellcheck,tooltiptext=inputtooltiptext">
+        <xul:hbox anonid="textbox-input-box" class="textbox-input-box" flex="1" xbl:inherits="tooltiptext=inputtooltiptext">
           <children />
           <xul:stack flex="1" class="textbox-stack">
             <!-- Input textbox layer -->
-            <xul:hbox anonid="input-layer" class="textbox-input-layer" flex="1">
+            <xul:hbox anonid="input-layer" class="textbox-input-layer textbox-input-box"
+                      flex="1" xbl:inherits="context,spellcheck">
               <html:input anonid="input" class="autocomplete-textbox textbox-input"
                           flex="1" allowevents="true"
-                          xbl:inherits="tooltiptext=inputtooltiptext,onfocus,onblur,value,type,maxlength,disabled,size,readonly,userAction" />
+                          xbl:inherits="tooltiptext=inputtooltiptext,onfocus,onblur,value,type,maxlength,disabled,size,readonly,userAction"/>
             </xul:hbox>
             <!-- Tokens layer -->
             <xul:hbox anonid="tokens-layer" class="searchbox-tokens-layer" flex="1" mousethrough="always"
@@ -85,11 +86,12 @@
       <xul:popupset anonid="popupset" class="autocomplete-result-popupset" />
 
       <!-- Popup for overflow tokens -->
-      <xul:panel anonid="tokens-overflow-popup" class="searchbox-tokens-overflow-popup" hidden="true">
+      <xul:panel anonid="tokens-overflow-popup" class="searchbox-tokens-overflow-popup" hidden="true"
+                 onclick="event.stopPropagation();">
         <xul:vbox anonid="tokens-overflow-popup-container" class="searchbox-tokens-overflow-popup-container" />
       </xul:panel>
     </content>
-  
+
     <implementation>
       <field name="stringbundle">document.getAnonymousElementByAttribute(this, "anonid", "searchwp-stringbundle");</field>
       <field name="textboxInputBox">document.getAnonymousElementByAttribute(this, "anonid", "textbox-input-box");</field>
@@ -284,10 +286,14 @@
         event.stopPropagation();
       ]]></handler>
 
-      <handler event="click" button="0" phase="capturing"><![CDATA[
+      <handler event="click" phase="capturing"><![CDATA[
         event.stopPropagation();
-
+        
         var findBackwards = event.shiftKey;
+        if (event.button >= 1 && event.button <= 2) {
+          findBackwards = !findBackwards;
+        }
+
         var matchCase = event.altKey || event.ctrlKey;
 
         // To handle F3 correctly, we have to clear this find bar search.
