@@ -3,61 +3,73 @@
 
 = FAQ =
 
- * *How to activate SearchWP once installed?*
+ * *How to activate SearchWP 1.0 once installed?*
   Under View > Toolbar > Customize, drag the items "Terms toolbar" and "Highlight" up to the toolbars. Or follow this animation.
 
  * *How do I change highlighting colors?*
-  You have to change the userContent.css file. Here is an example. You can also change buttons' icon with the userChrome.css file, but this is a little bit trickier.
+  You have to change the userContent.css and userChrome.css files. Here is an example.
 
 userChrome.css
 {{{
 @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"); 
 
-#searchwp-terms-box > toolbarbutton.searchwp-term-highlight1 > .toolbarbutton-icon,
-#searchwp-terms-popup > toolbarbutton.searchwp-term-highlight1 > .toolbarbutton-icon {
-  background-image: url("chrome://searchwp/skin/icons/search-yellow.png");
+.searchbox-token {
+  background: #dee7f8;
+  color: #000;
 }
 
-#searchwp-terms-box > toolbarbutton.searchwp-term-highlight2 > .toolbarbutton-icon,
-#searchwp-terms-popup > toolbarbutton.searchwp-term-highlight2 > .toolbarbutton-icon {
-  background-image: url("chrome://searchwp/skin/icons/search-aqua.png");
+.searchbox-token:hover {
+  border-color: #6d95e0;
+  background: #bbcef1;
 }
 
-#searchwp-terms-box > toolbarbutton.searchwp-term-highlight3 > .toolbarbutton-icon,
-#searchwp-terms-popup > toolbarbutton.searchwp-term-highlight3 > .toolbarbutton-icon {
-  background-image: url("chrome://searchwp/skin/icons/search-chartreuse.png");
+.searchbox-token:hover:active {
+  border-color: #608ce0;
+  background: #a0c9ff;
 }
 
-#searchwp-terms-box > toolbarbutton.searchwp-term-highlight4 > .toolbarbutton-icon,
-#searchwp-terms-popup > toolbarbutton.searchwp-term-highlight4 > .toolbarbutton-icon {
-  background-image: url("chrome://searchwp/skin/icons/search-coral.png");
+.searchbox-token[highlight="term-1"] {
+  background-color: #fbed73;
+  border-color: #e1d467;
 }
+
+.searchbox-token[highlight="term-1"]:hover {
+  background-color: #fbe313;
+  border-color: #dac400;
+}
+
+.searchbox-token[highlight="term-1"]:hover:active {
+  background-color: #f1d700;
+  border-color: #d1ba00;
+}
+
+...
 }}}
 
 userContent.css
 {{{
-.searchwp-term-highlight1,
-.searchwp-term-highlight2,
-.searchwp-term-highlight3,
-.searchwp-term-highlight4,
-.searchwp-term-highlight5 {
-  color: black !important;
+.searchwp-term {
+  color: black;
 }
 
-.searchwp-term-highlight1 {
-  background-color: #ffff00 !important;
+.searchwp-term[highlight="term-1"] {
+  background-color: #fbed73;
 }
 
-.searchwp-term-highlight2 {
-  background-color: #00ffff !important;
+.searchwp-term[highlight="term-2"] {
+  background-color: #ffb18c;
 }
 
-.searchwp-term-highlight3 {
-  background-color: #00ff00 !important;
+.searchwp-term[highlight="term-3"] {
+  background-color: #ffd281;
 }
 
-.searchwp-term-highlight4 {
-  background-color: #ff7777 !important;
+.searchwp-term[highlight="term-4"] {
+  background-color: #c3f991;
+}
+
+.searchwp-term[highlight="term-5"] {
+  background-color: #e9b8ff;
 }
 }}}
 
@@ -68,5 +80,5 @@ userContent.css
 
  * `F3` lets you repeat the last jump-to-word search.
  * `F8` enables or disables the highlighting.
- * `SHIFT + Click` or `SHIFT + F3` reverses the order of the search.
+ * `SHIFT + Click`, `SHIFT + F3`, middle-click or right-click reverses the order of the search.
  * `CTRL + Click` or `CTRL + F3` makes the search case-sensitive.
