@@ -1,0 +1,173 @@
+/* ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is SearchWP.
+ *
+ * The Initial Developer of the Original Code is 
+ *  Georges-Etienne Legendre <legege@legege.com> <http://legege.com>.
+ * Portions created by the Initial Developer are Copyright (C) 2004-2008.
+ * All Rights Reserved.
+ *
+ * ***** END LICENSE BLOCK ***** */
+
+@import url("chrome://global/skin/");
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+@namespace html url("http://www.w3.org/1999/xhtml");
+
+.searchbox-tokens-layer,
+.searchbox-tokens-layer > *,
+.searchbox-token,
+.searchbox-token > * {
+  margin: 0;
+  padding: 0;
+  cursor: text;
+}
+
+.searchbox-tokens-layer {
+  -moz-box-align: center;
+  margin-top: 1px;
+}
+
+.searchbox-tokens-container {
+  -moz-margin-start: 5px;
+  -moz-margin-end: 6px;
+}
+
+.searchbox-token {
+  border: 1px solid #a4bdec;
+  background: #dee7f8;
+  -moz-border-radius: .9em;
+  color: #000;
+  text-align: center;
+  padding: 0 .33em;
+  -moz-margin-start: .28em !important;
+  -moz-margin-end: .28em !important;
+}
+
+.searchbox-token:hover {
+  border-color: #6d95e0;
+  background: #bbcef1;
+  cursor: pointer !important;
+}
+
+.searchbox-token:hover:active {
+  border-color: #608ce0;
+  background: #a0c9ff;
+}
+
+.searchbox-token[highlight="term-1"] {
+  background-color: #fbed73;
+  border-color: #e1d467;
+}
+
+.searchbox-token[highlight="term-1"]:hover {
+  background-color: #fbe313;
+  border-color: #dac400;
+}
+
+.searchbox-token[highlight="term-1"]:hover:active {
+  background-color: #f1d700;
+  border-color: #d1ba00;
+}
+
+.searchbox-token[highlight="term-2"] {
+  background-color: #ffb18c;
+  border-color: #e69169;
+}
+
+.searchbox-token[highlight="term-2"]:hover {
+  background-color: #ff9766;
+  border-color: #dd7b4f;
+}
+
+.searchbox-token[highlight="term-2"]:hover:active {
+  background-color: #fe7f44;
+  border-color: #da6630;
+}
+
+.searchbox-token[highlight="term-3"] {
+  background-color: #ffd281;
+  border-color: #e6bd76;
+}
+
+.searchbox-token[highlight="term-3"]:hover {
+  background-color: #ffbf4c;
+  border-color: #dfa338;
+}
+
+.searchbox-token[highlight="term-3"]:hover:active {
+  background-color: #ffb122;
+  border-color: #db9400;
+}
+
+.searchbox-token[highlight="term-4"] {
+  background-color: #c3f991;
+  border-color: #b1e084;
+}
+
+.searchbox-token[highlight="term-4"]:hover {
+  background-color: #9af941;
+  border-color: #7bd72a;
+}
+
+.searchbox-token[highlight="term-4"]:hover:active {
+  background-color: #75f800;
+  border-color: #59d700;
+}
+
+.searchbox-token[highlight="term-5"] {
+  background-color: #e9b8ff;
+  border-color: #d1a5e5;
+}
+
+.searchbox-token[highlight="term-5"]:hover {
+  background-color: #e09bff;
+  border-color: #c180de;
+}
+
+.searchbox-token[highlight="term-5"]:hover:active {
+  background-color: #da86fe;
+  border-color: #bc6edf;
+}
+
+.searchbox-token[notfound="true"],
+.searchbox-token[notfound="true"]:hover,
+.searchbox-token[notfound="true"]:hover:active {
+  background-color: #c6c6c6;
+  border-color: #b3b3b3;
+}
+
+.searchbox-tokens-overflow {
+  background: url("chrome://@NAME@/skin/shade.png") repeat-y 100% 0;
+  margin: 1px 0;
+}
+
+.searchbox-tokens-overflow-button {
+  list-style-image: url("chrome://@NAME@/skin/ellipsis.png");
+  padding: 2px;
+  cursor: pointer;
+  -moz-margin-end: 6px;
+}
+
+.searchbox-tokens-overflow-popup {
+  border: 1px solid;
+}
+
+.searchbox-tokens-overflow-popup-container {
+  padding: 1px;
+}
+
+.searchbox-tokens-overflow-popup-container .searchbox-token {
+  margin: 2px;
+  display: inline;
+}
