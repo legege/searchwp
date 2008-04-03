@@ -1,0 +1,2 @@
+override chrome://@NAME@-platform/skin/overlay.css jar:../../chrome/@NAME@.jar!/skin/classic/platform/mac/overlay.css
+override chrome://@NAME@-platform/skin/highlight.png jar:../../chrome/@NAME@.jar!/skin/classic/platform/mac/highlight.png
