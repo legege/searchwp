@@ -35,6 +35,7 @@
 
 .searchbox-tokens-layer {
   -moz-box-align: center;
+  margin-top: 1px;
 }
 
 .searchbox-tokens-container {

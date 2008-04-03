@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<?xml-stylesheet href="chrome://@NAME@/skin/overlay.css" ?>
+<?xml-stylesheet href="chrome://@NAME@-platform/skin/overlay.css" ?>
 <?xml-stylesheet href="chrome://@NAME@/skin/highlighting-agent.css" ?>
 
 <!DOCTYPE overlay SYSTEM "chrome://@NAME@/locale/searchwp.dtd">
