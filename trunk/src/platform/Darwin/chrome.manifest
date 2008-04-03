@@ -1,3 +1,3 @@
 override chrome://@NAME@-platform/skin/highlight.png jar:../../chrome/@NAME@.jar!/skin/classic/platform/mac/highlight.png
 override chrome://@NAME@-platform/skin/overlay.css jar:../../chrome/@NAME@.jar!/skin/classic/platform/mac/overlay.css
-override chrome://@NAME@-platform/skin/searchwp.css jar:../../chrome/@NAME@.jar!/skin/classic/platform/mac/searchwp.css
+override chrome://@NAME@-platform/skin/searchbox.css jar:../../chrome/@NAME@.jar!/skin/classic/platform/mac/searchbox.css
