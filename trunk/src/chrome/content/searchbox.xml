@@ -37,6 +37,7 @@
            extends="chrome://browser/content/search/search.xml#searchbar-textbox">
     <resources>
       <stylesheet src="chrome://@NAME@/skin/searchbox.css" />
+      <stylesheet src="chrome://@NAME@-platform/skin/searchbox.css" />
     </resources>
 
     <content sizetopopup="pref">
