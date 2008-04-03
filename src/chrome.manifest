@@ -1,5 +1,6 @@
 content @NAME@ jar:chrome/@NAME@.jar!/content/
-skin @NAME@ classic/1.0 jar:chrome/@NAME@.jar!/skin/classic/
+skin @NAME@  classic/1.0 jar:chrome/@NAME@.jar!/skin/classic/
+skin @NAME@-platform classic/1.0 jar:chrome/@NAME@.jar!/skin/classic/platform/default/
 
 # locale @NAME@ ca-AD jar:chrome/@NAME@.jar!/locale/ca-AD/
 # locale @NAME@ cs-CZ jar:chrome/@NAME@.jar!/locale/cs-CZ/
@@ -25,4 +26,4 @@ locale @NAME@ pt-BR jar:chrome/@NAME@.jar!/locale/pt-BR/
 overlay chrome://browser/content/browser.xul chrome://@NAME@/content/overlay.xul
 
 style chrome://browser/content/browser.xul chrome://@NAME@/content/searchboxBindings.css
-style chrome://global/content/customizeToolbar.xul chrome://@NAME@/skin/overlay.css
+style chrome://global/content/customizeToolbar.xul chrome://@NAME@-platform/skin/overlay.css
