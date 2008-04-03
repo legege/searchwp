@@ -6,6 +6,7 @@
  * Fixed: Clicking through the token drop down popup bring focus to the search box
  * Fixed: Right-click in searchbox for text copy/paste doesn't work
  * New: Middle and right-click for backward search
+ * Compatible with Firefox 3.0b5
 
 == SearchWP 2.0 (February 29th, 2008) ==
 
