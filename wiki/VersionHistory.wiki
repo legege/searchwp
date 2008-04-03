@@ -1,6 +1,12 @@
 #summary Change Log
 #labels Featured
 
+== SearchWP 2.1 (April 2nd, 2008) ==
+ * Fixed: On OSX, in toolbar customization, the Windows highlighting icon is used (issue 7)
+ * Fixed: Clicking through the token drop down popup bring focus to the search box
+ * Fixed: Right-click in searchbox for text copy/paste doesn't work
+ * New: Middle and right-click for backward search
+
 == SearchWP 2.0 (February 29th, 2008) ==
 
 === Beta 3 (February 11th, 2008) ===
