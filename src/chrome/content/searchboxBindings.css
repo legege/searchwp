@@ -26,6 +26,10 @@
   -moz-binding: url("chrome://@NAME@/content/searchbox.xml#searchbox") !important;
 }
 
+.searchbar-textbox[tokenized="true"] {
+  min-width: 8em !important;
+}
+
 .searchbox-token {
   -moz-binding: url("chrome://@NAME@/content/searchbox.xml#searchbox-token") !important;
 }
