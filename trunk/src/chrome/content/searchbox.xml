@@ -61,8 +61,7 @@
                           xbl:inherits="tooltiptext=inputtooltiptext,onfocus,onblur,value,type,maxlength,disabled,size,readonly,userAction"/>
             </xul:hbox>
             <!-- Tokens layer -->
-            <xul:hbox anonid="tokens-layer" class="searchbox-tokens-layer" flex="1" mousethrough="always"
-                      onclick="focus();" hidden="true">
+            <xul:hbox anonid="tokens-layer" class="searchbox-tokens-layer" flex="1" mousethrough="always" hidden="true">
               <xul:scrollbox anonid="tokens-container" class="searchbox-tokens-container" flex="1"
                              onoverflow="cropped = true;"
                              onunderflow="cropped = false;" />
@@ -119,7 +118,7 @@
 
       <property name="value"
                 onget="return (document.getBindingParent(this).hasAttribute('empty') || this.hasAttribute('empty')) ? '' : this.inputField.value;">
-        <setter><![CDATA[
+        <setter><![CDATA[          
           this.mIgnoreInput = true;
           if (val) {
             // clear the emptyText _before_ setting a new non-empty value
@@ -227,6 +226,10 @@
             this.tokensOverflowLayer.hidden = true;
             this.inputLayer.style.setProperty("opacity", "0", "important");
             this.setAttribute("tokenized", true);
+
+            var event = document.createEvent('Events');
+            event.initEvent('tokenized', true, true);
+            this.dispatchEvent(event);
           }
         ]]></body>
       </method>
@@ -238,6 +241,10 @@
             this.tokensOverflowLayer.hidden = true;
             this.inputLayer.style.removeProperty("opacity");
             this.removeAttribute("tokenized");
+
+            var event = document.createEvent('Events');
+            event.initEvent('untokenized', true, true);
+            this.dispatchEvent(event);
           }
         ]]></body>
       </method>
@@ -246,21 +253,10 @@
     <handlers>
       <handler event="input" action="this.rebuildTokens()" />
 
-      <handler event="focus" phase="capturing">
-        this._hideTokens();
-      </handler>
-
-      <handler event="blur" phase="capturing">
-        this._showTokens();
-      </handler>
-
-      <handler event="dragover" phase="capturing">
-        this._hideTokens();
-      </handler>
-
-      <handler event="dragexit" phase="capturing">
-        this._showTokens();
-      </handler>
+      <handler event="focus" phase="capturing">this._hideTokens();</handler>
+      <handler event="blur" phase="capturing">this._showTokens();</handler>
+      <handler event="dragover" phase="capturing">this._hideTokens();</handler>
+      <handler event="dragexit" phase="capturing">this._showTokens();</handler>
     </handlers>
   </binding>
 
@@ -289,6 +285,9 @@
 
       <handler event="click" phase="capturing"><![CDATA[
         event.stopPropagation();
+        if (event.button == 2) {
+          event.preventDefault();
+        }
         
         var findBackwards = event.shiftKey;
         if (event.button >= 1 && event.button <= 2) {
