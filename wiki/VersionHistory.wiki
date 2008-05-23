@@ -1,6 +1,12 @@
 #summary Change Log
 #labels Featured
 
+== SearchWP 2.2 (May 22nd, 2008) ==
+ * Ready for Firefox 3.0 RC1
+ * Fixed: Positioning adjustments of tokens in the searchbox
+ * Fixed: Searchbox min-width when tokenized
+ * Fixed: alignment problem on OSX
+
 == SearchWP 2.1 (April 2nd, 2008) ==
  * Fixed: On OSX, in toolbar customization, the Windows highlighting icon is used (issue 7)
  * Fixed: Clicking through the token drop down popup bring focus to the search box
