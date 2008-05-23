@@ -1,0 +1,6 @@
+<!ENTITY searchbox.tokens.overflow.tooltiptext "Botões de pesquisa mais rápidos...">
+<!ENTITY button.highlight.label "Realçar">
+<!ENTITY button.highlight.tooltiptext "Ativar ou desativar realçamento com ou sem de diferença de maiúsc./minúsc.">
+<!ENTITY pref.title "Opções">
+<!ENTITY pref.highlightMinlength.label "Tamanho mínimo para as palavras a serem realçados:">
+<!ENTITY pref.highlightMinlength.accesskey "m">

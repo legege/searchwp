@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+<!--
+  Mozilla Extension ANT Build Script
+  See <http://legege.com> for more information 
+  -->
+<project name="searchwp" default="all">
+  <!-- Include some global extension properties -->
+  <property file="extension.properties" />
+
+  <!-- Define other properties -->
+  <property name="extension.name" value="${ant.project.name}" />
+
+  <property name="src.dir" value="src" />
+  <property name="src.chrome.dir" value="${src.dir}/chrome" />
+  <property name="src.chrome.locale.dir" value="${src.dir}/chrome/locale" />
+  <property name="target.dir" value="target" />
+  <property name="target.xpi.dir" value="${target.dir}/${extension.id}" />
+
+  <!-- Public Targets -->
+  <target name="all" description="Execute all" depends="xpi, uninstall, install, run" />
+
+  <target name="xpi" description="Build the extension">
+    <!-- Copy everything -->
+    <copy todir="${target.xpi.dir}">
+      <fileset dir="${src.dir}" includes="**/*" />
+    </copy>
+
+    <!-- Replace tokens everything -->
+    <replace dir="${target.xpi.dir}">
+      <replacefilter token="@ID@" value="${extension.id}" />
+      <replacefilter token="@NAME@" value="${extension.name}" />
+      <replacefilter token="@VERSION@" value="${extension.version}" />
+    </replace>
+
+    <!-- Create the chrome jar -->
+    <zip destfile="${target.xpi.dir}/chrome/${extension.name}.jar">
+      <fileset dir="${target.xpi.dir}/chrome" includes="**/*" excludes="${extension.name}.jar" />
+    </zip>
+
+    <!-- Create the xpi -->
+    <zip destfile="${target.dir}/${extension.name}-${extension.version}.xpi">
+      <fileset dir="${target.xpi.dir}" excludes="chrome/**/*" />
+      <fileset dir="${target.xpi.dir}" includes="chrome/${extension.name}.jar" />
+    </zip>
+
+    <!-- Create the checksum -->
+    <checksum algorithm="SHA1" file="${target.dir}/${extension.name}-${extension.version}.xpi" />
+  </target>
+
+  <target name="replace-locale-id" description="Replace all extension.id in chrome/locale">
+    <replace dir="${src.chrome.locale.dir}">
+      <replacefilter token="${extension.id}" value="@ID@" />
+    </replace>
+  </target>
+  
+  <target name="clean" description="Clean the target directory">
+    <delete dir="${target.dir}" />
+  </target>
+
+  <target name="install" description="Install the extension in the application" depends="profile-env-init" if="profile.exists">
+    <copy todir="${install.dir}">
+      <fileset dir="${target.xpi.dir}" excludes="chrome/**/*" />
+      <fileset dir="${target.xpi.dir}" includes="chrome/${extension.name}.jar" />
+    </copy>
+  </target>
+
+  <target name="uninstall" description="Uninstall the extension in the application" depends="profile-env-init" if="profile.exists">
+    <delete dir="${install.dir}" />
+  </target>
+
+  <target name="run" description="Run the application or create the profile" depends="profile-env-init">
+    <echo level="verbose">Please note: Launching the application only works when it was not already running...</echo>
+    <exec executable="${mozapp.exec}" spawn="true">
+      <arg line="-no-remote -p ${mozapp.profile.name}" />
+    </exec>
+  </target>
+
+  <!-- Private Targets -->
+  <target name="profile-env-init">
+    <!-- Include user and os specific properties -->
+    <condition property="os.family" value="windows">
+      <os family="windows" />
+    </condition>
+    <condition property="os.family" value="unix">
+      <and>
+        <os family="unix" />
+        <not>
+          <os family="mac" />
+        </not>
+      </and>
+    </condition>
+    <condition property="os.family" value="macosx">
+      <and>
+        <os family="mac" />
+        <os family="unix" />
+      </and>
+    </condition>
+
+    <loadproperties srcfile="env.properties">
+      <filterchain>
+        <containsregex byline="true" pattern="^${user.name}\.${os.family}\.(.*)" replace="\1" />
+      </filterchain>
+    </loadproperties>
+
+    <echo level="verbose">If this fails, you haven't configured your environment properties in the env.properties file.</echo>
+    <pathconvert property="profile.dir" pathsep=" ">
+      <path>
+        <dirset dir="${mozapp.profiles.dir}">
+          <include name="*.${mozapp.profile.name}" />
+        </dirset>
+      </path>
+      <identitymapper />
+    </pathconvert>
+    <available file="${profile.dir}/prefs.js" property="profile.exists" />
+    <property name="install.dir" value="${profile.dir}/extensions/${extension.id}" />
+  </target>
+</project>
+
