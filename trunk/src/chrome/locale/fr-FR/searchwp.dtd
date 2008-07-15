@@ -4,3 +4,5 @@
 <!ENTITY pref.title "Options">
 <!ENTITY pref.highlightMinlength.label "Longueur minimale des mots pour qu&apos;ils soient surlignés :">
 <!ENTITY pref.highlightMinlength.accesskey "L">
+<!ENTITY pref.groupTokensSingleMenu.label "Grouper les boutons des mots dans un menu unique">
+<!ENTITY pref.groupTokensSingleMenu.accesskey "M">

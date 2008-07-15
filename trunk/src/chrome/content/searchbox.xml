@@ -118,7 +118,7 @@
       <property name="cropped" onget="return this._cropped;">
         <setter><![CDATA[
           this._cropped = val; 
-          if (searchwp.Preferences.tokensDisplayMode = 2) {
+          if (searchwp.Preferences.tokensDisplayMode == 2) {
             this.embeddedActionsLayer.hidden = !val;
           }
           return val;
