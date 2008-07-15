@@ -42,16 +42,22 @@
   <script type="application/x-javascript" src="chrome://@NAME@/content/options/package-info.js" />
   <script type="application/x-javascript" src="chrome://@NAME@/content/options/optionsDialog.js" />
 
-  <hbox align="center">
-    <label control="highlightMinlength" accesskey="&pref.highlightMinlength.accesskey;">&pref.highlightMinlength.label;</label>
-    <menulist id="highlightMinlength" preference="extensions.searchwp.highlight-minlength">
-      <menupopup>
-        <menuitem label="1" />
-        <menuitem label="2" />
-        <menuitem label="3" />
-        <menuitem label="4" />
-        <menuitem label="5" />
-      </menupopup>
-    </menulist>
-  </hbox>
+  <vbox>
+    <hbox align="center">
+      <label control="highlightMinlength" accesskey="&pref.highlightMinlength.accesskey;">&pref.highlightMinlength.label;</label>
+      <menulist id="highlightMinlength" preference="extensions.searchwp.highlightMinLength">
+        <menupopup>
+          <menuitem label="1" />
+          <menuitem label="2" />
+          <menuitem label="3" />
+          <menuitem label="4" />
+          <menuitem label="5" />
+        </menupopup>
+      </menulist>
+    </hbox>
+    <hbox align="center">
+      <checkbox id="groupTokensSingleMenu" label="&pref.groupTokensSingleMenu.label;"
+                accesskey="&pref.groupTokensSingleMenu.accesskey;" />
+    </hbox>
+  </vbox>
 </dialog>

@@ -147,7 +147,7 @@
   border-color: #b3b3b3;
 }
 
-.searchbox-tokens-overflow {
+.searchbox-embedded-actions-layer {
   background: url("chrome://@NAME@/skin/shade.png") repeat-y 100% 0;
   margin: 2px 0 1px 0;
 }

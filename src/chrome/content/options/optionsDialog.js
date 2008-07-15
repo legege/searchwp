@@ -23,6 +23,7 @@
 searchwp.options.OptionsDialog = new function() {
   this.onLoad = function() {
     document.getElementById("highlightMinlength").selectedIndex = searchwp.Preferences.highlightMinLength - 1;
+    document.getElementById("groupTokensSingleMenu").checked = searchwp.Preferences.tokensDisplayMode == 3;
   }
 
   this.onAccept = function() {
@@ -30,6 +31,13 @@ searchwp.options.OptionsDialog = new function() {
     var highlightMinLength = document.getElementById("highlightMinlength").selectedIndex + 1;
     if (highlightMinLength > 0) {
       searchwp.Preferences.highlightMinLength = highlightMinLength;
+    }
+
+    if (document.getElementById("groupTokensSingleMenu").checked) {
+      searchwp.Preferences.tokensDisplayMode = 3;
+    }
+    else {
+      searchwp.Preferences.tokensDisplayMode = 2;
     }
 
     return true;

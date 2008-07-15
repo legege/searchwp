@@ -27,6 +27,7 @@ searchwp.Preferences = new function() {
   this.PREF_HIGHLIGHT_STATE = "highlightState";
   this.PREF_HIGHLIGHT_MATCH_CASE = "highlightMatchCase";
   this.PREF_FIRST_LAUNCH = "firstLaunch";
+  this.PREF_TOKENS_DISPLAY_MODE = "tokensDisplayMode";
 
   var PREF_BRANCH = "extensions.@NAME@.";
   var prefService = Components.classes["@mozilla.org/preferences-service;1"]
@@ -54,6 +55,7 @@ searchwp.Preferences = new function() {
 
   /**
    * Sets the state of the highlighting.
+   *
    * @param aValue true or false
    */
   this.__defineSetter__("highlighted", function(aValue) {
@@ -75,6 +77,7 @@ searchwp.Preferences = new function() {
 
   /**
    * Sets if highlighting should match case.
+   *
    * @param aValue true or false
    */
   this.__defineSetter__("highlightMatchCase", function(aValue) {
@@ -96,6 +99,7 @@ searchwp.Preferences = new function() {
 
   /**
    * Sets the first launch flag.
+   *
    * @param aValue true or false
    */
   this.__defineSetter__("firstLaunch", function(aValue) {
@@ -130,9 +134,30 @@ searchwp.Preferences = new function() {
 
   /**
    * Sets the mininum length to highlight a term.
-   * @param aValue The minimum length
+   *
+   * @param aValue The minimum length.
    */
   this.__defineSetter__("highlightMinLength", function(aValue) {
     this.branch.setIntPref(this.PREF_HIGHLIGHT_MINLENGTH, aValue);
+  });
+
+  /**
+   * @return the tokens display mode (1: disabled, 2: overlay, 3: complete menu)
+   */
+  this.__defineGetter__("tokensDisplayMode", function() {
+    try {
+      return this.branch.getIntPref(this.PREF_TOKENS_DISPLAY_MODE);
+    }
+    catch (e) {
+      this.tokensDisplayMode = 1;
+      return false;
+    }
+  });
+
+  /**
+   * @param aValue the tokens display mode (1: disabled, 2: overlay, 3: complete menu)
+   */
+  this.__defineSetter__("tokensDisplayMode", function(aValue) {
+    this.branch.setIntPref(this.PREF_TOKENS_DISPLAY_MODE, aValue);
   });
 }

@@ -4,3 +4,5 @@
 <!ENTITY pref.title "Options">
 <!ENTITY pref.highlightMinlength.label "Minimum length for the words to be highlighted:">
 <!ENTITY pref.highlightMinlength.accesskey "L">
+<!ENTITY pref.groupTokensSingleMenu.label "Group word tokens in a single menu">
+<!ENTITY pref.groupTokensSingleMenu.accesskey "M">

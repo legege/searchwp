@@ -62,12 +62,13 @@
             </xul:hbox>
             <!-- Tokens layer -->
             <xul:hbox anonid="tokens-layer" class="searchbox-tokens-layer" flex="1" mousethrough="always" hidden="true">
+              <!-- Compatibility warning: The Searchbar Autosizer extension depends on the "tokens-container" element to automatically adjust the width of the search box -->
               <xul:scrollbox anonid="tokens-container" class="searchbox-tokens-container" flex="1"
                              onoverflow="cropped = true;"
                              onunderflow="cropped = false;" />
             </xul:hbox>
-            <!-- Tokens overflow -->
-            <xul:hbox anonid="tokens-overflow" class="searchbox-tokens-overflow" flex="1"
+            <!-- Embedded actions layer (e.g. overflow) -->
+            <xul:hbox anonid="embedded-actions-layer" class="searchbox-embedded-actions-layer" flex="1"
                       mousethrough="always" align="right" hidden="true">
               <xul:image anonid="tokens-overflow-button" class="searchbox-tokens-overflow-button"
                          mousethrough="never"
@@ -98,7 +99,7 @@
       <field name="inputLayer">document.getAnonymousElementByAttribute(this, "anonid", "input-layer");</field>
       <field name="tokensLayer">document.getAnonymousElementByAttribute(this, "anonid", "tokens-layer");</field>
       <field name="tokensContainer">document.getAnonymousElementByAttribute(this, "anonid", "tokens-container");</field>
-      <field name="tokensOverflowLayer">document.getAnonymousElementByAttribute(this, "anonid", "tokens-overflow");</field>
+      <field name="embeddedActionsLayer">document.getAnonymousElementByAttribute(this, "anonid", "embedded-actions-layer");</field>
       <field name="tokensOverflowButton">document.getAnonymousElementByAttribute(this, "anonid", "tokens-overflow-button");</field>
       <field name="tokensOverflowPopup">document.getAnonymousElementByAttribute(this, "anonid", "tokens-overflow-popup");</field>
       <field name="tokensOverflowPopupContainer">document.getAnonymousElementByAttribute(this, "anonid", "tokens-overflow-popup-container");</field>
@@ -112,13 +113,21 @@
 
       <field name="_cropped">false</field>
 
-      <property name="cropped"
-                onget="return this._cropped;"
-                onset="this._cropped = val; this.tokensOverflowLayer.hidden = !val; return val;" />
+      <field name="_tokensDisplayMode">0</field>
+
+      <property name="cropped" onget="return this._cropped;">
+        <setter><![CDATA[
+          this._cropped = val; 
+          if (searchwp.Preferences.tokensDisplayMode = 2) {
+            this.embeddedActionsLayer.hidden = !val;
+          }
+          return val;
+        ]]></setter>
+      </property>
 
       <property name="value"
                 onget="return (document.getBindingParent(this).hasAttribute('empty') || this.hasAttribute('empty')) ? '' : this.inputField.value;">
-        <setter><![CDATA[          
+        <setter><![CDATA[
           this.mIgnoreInput = true;
           if (val) {
             // clear the emptyText _before_ setting a new non-empty value
@@ -143,14 +152,22 @@
           this.inputField.dispatchEvent(event);
 
           this.rebuildTokens();
-          if (val && !this.hasAttribute("focused")) {
-            this._showTokens();
-          }
-          else {
-            this._hideTokens();
-          }
+
           return val;
         ]]></setter>
+      </property>
+
+      <property name="_embeddedActionsWidth">
+        <getter><![CDATA[
+          var width = 0;
+          for (var i = 0; i < this.embeddedActionsLayer.childNodes.length; i++) {
+            var element = this.embeddedActionsLayer.childNodes[i];
+            if (!element.hidden) {
+              width += element.boxObject.width
+            }
+          }
+          return width;
+        ]]></getter>
       </property>
 
       <method name="openOverflowPopup">
@@ -163,7 +180,7 @@
 
           // Adjust token visibility
           var tokensScrollBoxObject = this.tokensContainer.boxObject.QueryInterface(Components.interfaces.nsIScrollBoxObject);
-          var rightLimitX = tokensScrollBoxObject.x + tokensScrollBoxObject.width - this.tokensOverflowButton.boxObject.width;
+          var rightLimitX = tokensScrollBoxObject.x + tokensScrollBoxObject.width - this._embeddedActionsWidth;
 
           for (var i = 0; i < this.tokensContainer.childNodes.length; i++) {
             var tokenNode = this.tokensContainer.childNodes[i];
@@ -178,12 +195,13 @@
 
           var popup = document.getAnonymousElementByAttribute(this, "anonid", "tokens-overflow-popup");
           popup.hidden = false;
-          popup.openPopup(this.tokensOverflowLayer, 'after_end');
+          popup.openPopup(this.embeddedActionsLayer, 'after_end');
         ]]></body>
       </method>
 
       <method name="rebuildTokens">
         <body><![CDATA[
+          // Removes all tokens
           while (this.tokensContainer.hasChildNodes()) {
             this.tokensContainer.removeChild(this.tokensContainer.firstChild);
           }
@@ -205,8 +223,10 @@
                 var criteria = "term-" + ((j++ % searchwp.Preferences.highlighterCount) + 1);
                 tokenNode.setAttribute("highlight", criteria);
               }
+
               this.tokensContainer.appendChild(tokenNode);
 
+              // We add all tokens in the popup menu too.
               var tokenPopupNode = tokenNode.cloneNode(true);
               this.tokensOverflowPopupContainer.appendChild(tokenPopupNode);
             }
@@ -216,15 +236,41 @@
           else {
             searchwp.Highlighting.update();
           }
+
+          if (this.value && !this.hasAttribute("focused")) {
+            this._showTokens();
+          }
+          else {
+            this._hideTokens();
+          }
         ]]></body>
       </method>
 
       <method name="_showTokens">
         <body><![CDATA[
-          if (!this.hasAttribute("tokenized") && this.value) {
-            this.tokensLayer.hidden = false;
-            this.tokensOverflowLayer.hidden = true;
-            this.inputLayer.style.setProperty("opacity", "0", "important");
+          // Should only show tokens when they're already shown
+          if (this.value && (!this.hasAttribute("tokenized")
+                             || this._tokensDisplayMode != searchwp.Preferences.tokensDisplayMode)) {
+            if (searchwp.Preferences.tokensDisplayMode == 2) {
+              this.embeddedActionsLayer.hidden = true;
+              this.tokensLayer.hidden = false;
+              this.inputLayer.style.setProperty("opacity", "0", "important");
+            }
+            else if (searchwp.Preferences.tokensDisplayMode == 3) {
+              this.embeddedActionsLayer.hidden = false;
+              this.tokensLayer.hidden = true;
+              this.inputLayer.style.removeProperty("opacity");
+            }
+            else {
+              this.embeddedActionsLayer.hidden = true;
+              this.tokensLayer.hidden = true;
+              this.inputLayer.style.removeProperty("opacity");
+            }
+
+            this._tokensDisplayMode = searchwp.Preferences.tokensDisplayMode
+
+            // Compatibility warning: The Searchbar Autosizer extension depends on
+            // the "tokenized" attribute to automatically adjust the width of the search box
             this.setAttribute("tokenized", true);
 
             var event = document.createEvent('Events');
@@ -237,10 +283,12 @@
       <method name="_hideTokens">
         <body><![CDATA[
           if (this.hasAttribute("tokenized")) {
+            this.embeddedActionsLayer.hidden = true;
             this.tokensLayer.hidden = true;
-            this.tokensOverflowLayer.hidden = true;
             this.inputLayer.style.removeProperty("opacity");
+
             this.removeAttribute("tokenized");
+            this._tokensDisplayMode = 0;
 
             var event = document.createEvent('Events');
             event.initEvent('untokenized', true, true);
