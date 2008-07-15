@@ -1,5 +1,6 @@
+<!ENTITY searchbox.tokens.overflow.tooltiptext "Viac tlačidiel pre rýchle vyhľadávanie...">
 <!ENTITY button.highlight.label "Zvýrazniť">
+<!ENTITY button.highlight.tooltiptext "Zapnúť a vypnúť zvýraznenie s alebo bez možnosti porovnania">
 <!ENTITY pref.title "Možnosti">
-<!ENTITY pref.highlighting.label "Zvýraznenie">
 <!ENTITY pref.highlightMinlength.label "Minimálna dĺžka pre slová , ktoré majú byť zvýraznené:">
 <!ENTITY pref.highlightMinlength.accesskey "M">

@@ -4,7 +4,7 @@ skin @NAME@-platform classic/1.0 jar:chrome/@NAME@.jar!/skin/classic/platform/de
 
 # locale @NAME@ ca-AD jar:chrome/@NAME@.jar!/locale/ca-AD/
 locale @NAME@ cs-CZ jar:chrome/@NAME@.jar!/locale/cs-CZ/
-# locale @NAME@ de-DE jar:chrome/@NAME@.jar!/locale/de-DE/
+locale @NAME@ de-DE jar:chrome/@NAME@.jar!/locale/de-DE/
 locale @NAME@ el-GR jar:chrome/@NAME@.jar!/locale/el-GR/
 locale @NAME@ en-US jar:chrome/@NAME@.jar!/locale/en-US/
 locale @NAME@ es-ES jar:chrome/@NAME@.jar!/locale/es-ES/
@@ -15,12 +15,12 @@ locale @NAME@ fr-FR jar:chrome/@NAME@.jar!/locale/fr-FR/
 locale @NAME@ it-IT jar:chrome/@NAME@.jar!/locale/it-IT/
 locale @NAME@ ja-JP jar:chrome/@NAME@.jar!/locale/ja-JP/
 # locale @NAME@ ko jar:chrome/@NAME@.jar!/locale/ko/
-# locale @NAME@ nl jar:chrome/@NAME@.jar!/locale/nl/
+locale @NAME@ nl-NL jar:chrome/@NAME@.jar!/locale/nl-NL/
 locale @NAME@ pl-PL jar:chrome/@NAME@.jar!/locale/pl-PL/
 locale @NAME@ pt-BR jar:chrome/@NAME@.jar!/locale/pt-BR/
 # locale @NAME@ ru jar:chrome/@NAME@.jar!/locale/ru/
-# locale @NAME@ sk jar:chrome/@NAME@.jar!/locale/sk/
-# locale @NAME@ zh-CN jar:chrome/@NAME@.jar!/locale/zh-CN/
+locale @NAME@ sk-SK jar:chrome/@NAME@.jar!/locale/sk-SK/
+locale @NAME@ zh-CN jar:chrome/@NAME@.jar!/locale/zh-CN/
 # locale @NAME@ zh-TW jar:chrome/@NAME@.jar!/locale/zh-TW/
 
 overlay chrome://browser/content/browser.xul chrome://@NAME@/content/overlay.xul
