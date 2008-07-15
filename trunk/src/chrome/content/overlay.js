@@ -213,6 +213,7 @@ searchwp.Overlay = new function() {
           }, 0);
           break;
         case searchwp.Preferences.PREF_HIGHLIGHT_MINLENGTH:
+        case searchwp.Preferences.PREF_TOKENS_DISPLAY_MODE:
           setTimeout(function() {
             searchwp.Highlighting.refresh();
 
