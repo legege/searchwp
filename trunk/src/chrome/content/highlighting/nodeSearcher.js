@@ -20,7 +20,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-searchwp.highlighting.NodeSearcher = function() {
+gSearchWP.Highlighting.NodeSearcher = function() {
   /**
    * @param aDocument The Document to search in.
    * @param aMatcher An object that has a <code>match</code> function taking
@@ -141,7 +141,7 @@ searchwp.highlighting.NodeSearcher = function() {
 /**
  * RegexMatcher for the NodeSearcher.
  */
-searchwp.highlighting.RegexMatcher = function(aCriteria, aMatchCase) {
+gSearchWP.Highlighting.RegexMatcher = function(aCriteria, aMatchCase) {
   var _regex = new RegExp(aCriteria, aMatchCase ? "m" : "mi");
 
   this.match = function(aStr) {

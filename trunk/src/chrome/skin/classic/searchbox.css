@@ -24,6 +24,13 @@
 @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
 @namespace html url("http://www.w3.org/1999/xhtml");
 
+*[tokenized="true"] {
+  min-width: 8em !important;
+}
+
+*[tokens-display-mode="3"] .searchbox-input-layer {
+  padding-right: 2em;
+}
 .searchbox-tokens-layer,
 .searchbox-tokens-layer > *,
 .searchbox-token,
@@ -152,22 +159,31 @@
   margin: 2px 0 1px 0;
 }
 
-.searchbox-tokens-overflow-button {
+*[tokens-display-mode="3"] .searchbox-embedded-actions-layer {
+  background: none;
+}
+
+.searchbox-tokens-menu-button {
   list-style-image: url("chrome://@NAME@/skin/ellipsis.png");
   padding: 2px;
   cursor: pointer;
   -moz-margin-end: 6px;
 }
 
-.searchbox-tokens-overflow-popup {
+*[tokens-display-mode="3"] .searchbox-tokens-menu-button {
+  list-style-image: url("chrome://@NAME@/skin/tokens-menu.png");
+  padding: 2px 0;
+}
+
+.searchbox-tokens-menu-popup {
   border: 1px solid;
 }
 
-.searchbox-tokens-overflow-popup-container {
+.searchbox-tokens-menu-popup-container {
   padding: 1px;
 }
 
-.searchbox-tokens-overflow-popup-container .searchbox-token {
+.searchbox-tokens-menu-popup-container .searchbox-token {
   margin: 2px;
   display: inline;
 }

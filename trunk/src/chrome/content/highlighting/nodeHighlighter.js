@@ -20,7 +20,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-searchwp.highlighting.NodeHighlighter = function(aName) {
+gSearchWP.Highlighting.NodeHighlighter = function(aName) {
   var self = this;
   var _name = aName;
 
@@ -121,7 +121,7 @@ searchwp.highlighting.NodeHighlighter = function(aName) {
   }
 }
 
-searchwp.highlighting.DefaultElementCreator = function(aElementName, aAttributes) {
+gSearchWP.Highlighting.DefaultElementCreator = function(aElementName, aAttributes) {
   var elementName = aElementName;
   var attributes = aAttributes;
 

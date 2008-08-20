@@ -20,14 +20,14 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-searchwp.Highlighting = new function() {
-  searchwp.loadStyleSheet("chrome://@NAME@/skin/highlighting-user.css");
+gSearchWP.Highlighting = new function() {
+  gSearchWP.loadStyleSheet("chrome://@NAME@/skin/highlighting-user.css");
 
   var _stringBundle = null;
   var _tokensArrayCache = [];
   var _highlightTimeout;
-  var _searcher = new searchwp.highlighting.NodeSearcher;
-  var _highlighter = new searchwp.highlighting.NodeHighlighter("searchwp-highlighting");
+  var _searcher = new gSearchWP.Highlighting.NodeSearcher;
+  var _highlighter = new gSearchWP.Highlighting.NodeHighlighter("searchwp-highlighting");
 
   /**
    * Initialize this class.
@@ -36,11 +36,11 @@ searchwp.Highlighting = new function() {
     _stringBundle = document.getElementById("bundle-searchwp");
 
     var tabBox = document.getElementById("content").mTabBox;
-    tabBox.addEventListener("select", function(aEvent) { searchwp.Highlighting.refresh() }, false);
+    tabBox.addEventListener("select", function(aEvent) { gSearchWP.Highlighting.refresh() }, false);
 
     if (this.highlightButton) {
-      this.highlightButton.setAttribute("checked", searchwp.Preferences.highlighted);
-      this.highlightButton.setAttribute("matchcase", searchwp.Preferences.highlightMatchCase);
+      this.highlightButton.setAttribute("checked", gSearchWP.Preferences.highlighted);
+      this.highlightButton.setAttribute("matchcase", gSearchWP.Preferences.highlightMatchCase);
     }
   }
 
@@ -48,7 +48,7 @@ searchwp.Highlighting = new function() {
    * Updates the highlighting according to the terms.
    */
   this.update = function(aTokensArray, aForce) {
-    if (aForce || !searchwp.Tokenizer.compare(_tokensArrayCache, aTokensArray)) {
+    if (aForce || !gSearchWP.Tokenizer.compare(_tokensArrayCache, aTokensArray)) {
       _tokensArrayCache = aTokensArray;
 
       setRefreshTimeout();
@@ -59,7 +59,7 @@ searchwp.Highlighting = new function() {
    * Refreshes the current highlighting.
    */
   this.refresh = function() {
-    if (searchwp.Preferences.highlighted) {
+    if (gSearchWP.Preferences.highlighted) {
       unhighlight();
       highlight();
     }
@@ -76,9 +76,9 @@ searchwp.Highlighting = new function() {
   this.toggleHighlight = function(aEvent) {
     var matchCase = aEvent.altKey || aEvent.ctrlKey;
 
-    searchwp.Preferences.highlightMatchCase = matchCase;
-    if (!searchwp.Preferences.highlighted || !matchCase) {
-      searchwp.Preferences.highlighted = !searchwp.Preferences.highlighted;
+    gSearchWP.Preferences.highlightMatchCase = matchCase;
+    if (!gSearchWP.Preferences.highlighted || !matchCase) {
+      gSearchWP.Preferences.highlighted = !gSearchWP.Preferences.highlighted;
     }
   }
 
@@ -103,7 +103,7 @@ searchwp.Highlighting = new function() {
     if (_highlightTimeout) {
       clearTimeout(_highlightTimeout);
     }
-    _highlightTimeout = setTimeout(function() { searchwp.Highlighting.refresh(); }, 500);
+    _highlightTimeout = setTimeout(function() { gSearchWP.Highlighting.refresh(); }, 500);
   }
 
   /**
@@ -115,21 +115,21 @@ searchwp.Highlighting = new function() {
       var count = 0;
       var j = 0;
       for (var term in termsArray) {
-        if (termsArray[term].length >= searchwp.Preferences.highlightMinLength) {
-          var criteria = "term-" + ((j++ % searchwp.Preferences.highlighterCount) + 1);
+        if (termsArray[term].length >= gSearchWP.Preferences.highlightMinLength) {
+          var criteria = "term-" + ((j++ % gSearchWP.Preferences.highlighterCount) + 1);
           count = count + highlightBrowserWindow(termsArray[term], criteria,
-              searchwp.Preferences.highlightMatchCase);
+              gSearchWP.Preferences.highlightMatchCase);
         }
       }
 
       if (count > 1) {
-        searchwp.displayMessage(_stringBundle.getFormattedString("highlightCountN", [count], 1), false);
+        gSearchWP.displayMessage(_stringBundle.getFormattedString("highlightCountN", [count], 1), false);
       }
       else if (count == 1) {
-        searchwp.displayMessage(_stringBundle.getFormattedString("highlightCount1", [count], 1), false);
+        gSearchWP.displayMessage(_stringBundle.getFormattedString("highlightCount1", [count], 1), false);
       }
       else {
-        searchwp.displayMessage(_stringBundle.getString("highlightCount0"), false);
+        gSearchWP.displayMessage(_stringBundle.getString("highlightCount0"), false);
       }
     }
   }
@@ -166,12 +166,12 @@ searchwp.Highlighting = new function() {
     var criteria = aWord.replace(/\s*/, "");
     criteria = criteria.replace(/([.*+?^${}()|[\]\/\\])/g, '\\$1');
 
-    var matcher = new searchwp.highlighting.RegexMatcher(criteria, aMatchCase);
+    var matcher = new gSearchWP.Highlighting.RegexMatcher(criteria, aMatchCase);
 
     var rangeMatches = _searcher.search(doc, matcher);
 
     /* highlight the matches */
-    var elementCreator = new searchwp.highlighting.DefaultElementCreator("layer", {class: "searchwp-term", highlight: aCriteria});
+    var elementCreator = new gSearchWP.Highlighting.DefaultElementCreator("layer", {class: "searchwp-term", highlight: aCriteria});
     for (var n in rangeMatches) {
       var node = rangeMatches[n].node;
       var match = rangeMatches[n].match;

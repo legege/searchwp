@@ -20,7 +20,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-searchwp.Overlay = new function() {
+gSearchWP.Overlay = new function() {
   var self = this;
   var _stringBundle = null;
   var _oldCustomizeDone;
@@ -46,15 +46,15 @@ searchwp.Overlay = new function() {
        Also, we cannot replace the customizeDone function without a setTimeout. */
     setTimeout(function() {
       var toolbox = document.getElementById("navigator-toolbox");
-      if (toolbox.customizeDone != searchwp.Overlay.onCustomizeDone) {
+      if (toolbox.customizeDone != gSearchWP.Overlay.onCustomizeDone) {
         _oldCustomizeDone = toolbox.customizeDone;
-        toolbox.customizeDone = searchwp.Overlay.onCustomizeDone;
+        toolbox.customizeDone = gSearchWP.Overlay.onCustomizeDone;
       }
     }, 0);
 
-    if (searchwp.Preferences.firstLaunch && !searchwp.Highlighting.exist()) {
+    if (gSearchWP.Preferences.firstLaunch && !gSearchWP.Highlighting.exist()) {
       setTimeout(function() {
-        searchwp.Overlay.firstLaunch();
+        gSearchWP.Overlay.firstLaunch();
       }, 50);
     }
 
@@ -62,9 +62,9 @@ searchwp.Overlay = new function() {
     var win = document.getElementById("main-window");
     win.setAttribute("searchwp-moz-platform", navigator.platform);
 
-    searchwp.Highlighting.init();
+    gSearchWP.Highlighting.init();
 
-    addEventListener("unload", function(aEvent) { searchwp.Overlay.onUnload(aEvent); }, false);
+    addEventListener("unload", function(aEvent) { gSearchWP.Overlay.onUnload(aEvent); }, false);
   }
 
   /**
@@ -117,7 +117,7 @@ searchwp.Overlay = new function() {
     }
     catch(e) { }
 
-    searchwp.Preferences.firstLaunch = false;
+    gSearchWP.Preferences.firstLaunch = false;
   }
 
   /**
@@ -125,7 +125,7 @@ searchwp.Overlay = new function() {
    * @return the original method.
    */
   this.onCustomizeDone = function() {
-    searchwp.Preferences.highlighted = false;
+    gSearchWP.Preferences.highlighted = false;
     return _oldCustomizeDone();
   }
 
@@ -158,7 +158,7 @@ searchwp.Overlay = new function() {
          * to load. The solution is to make the highlighting asynchrone.
          */
         setTimeout(function() {
-          searchwp.Highlighting.refresh();
+          gSearchWP.Highlighting.refresh();
         }, 0);
       }
     }
@@ -170,17 +170,17 @@ searchwp.Overlay = new function() {
    * Preferences Observer
    */
   this.preferencesObserver = new function() {
-    var branch = searchwp.Preferences.branch;
+    var branch = gSearchWP.Preferences.branch;
 
     this.register = function() {
-      var pbi = branch.QueryInterface(Components.interfaces.nsIPrefBranchInternal);
+      var pbi = branch.QueryInterface(Components.interfaces.nsIPrefBranch2);
       pbi.addObserver("", this, false);
     }
 
     this.unregister = function() {
       if (!branch) return;
 
-      var pbi = branch.QueryInterface(Components.interfaces.nsIPrefBranchInternal);
+      var pbi = branch.QueryInterface(Components.interfaces.nsIPrefBranch2);
       pbi.removeObserver("", this, false);
     }
 
@@ -190,36 +190,27 @@ searchwp.Overlay = new function() {
       }
 
       switch (aData) {
-        case searchwp.Preferences.PREF_HIGHLIGHT_STATE:
+        case gSearchWP.Preferences.PREF_HIGHLIGHT_STATE:
           setTimeout(function() {
-            var item = searchwp.Highlighting.highlightButton;
+            var item = gSearchWP.Highlighting.highlightButton;
             if (item) {
-              item.setAttribute("checked", searchwp.Preferences.highlighted);
+              item.setAttribute("checked", gSearchWP.Preferences.highlighted);
             }
-            searchwp.Highlighting.refresh();
-
-            if (typeof(searchwp.Overlay.searchbox.rebuildTokens) == "function") {
-              searchwp.Overlay.searchbox.rebuildTokens();
-            }
+            gSearchWP.Highlighting.refresh();
           }, 0);
           break;
-        case searchwp.Preferences.PREF_HIGHLIGHT_MATCH_CASE:
+        case gSearchWP.Preferences.PREF_HIGHLIGHT_MATCH_CASE:
           setTimeout(function() {
-            var item = searchwp.Highlighting.highlightButton;
+            var item = gSearchWP.Highlighting.highlightButton;
             if (item) {
-              item.setAttribute("matchcase", searchwp.Preferences.highlightMatchCase);
+              item.setAttribute("matchcase", gSearchWP.Preferences.highlightMatchCase);
             }
-            searchwp.Highlighting.refresh();
+            gSearchWP.Highlighting.refresh();
           }, 0);
           break;
-        case searchwp.Preferences.PREF_HIGHLIGHT_MINLENGTH:
-        case searchwp.Preferences.PREF_TOKENS_DISPLAY_MODE:
+        case gSearchWP.Preferences.PREF_HIGHLIGHT_MINLENGTH:
           setTimeout(function() {
-            searchwp.Highlighting.refresh();
-
-            if (typeof(searchwp.Overlay.searchbox.rebuildTokens) == "function") {
-              searchwp.Overlay.searchbox.rebuildTokens();
-            }
+            gSearchWP.Highlighting.refresh();
           }, 0);
           break;
       }
@@ -227,4 +218,4 @@ searchwp.Overlay = new function() {
   }
 }
 
-addEventListener("load", function(aEvent) { searchwp.Overlay.onLoad(aEvent); }, false);
+addEventListener("load", function(aEvent) { gSearchWP.Overlay.onLoad(aEvent); }, false);
