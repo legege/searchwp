@@ -28,7 +28,7 @@
   min-width: 8em !important;
 }
 
-*[tokens-display-mode="3"] .searchbox-input-layer {
+*[tokensdisplaymode="3"] .searchbox-input-layer {
   padding-right: 2em;
 }
 .searchbox-tokens-layer,
@@ -159,7 +159,7 @@
   margin: 2px 0 1px 0;
 }
 
-*[tokens-display-mode="3"] .searchbox-embedded-actions-layer {
+*[tokensdisplaymode="3"] .searchbox-embedded-actions-layer {
   background: none;
 }
 
@@ -170,7 +170,7 @@
   -moz-margin-end: 6px;
 }
 
-*[tokens-display-mode="3"] .searchbox-tokens-menu-button {
+*[tokensdisplaymode="3"] .searchbox-tokens-menu-button {
   list-style-image: url("chrome://@NAME@/skin/tokens-menu.png");
   padding: 2px 0;
 }
