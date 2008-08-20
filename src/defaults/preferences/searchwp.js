@@ -21,6 +21,7 @@
  * ***** END LICENSE BLOCK ***** */
 
 pref("extensions.@ID@.description", "chrome://@NAME@/locale/searchwp.properties");
+pref("extensions.searchwp.beepNotFound", true);
 pref("extensions.searchwp.firstLaunch", true);
 pref("extensions.searchwp.highlight.matchCase", false);
 pref("extensions.searchwp.highlight.minLength", 2);

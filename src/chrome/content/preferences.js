@@ -33,8 +33,10 @@ gSearchWP.Preferences = new function() {
   var PREF_BRANCH = "extensions.@NAME@.";
 
   this.addObserver = function(aPrefName, aObserver) {
-    var pbi = self.branch.QueryInterface(Components.interfaces.nsIPrefBranch2);
-    pbi.addObserver(aPrefName, aObserver, false);
+    var pbi = Components.classes["@mozilla.org/preferences-service;1"]
+                        .getService(Components.interfaces.nsIPrefService)
+                        .QueryInterface(Components.interfaces.nsIPrefBranch2);
+    pbi.addObserver(PREF_BRANCH + aPrefName, aObserver, false);
   }
 
   /**

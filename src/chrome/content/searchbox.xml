@@ -120,7 +120,7 @@
       <property name="cropped" onget="return this._cropped;">
         <setter><![CDATA[
           this._cropped = val; 
-          if (searchwp.Preferences.tokensDisplayMode == 2) {
+          if (gSearchWP.Preferences.tokensDisplayMode == 2) {
             this._embeddedActionsLayer.hidden = !val;
           }
           return val;
@@ -214,7 +214,7 @@
       <method name="_rebuildTokens">
         <body><![CDATA[
           // Set the display mode attribute (for CSS)
-          this.setAttribute("tokens-display-mode", gSearchWP.Preferences.tokensDisplayMode);
+          this.setAttribute("tokensdisplaymode", gSearchWP.Preferences.tokensDisplayMode);
 
           // Removes all tokens
           while (this._tokensContainer.hasChildNodes()) {
