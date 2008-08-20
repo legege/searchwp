@@ -20,7 +20,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-searchwp.Tokenizer = new function() {
+gSearchWP.Tokenizer = new function() {
 
   /**
    * @param aSearchString The search string.

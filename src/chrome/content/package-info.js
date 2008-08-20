@@ -20,15 +20,15 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-if (!this.searchwp) this.searchwp = {};
+if (!this.gSearchWP) this.gSearchWP = {};
 
-searchwp.playBeep = function() {
+gSearchWP.playBeep = function() {
   Components.classes["@mozilla.org/sound;1"]
             .createInstance(Components.interfaces.nsISound)
             .beep();
 }
 
-searchwp.displayMessage = function(aMessage, aBeep) {
+gSearchWP.displayMessage = function(aMessage, aBeep) {
   var xulBrowserWindow = window.XULBrowserWindow;
 
   if (!xulBrowserWindow) {
@@ -53,7 +53,7 @@ searchwp.displayMessage = function(aMessage, aBeep) {
   return;
 }
 
-searchwp.loadStyleSheet = function(aFileURI) {
+gSearchWP.loadStyleSheet = function(aFileURI) {
   var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"]
                       .getService(Components.interfaces.nsIStyleSheetService);
   var ios = Components.classes["@mozilla.org/network/io-service;1"]

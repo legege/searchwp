@@ -33,8 +33,8 @@
 
 <dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" id="searchwpPref"
   title="&pref.title;" buttons="accept"
-  onload="searchwp.options.OptionsDialog.onLoad();"
-  ondialogaccept="return searchwp.options.OptionsDialog.onAccept();">
+  onload="gSearchWP.Options.OptionsDialog.onLoad();"
+  ondialogaccept="return gSearchWP.Options.OptionsDialog.onAccept();">
 
   <script type="application/x-javascript" src="chrome://@NAME@/content/package-info.js" />
   <script type="application/x-javascript" src="chrome://@NAME@/content/preferences.js" />
@@ -45,7 +45,7 @@
   <vbox>
     <hbox align="center">
       <label control="highlightMinlength" accesskey="&pref.highlightMinlength.accesskey;">&pref.highlightMinlength.label;</label>
-      <menulist id="highlightMinlength" preference="extensions.searchwp.highlightMinLength">
+      <menulist id="highlightMinlength" preference="extensions.@NAME@.highlight.minLength">
         <menupopup>
           <menuitem label="1" />
           <menuitem label="2" />

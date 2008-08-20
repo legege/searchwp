@@ -1,4 +1,4 @@
-<!ENTITY searchbox.tokens.overflow.tooltiptext "Plus de boutons rapides de recherche...">
+<!ENTITY searchbox.tokens.menu.tooltiptext "Plus de boutons rapides de recherche...">
 <!ENTITY button.highlight.label "Surligner">
 <!ENTITY button.highlight.tooltiptext "Surligner tous les termes en respectant ou non la case">
 <!ENTITY pref.title "Options">
