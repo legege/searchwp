@@ -1,5 +1,0 @@
-<!ENTITY button.highlight.label "Подсветка">
-<!ENTITY pref.title "Настройки">
-<!ENTITY pref.highlighting.label "Подсветка">
-<!ENTITY pref.highlightMinlength.label "Минимальная длина подсвечиваемых слов">
-<!ENTITY pref.highlightMinlength.accesskey "Д">
