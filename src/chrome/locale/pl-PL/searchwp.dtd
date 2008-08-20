@@ -1,6 +1,8 @@
-<!ENTITY searchbox.tokens.overflow.tooltiptext "Więcej przycisków szybkiego wyszukiwania...">
-<!ENTITY button.highlight.label "Podświetl">
-<!ENTITY button.highlight.tooltiptext "Włącz/wyłącz podświetlanie z lub bez uwzględniania wielkości liter">
+<!ENTITY searchbox.tokens.menu.tooltiptext "Więcej przycisków szybkiego wyszukiwania...">
+<!ENTITY button.highlight.label "Wyróżnij">
+<!ENTITY button.highlight.tooltiptext "Włącz/wyłącz wyróżnianie z lub bez uwzględniania wielkości liter">
 <!ENTITY pref.title "Opcje">
-<!ENTITY pref.highlightMinlength.label "Minimalna długość podświetlanych słów:">
-<!ENTITY pref.highlightMinlength.accesskey "L">
+<!ENTITY pref.highlightMinlength.label "Minimalna długość wyróżnianych słów:">
+<!ENTITY pref.highlightMinlength.accesskey "M">
+<!ENTITY pref.groupTokensSingleMenu.label "Grupuj znaczniki słów w pojedyncze menu">
+<!ENTITY pref.groupTokensSingleMenu.accesskey "G">

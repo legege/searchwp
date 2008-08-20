@@ -1,6 +1,8 @@
-<!ENTITY searchbox.tokens.overflow.tooltiptext "Altri pulsanti per la ricerca rapida...">
+<!ENTITY searchbox.tokens.menu.tooltiptext "Effettua ricerca rapida">
 <!ENTITY button.highlight.label "Evidenziature di SearchWP">
-<!ENTITY button.highlight.tooltiptext "Attiva/disattiva le evidenziature con o senza maiuscole/minuscole">
+<!ENTITY button.highlight.tooltiptext "Attiva/disattiva le evidenziature indipendentemente da maiuscole/minuscole">
 <!ENTITY pref.title "Opzioni di SearchWP">
 <!ENTITY pref.highlightMinlength.label "Numero minimo di caratteri affinché i lemmi siano evidenziati:">
 <!ENTITY pref.highlightMinlength.accesskey "N">
+<!ENTITY pref.groupTokensSingleMenu.label "Effettua ricerca rapida facendo clic sui tre puntini di sospensione nella barra di ricerca">
+<!ENTITY pref.groupTokensSingleMenu.accesskey "E">
