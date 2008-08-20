@@ -1,5 +1,8 @@
+<!ENTITY searchbox.tokens.menu.tooltiptext "More fast search buttons...">
 <!ENTITY button.highlight.label "高亮度標示">
+<!ENTITY button.highlight.tooltiptext "Turn on and off highlighting with or without case matching">
 <!ENTITY pref.title "選項">
-<!ENTITY pref.highlighting.label "高亮度標示">
 <!ENTITY pref.highlightMinlength.label "需要標示的關鍵字最小長度:">
 <!ENTITY pref.highlightMinlength.accesskey "L">
+<!ENTITY pref.groupTokensSingleMenu.label "Group word tokens in a single menu">
+<!ENTITY pref.groupTokensSingleMenu.accesskey "M">
