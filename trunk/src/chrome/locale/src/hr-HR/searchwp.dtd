@@ -1,8 +1,4 @@
-<!ENTITY searchbox.tokens.menu.tooltiptext "More fast search buttons...">
 <!ENTITY button.highlight.label "Istakni">
-<!ENTITY button.highlight.tooltiptext "Turn on and off highlighting with or without case matching">
 <!ENTITY pref.title "Opcije">
 <!ENTITY pref.highlightMinlength.label "Najmanja dužina za riječi koje će se isticati:">
 <!ENTITY pref.highlightMinlength.accesskey "d">
-<!ENTITY pref.groupTokensSingleMenu.label "Group word tokens in a single menu">
-<!ENTITY pref.groupTokensSingleMenu.accesskey "M">
