@@ -1,8 +1,4 @@
-<!ENTITY searchbox.tokens.menu.tooltiptext "More fast search buttons...">
 <!ENTITY button.highlight.label "강조">
-<!ENTITY button.highlight.tooltiptext "Turn on and off highlighting with or without case matching">
 <!ENTITY pref.title "설정">
 <!ENTITY pref.highlightMinlength.label "강조할 검색어의 최소 길이:">
 <!ENTITY pref.highlightMinlength.accesskey "L">
-<!ENTITY pref.groupTokensSingleMenu.label "Group word tokens in a single menu">
-<!ENTITY pref.groupTokensSingleMenu.accesskey "M">
