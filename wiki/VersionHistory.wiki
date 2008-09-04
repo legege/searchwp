@@ -1,6 +1,10 @@
 #summary Change Log
 #labels Featured
 
+== SearchWP 2.3 (Septembre 3rd, 2008) ==
+ * New: Possibility to group tokens in a single menu to avoid having tokens over the text.
+ * All available translations (even when partially available) are now packaged in the final XPI file.
+
 == SearchWP 2.2 (May 22nd, 2008) ==
  * Ready for Firefox 3.0 RC1
  * Fixed: Positioning adjustments of tokens in the searchbox
