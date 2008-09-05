@@ -26,8 +26,8 @@ gSearchWP.Highlighting = new function() {
   var _stringBundle = null;
   var _tokensArrayCache = [];
   var _highlightTimeout;
-  var _searcher = new gSearchWP.Highlighting.NodeSearcher;
-  var _highlighter = new gSearchWP.Highlighting.NodeHighlighter("searchwp-highlighting");
+  var _searcher = new gSearchWP.Highlighter.NodeSearcher();
+  var _highlighter = new gSearchWP.Highlighter.NodeHighlighter("searchwp-highlighting");
 
   /**
    * Initialize this class.
@@ -166,12 +166,12 @@ gSearchWP.Highlighting = new function() {
     var criteria = aWord.replace(/\s*/, "");
     criteria = criteria.replace(/([.*+?^${}()|[\]\/\\])/g, '\\$1');
 
-    var matcher = new gSearchWP.Highlighting.RegexMatcher(criteria, aMatchCase);
+    var matcher = new gSearchWP.Highlighter.RegexMatcher(criteria, aMatchCase);
 
     var rangeMatches = _searcher.search(doc, matcher);
 
     /* highlight the matches */
-    var elementCreator = new gSearchWP.Highlighting.DefaultElementCreator("layer", {class: "searchwp-term", highlight: aCriteria});
+    var elementCreator = new gSearchWP.Highlighter.DefaultElementCreator("layer", {class: "searchwp-term", highlight: aCriteria});
     for (var n in rangeMatches) {
       var node = rangeMatches[n].node;
       var match = rangeMatches[n].match;

@@ -43,9 +43,11 @@ gSearchWP.Preferences = new function() {
    * @return the preferences branch.
    */
   this.__defineGetter__("branch", function() {
-    return Components.classes["@mozilla.org/preferences-service;1"]
+    var branch = Components.classes["@mozilla.org/preferences-service;1"]
                      .getService(Components.interfaces.nsIPrefService)
                      .getBranch(PREF_BRANCH);
+    branch = branch.QueryInterface(Components.interfaces.nsIPrefBranch2);
+    return branch;
   });
 
   /**

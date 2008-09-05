@@ -173,15 +173,12 @@ gSearchWP.Overlay = new function() {
     var branch = gSearchWP.Preferences.branch;
 
     this.register = function() {
-      var pbi = branch.QueryInterface(Components.interfaces.nsIPrefBranch2);
-      pbi.addObserver("", this, false);
+      branch.addObserver("", this, false);
     }
 
     this.unregister = function() {
       if (!branch) return;
-
-      var pbi = branch.QueryInterface(Components.interfaces.nsIPrefBranch2);
-      pbi.removeObserver("", this, false);
+      branch.removeObserver("", this, false);
     }
 
     this.observe = function(aSubject, aTopic, aData) {

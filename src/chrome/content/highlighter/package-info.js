@@ -21,4 +21,4 @@
  * ***** END LICENSE BLOCK ***** */
 
 if (!this.gSearchWP) this.gSearchWP = {};
-if (!this.gSearchWP.Highlighting) this.gSearchWP.Highlighting = {};
+if (!this.gSearchWP.Highlighter) this.gSearchWP.Highlighter = {};
