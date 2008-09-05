@@ -34,9 +34,9 @@
     <stringbundle id="bundle-searchwp" src="chrome://@NAME@/locale/searchwp.properties" />
   </stringbundleset>
 
-  <script type="application/x-javascript" src="chrome://@NAME@/content/highlighting/package-info.js" />
-  <script type="application/x-javascript" src="chrome://@NAME@/content/highlighting/nodeHighlighter.js" />
-  <script type="application/x-javascript" src="chrome://@NAME@/content/highlighting/nodeSearcher.js" />
+  <script type="application/x-javascript" src="chrome://@NAME@/content/highlighter/package-info.js" />
+  <script type="application/x-javascript" src="chrome://@NAME@/content/highlighter/nodeHighlighter.js" />
+  <script type="application/x-javascript" src="chrome://@NAME@/content/highlighter/nodeSearcher.js" />
 
   <script type="application/x-javascript" src="chrome://@NAME@/content/package-info.js" />
   <script type="application/x-javascript" src="chrome://@NAME@/content/preferences.js" />
