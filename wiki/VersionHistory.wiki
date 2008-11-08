@@ -1,10 +1,13 @@
 #summary Change Log
 #labels Featured
 
-== SearchWP 2.3.1 (Septembre 5th, 2008) ==
+== SearchWP 2.4b1 (November 8th, 2008) ==
+ * Compatibility for Firefox 3.1b2pre
+
+== SearchWP 2.3.1 (September 5th, 2008) ==
  * Fixed: Issue 34 (version 2.3 breaks highlighting)
 
-== SearchWP 2.3 (Septembre 3rd, 2008) ==
+== SearchWP 2.3 (September 3rd, 2008) ==
  * New: Possibility to group tokens in a single menu to avoid having tokens over the text.
  * All available translations (even when partially available) are now packaged in the final XPI file.
 
