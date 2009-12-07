@@ -1,6 +1,10 @@
 #summary Change Log
 #labels Featured
 
+
+== SearchWP 2.4.1 (December 6th, 2009) ==
+ * Compatibility for Firefox 3.6
+
 == SearchWP 2.4 (July 1st, 2009) ==
  * Compatibility for Firefox 3.5
 
