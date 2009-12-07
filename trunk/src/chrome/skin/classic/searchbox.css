@@ -172,7 +172,7 @@
 
 *[tokensdisplaymode="3"] .searchbox-tokens-menu-button {
   list-style-image: url("chrome://@NAME@/skin/tokens-menu.png");
-  padding: 2px 0;
+  padding: 1px 0;
 }
 
 .searchbox-tokens-menu-popup {
