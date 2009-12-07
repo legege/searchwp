@@ -128,36 +128,24 @@
       </property>
 
       <property name="value"
-                onget="return (document.getBindingParent(this).hasAttribute('empty') || this.hasAttribute('empty')) ? '' : this.inputField.value;">
+                onget="return this.hasAttribute('isempty') ? '' : this.inputField.value;">
         <setter><![CDATA[
-          this.mIgnoreInput = true;
           if (val) {
             // clear the emptyText _before_ setting a new non-empty value
-            try {
-              this._clearEmptyText();
-            }
-            catch (e) {}
+            this._clearEmptyText();
             this.inputField.value = val;
-          }
-          else {
+          } else {
             // display the emptyText _after_ setting a value that's an empty string
             this.inputField.value = val;
-            try {
-              this._updateVisibleText();
-            }
-            catch (e) {}
+            this._updateVisibleText();
           }
-          this.mIgnoreInput = false;
-
-          var event = document.createEvent('Events');
-          event.initEvent('ValueChange', true, true);
-          this.inputField.dispatchEvent(event);
 
           this._rebuildTokens();
 
           return val;
         ]]></setter>
       </property>
+
 
       <method name="initializeSearchWP">
         <body><![CDATA[
