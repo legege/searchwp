@@ -128,7 +128,7 @@
       </property>
 
       <property name="value"
-                onget="return this.hasAttribute('isempty') ? '' : this.inputField.value;">
+                onget="return (this.hasAttribute('isempty') || this.hasAttribute('empty')) ? '' : this.inputField.value;">
         <setter><![CDATA[
           if (val) {
             // clear the emptyText _before_ setting a new non-empty value
