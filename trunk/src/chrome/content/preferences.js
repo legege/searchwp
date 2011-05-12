@@ -39,6 +39,13 @@ gSearchWP.Preferences = new function() {
     pbi.addObserver(PREF_BRANCH + aPrefName, aObserver, false);
   }
 
+  this.removeObserver = function(aPrefName, aObserver) {
+    var pbi = Components.classes["@mozilla.org/preferences-service;1"]
+                        .getService(Components.interfaces.nsIPrefService)
+                        .QueryInterface(Components.interfaces.nsIPrefBranch2);
+    pbi.removeObserver(PREF_BRANCH + aPrefName, aObserver);
+  }
+
   /**
    * @return the preferences branch.
    */
