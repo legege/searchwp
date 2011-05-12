@@ -76,6 +76,7 @@ gSearchWP.Tokenizer = new function() {
         case '(':
         case ')':
         case '~':
+        case '?':
         case ',':
         case ' ':
         // double-byte space
