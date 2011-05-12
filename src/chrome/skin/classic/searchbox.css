@@ -29,7 +29,7 @@
 }
 
 *[tokenized="true"] {
-  min-width: 8em !important;
+  min-width: 5em !important;
 }
 
 *[tokensdisplaymode="3"] .searchbox-input-layer {
