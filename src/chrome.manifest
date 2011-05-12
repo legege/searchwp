@@ -1,6 +1,7 @@
 content @NAME@ jar:chrome/@NAME@.jar!/content/
 skin @NAME@  classic/1.0 jar:chrome/@NAME@.jar!/skin/classic/
 skin @NAME@-platform classic/1.0 jar:chrome/@NAME@.jar!/skin/classic/platform/default/
+skin @NAME@-platform classic/1.0 jar:chrome/@NAME@.jar!/skin/classic/platform/mac/ os=Darwin
 
 locale @NAME@ ca-AD jar:chrome/@NAME@.jar!/locale/ca-AD/
 locale @NAME@ cs-CZ jar:chrome/@NAME@.jar!/locale/cs-CZ/

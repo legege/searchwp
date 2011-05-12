@@ -23,31 +23,31 @@
 /* Highlight Button for OSX */
 #searchwp-highlight-button {
   list-style-image: url("chrome://@NAME@-platform/skin/highlight.png");
-  -moz-image-region: rect(0px, 28px, 23px, 0px);
+  -moz-image-region: rect(0px, 18px, 16px, 0px);
 }
 
 #searchwp-highlight-button:hover:active { 
-  -moz-image-region: rect(23px, 28px, 46px, 0px);
+  -moz-image-region: rect(16px, 18px, 32px, 0px);
   background-color: transparent;
   border-color: transparent;
 }
 
 #searchwp-highlight-button[checked="true"] {
-  -moz-image-region: rect(0px, 56px, 23px, 28px);
+  -moz-image-region: rect(0px, 36px, 16px, 18px);
   background-color: transparent;
   border-color: transparent;
 }
 
 #searchwp-highlight-button[checked="true"]:hover:active {
-  -moz-image-region: rect(23px, 56px, 46px, 28px);
+  -moz-image-region: rect(16px, 36px, 32px, 18px);
 }
 
 #searchwp-highlight-button[checked="true"][matchcase="true"] {
-  -moz-image-region: rect(0px, 84px, 23px, 56px);
+  -moz-image-region: rect(0px, 54px, 16px, 36px);
   background-color: transparent;
   border-color: transparent;
 }
 
 #searchwp-highlight-button[checked="true"][matchcase="true"]:hover:active {
-  -moz-image-region: rect(23px, 84px, 46px, 56px);
+  -moz-image-region: rect(16px, 54px, 32px, 36px);
 }
