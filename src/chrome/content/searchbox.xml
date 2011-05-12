@@ -42,12 +42,10 @@
     <content sizetopopup="pref">
       <xul:stringbundle anonid="searchwp-stringbundle" src="chrome://@NAME@/locale/searchbox.properties" />
 
-      <xul:hbox class="autocomplete-textbox-container" flex="1">
-        <xul:hbox class="textbox-icon-box" onclick="focus(); inputField.select();">
-          <children includes="image|deck|stack|box">
-            <xul:image class="autocomplete-icon" allowevents="true" />
-          </children>
-        </xul:hbox>
+      <xul:hbox class="autocomplete-textbox-container" flex="1" xbl:inherits="focused">
+        <children includes="image|deck|stack|box">
+          <xul:image class="autocomplete-icon" allowevents="true" />
+        </children>
 
         <xul:hbox anonid="textbox-input-box" class="textbox-input-box" flex="1" xbl:inherits="tooltiptext=inputtooltiptext">
           <children />
@@ -57,7 +55,7 @@
                       flex="1" xbl:inherits="context,spellcheck">
               <html:input anonid="input" class="autocomplete-textbox textbox-input"
                           flex="1" allowevents="true"
-                          xbl:inherits="tooltiptext=inputtooltiptext,onfocus,onblur,value,type,maxlength,disabled,size,readonly,userAction"/>
+                          xbl:inherits="tooltiptext=inputtooltiptext,onfocus,onblur,value,type,maxlength,disabled,size,readonly,placeholder,tabindex,accesskey,userAction"/>
             </xul:hbox>
             <!-- Tokens layer -->
             <xul:hbox anonid="tokens-layer" class="searchbox-tokens-layer" flex="1" mousethrough="always" hidden="true">
@@ -81,7 +79,7 @@
       </xul:hbox>
 
       <xul:dropmarker anonid="historydropmarker" class="autocomplete-history-dropmarker" allowevents="true"
-                      xbl:inherits="open,enablehistory" />
+                      xbl:inherits="open,enablehistory,parentfocused=focused" />
 
       <xul:popupset anonid="popupset" class="autocomplete-result-popupset" />
 
@@ -97,8 +95,14 @@
         if (document.getBindingParent(this).parentNode.parentNode.localName == "toolbarpaletteitem") {
           return;
         }
-        setTimeout(function(a) { a.initializeSearchWP(); }, 0, this);
+        setTimeout(function(a) {
+          a.initializeSearchWP();
+        }, 0, this);
       ]]></constructor>
+
+      <destructor><![CDATA[
+        this.tearDownSearchWP();
+      ]]></destructor>
 
       <field name="_searchwpStringBundle">document.getAnonymousElementByAttribute(this, "anonid", "searchwp-stringbundle");</field>
       <field name="_inputLayer">document.getAnonymousElementByAttribute(this, "anonid", "input-layer");</field>
@@ -117,6 +121,41 @@
       <field name="_cropped">false</field>
       <field name="_displayMode">0</field>
 
+      <!-- nsIController -->
+      <field name="searchbarController" readonly="true"><![CDATA[({
+        _self: this,
+        supportsCommand: function(aCommand) {
+          return aCommand == "cmd_clearhistory" ||
+                 aCommand == "cmd_togglesuggest";
+        },
+
+        isCommandEnabled: function(aCommand) {
+          if (aCommand == "cmd_clearhistory") {
+            var param = this._self.getAttribute("autocompletesearchparam");
+            return this._self._formHistSvc.nameExists(param);
+          }
+          return true;
+        },
+
+        doCommand: function (aCommand) {
+          switch (aCommand) {
+            case "cmd_clearhistory":
+              var param = this._self.getAttribute("autocompletesearchparam");
+              this._self._formHistSvc.removeEntriesForName(param);
+              this._self.value = "";
+              break;
+            case "cmd_togglesuggest":
+              // The pref observer will update _suggestEnabled and the menu
+              // checkmark.
+              this._self._prefBranch.setBoolPref("browser.search.suggest.enabled",
+                                                 !this._self._suggestEnabled);
+              break;
+            default:
+              // do nothing with unrecognized command
+          }
+        }
+      })]]></field>
+
       <property name="cropped" onget="return this._cropped;">
         <setter><![CDATA[
           this._cropped = val; 
@@ -127,26 +166,6 @@
         ]]></setter>
       </property>
 
-      <property name="value"
-                onget="return (this.hasAttribute('isempty') || this.hasAttribute('empty')) ? '' : this.inputField.value;">
-        <setter><![CDATA[
-          if (val) {
-            // clear the emptyText _before_ setting a new non-empty value
-            this._clearEmptyText();
-            this.inputField.value = val;
-          } else {
-            // display the emptyText _after_ setting a value that's an empty string
-            this.inputField.value = val;
-            this._updateVisibleText();
-          }
-
-          this._rebuildTokens();
-
-          return val;
-        ]]></setter>
-      </property>
-
-
       <method name="initializeSearchWP">
         <body><![CDATA[
           this._displayMode = gSearchWP.Preferences.tokensDisplayMode;
@@ -155,6 +174,19 @@
           gSearchWP.Preferences.addObserver(gSearchWP.Preferences.PREF_TOKENS_DISPLAY_MODE, this);
           gSearchWP.Preferences.addObserver(gSearchWP.Preferences.PREF_HIGHLIGHT_STATE, this);
           gSearchWP.Preferences.addObserver(gSearchWP.Preferences.PREF_HIGHLIGHT_MINLENGTH, this);
+          this._addedSearchWPObservers = true;
+          alert('eee');
+        ]]></body>
+      </method>
+
+      <method name="tearDownSearchWP">
+        <body><![CDATA[
+          if (this._addedSearchWPObservers) {
+            // Unregister as an observer...
+            gSearchWP.Preferences.removeObserver(gSearchWP.Preferences.PREF_TOKENS_DISPLAY_MODE, this);
+            gSearchWP.Preferences.removeObserver(gSearchWP.Preferences.PREF_HIGHLIGHT_STATE, this);
+            gSearchWP.Preferences.removeObserver(gSearchWP.Preferences.PREF_HIGHLIGHT_MINLENGTH, this);
+          }
         ]]></body>
       </method>
 
@@ -165,8 +197,20 @@
         <body><![CDATA[
           if (aTopic == "nsPref:changed") {
             // If any pref changed, we need to rebuild tokens to adjust presentation
-            this._rebuildTokens();
+            this._rebuildTokens(this.value);
+
+            // No, it's not possible to call overriden method... wow. These lines are copied from parent.
+            this._suggestEnabled = this._prefBranch.getBoolPref("browser.search.suggest.enabled");
+            this._suggestMenuItem.setAttribute("checked", this._suggestEnabled);
           }
+        ]]></body>
+      </method>
+
+      <method name="onBeforeValueSet">
+        <parameter name="aValue"/>
+        <body><![CDATA[
+          this._rebuildTokens(aValue);
+          return aValue;
         ]]></body>
       </method>
 
@@ -200,6 +244,7 @@
       </method>
 
       <method name="_rebuildTokens">
+        <parameter name="aValue"/>
         <body><![CDATA[
           // Set the display mode attribute (for CSS)
           this.setAttribute("tokensdisplaymode", gSearchWP.Preferences.tokensDisplayMode);
@@ -212,11 +257,11 @@
             this._tokensMenuPopupContainer.removeChild(this._tokensMenuPopupContainer.firstChild);
           }
 
-          if (this.value) {
+          if (aValue) {
             var tokensScrollBoxObject = this._tokensContainer.boxObject.QueryInterface(Components.interfaces.nsIScrollBoxObject);
 
             // Create an array of terms and we add them to the tokens layer and the tokens popup
-            var termsArray = gSearchWP.Tokenizer.createTokensArray(this.value);
+            var termsArray = gSearchWP.Tokenizer.createTokensArray(aValue);
             for (var i = 0, j = 0; i < termsArray.length; i++) {
               var tokenNode = this._tokenProto.cloneNode(true);
               tokenNode.value = termsArray[i];
@@ -240,8 +285,8 @@
             gSearchWP.Highlighting.update();
           }
 
-          if (this.value && !this.hasAttribute("focused")) {
-            this._showTokens();
+          if (aValue && !this.hasAttribute("focused")) {
+            this._showTokens(aValue);
           }
           else {
             this._hideTokens();
@@ -250,11 +295,12 @@
       </method>
 
       <method name="_showTokens">
+        <parameter name="aValue"/>
         <body><![CDATA[
           // Should only show tokens when they're already shown, and
           // if the tokens display mode hasn't changed.
-          if (this.value && (!this.hasAttribute("tokenized")
-                             || this._displayMode != gSearchWP.Preferences.tokensDisplayMode)) {
+          if (aValue && (!this.hasAttribute("tokenized")
+                         || this._displayMode != gSearchWP.Preferences.tokensDisplayMode)) {
             if (gSearchWP.Preferences.tokensDisplayMode == 2) { // Overlay
               this._embeddedActionsLayer.hidden = true;
               this._tokensLayer.hidden = false;
@@ -326,12 +372,12 @@
     </implementation>
 
     <handlers>
-      <handler event="input" action="this._rebuildTokens()" />
+      <handler event="input" action="this._rebuildTokens(this.value)" />
 
       <handler event="focus" phase="capturing">this._hideTokens();</handler>
-      <handler event="blur" phase="capturing">this._showTokens();</handler>
+      <handler event="blur" phase="capturing">this._showTokens(this.value);</handler>
       <handler event="dragover" phase="capturing">this._hideTokens();</handler>
-      <handler event="dragexit" phase="capturing">this._showTokens();</handler>
+      <handler event="dragexit" phase="capturing">this._showTokens(this.value);</handler>
     </handlers>
   </binding>
 
@@ -351,6 +397,55 @@
           return val;
         ]]></setter>
       </property>
+
+      <method name="_findFast">
+        <parameter name="aFindBackwards" />
+        <parameter name="aMatchCase" />
+        <body><![CDATA[
+          // To handle F3 correctly, we have to clear this find bar search.
+          if (gFindBar.hidden && gFindBar.getElement("findbar-textbox").value.length > 0) {
+            gFindBar.getElement("findbar-textbox").value = "";
+            gFindBar.find("");
+          }
+
+          var fastFind = window.getBrowser().fastFind;
+          fastFind.caseSensitive = aMatchCase;
+
+          var result;
+          if (fastFind.searchString != this.value) {
+            result = fastFind.find(this.value, false);
+          }
+          else {
+            result = fastFind.findAgain(aFindBackwards, false);
+          }
+
+          var stringbundle = document.getBindingParent(this)._searchwpStringBundle;
+          switch (result) {
+            case 0: // Found
+              break;
+            case 1: // Not found
+              this.setAttribute("notfound", true);
+              if (this._notFoundTimeout) {
+                clearTimeout(this._notFoundTimeout);
+              }
+
+              this._notFoundTimeout = setTimeout(function(aToken, aEvent) {
+                aToken.removeAttribute("notfound");
+              }, 3000, this);
+
+              gSearchWP.displayMessage(stringbundle.getFormattedString("notFound", [this.value], 1), true);
+              break;
+            case 2: // Wrapped
+              if (aFindBackwards) {
+                gSearchWP.displayMessage(stringbundle.getString("wrappedToBottom"), true);
+              }
+              else {
+                gSearchWP.displayMessage(stringbundle.getString("wrappedToTop"), true);
+              }
+              break;
+          }
+        ]]></body>
+      </method>
     </implementation>
 
     <handlers>
@@ -362,6 +457,14 @@
         event.stopPropagation();
         if (event.button == 2) {
           event.preventDefault();
+
+          var popup = document.getAnonymousElementByAttribute(
+                      document.getBindingParent(this), "anonid", "tokens-menu-popup");
+          if (popup.state != "open"){
+            document.getBindingParent(this).focus();
+            document.getBindingParent(this).select();
+            return;
+          }
         }
         
         var findBackwards = event.shiftKey;
@@ -371,48 +474,7 @@
 
         var matchCase = event.altKey || event.ctrlKey;
 
-        // To handle F3 correctly, we have to clear this find bar search.
-        if (gFindBar.hidden && gFindBar.getElement("findbar-textbox").value.length > 0) {
-          gFindBar.getElement("findbar-textbox").value = "";
-          gFindBar.find("");
-        }
-
-        var fastFind = window.getBrowser().fastFind;
-        fastFind.caseSensitive = matchCase;
-
-        var result;
-        if (fastFind.searchString != this.value) {
-          result = fastFind.find(this.value, false);
-        }
-        else {
-          result = fastFind.findAgain(findBackwards, false);
-        }
-
-        var stringbundle = document.getBindingParent(this)._searchwpStringBundle;
-        switch (result) {
-          case 0: // Found
-            break;
-          case 1: // Not found
-            this.setAttribute("notfound", true);
-            if (this._notFoundTimeout) {
-              clearTimeout(this._notFoundTimeout);
-            }
-
-            this._notFoundTimeout = setTimeout(function(aToken, aEvent) {
-              aToken.removeAttribute("notfound");
-            }, 3000, this);
-
-            gSearchWP.displayMessage(stringbundle.getFormattedString("notFound", [this.value], 1), true);
-            break;
-          case 2: // Wrapped
-            if (findBackwards) {
-              gSearchWP.displayMessage(stringbundle.getString("wrappedToBottom"), true);
-            }
-            else {
-              gSearchWP.displayMessage(stringbundle.getString("wrappedToTop"), true);
-            }
-            break;
-        }
+        this._findFast(findBackwards, matchCase);
       ]]></handler>
     </handlers>
   </binding>

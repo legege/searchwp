@@ -24,6 +24,10 @@
 @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
 @namespace html url("http://www.w3.org/1999/xhtml");
 
+.searchbar-textbox > .autocomplete-textbox-container > .textbox-input-box {
+  padding: 0 !important;
+}
+
 *[tokenized="true"] {
   min-width: 8em !important;
 }
@@ -31,18 +35,19 @@
 *[tokensdisplaymode="3"] .searchbox-input-layer {
   padding-right: 2em;
 }
+
 .searchbox-tokens-layer,
 .searchbox-tokens-layer > *,
 .searchbox-token,
 .searchbox-token > * {
-  margin: 0;
+  margin: 0 !important;
   padding: 0;
   cursor: text;
 }
 
 .searchbox-tokens-layer {
   -moz-box-align: center;
-  margin-top: 1px;
+  margin-top: 0px;
 }
 
 .searchbox-tokens-container {
@@ -172,7 +177,7 @@
 
 *[tokensdisplaymode="3"] .searchbox-tokens-menu-button {
   list-style-image: url("chrome://@NAME@/skin/tokens-menu.png");
-  padding: 1px 0;
+  padding: 0px 0;
 }
 
 .searchbox-tokens-menu-popup {
@@ -184,6 +189,10 @@
 }
 
 .searchbox-tokens-menu-popup-container .searchbox-token {
-  margin: 2px;
+  margin: 2px !important;
   display: inline;
+}
+
+.searchbox-token-label {
+  margin: 0 !important;
 }
