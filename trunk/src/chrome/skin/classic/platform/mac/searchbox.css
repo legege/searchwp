@@ -25,7 +25,7 @@
 @namespace html url("http://www.w3.org/1999/xhtml");
 
 .searchbox-tokens-layer {
-  margin-top: 1px;
+  margin-top: 0px;
 }
 
 *[tokensdisplaymode="3"] .searchbox-tokens-menu-button {
