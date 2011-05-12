@@ -175,7 +175,6 @@
           gSearchWP.Preferences.addObserver(gSearchWP.Preferences.PREF_HIGHLIGHT_STATE, this);
           gSearchWP.Preferences.addObserver(gSearchWP.Preferences.PREF_HIGHLIGHT_MINLENGTH, this);
           this._addedSearchWPObservers = true;
-          alert('eee');
         ]]></body>
       </method>
 
@@ -403,9 +402,9 @@
         <parameter name="aMatchCase" />
         <body><![CDATA[
           // To handle F3 correctly, we have to clear this find bar search.
-          if (gFindBar.hidden && gFindBar.getElement("findbar-textbox").value.length > 0) {
-            gFindBar.getElement("findbar-textbox").value = "";
-            gFindBar.find("");
+          // See chrome://global/content/bindings/findbar.xml#findbar-textbox for more info
+          if (gFindBar.hidden) {
+            gFindBar.getElement("findbar-textbox").value = this.value;
           }
 
           var fastFind = window.getBrowser().fastFind;
