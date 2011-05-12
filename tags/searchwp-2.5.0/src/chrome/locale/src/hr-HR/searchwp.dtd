@@ -1,0 +1,4 @@
+<!ENTITY button.highlight.label "Istakni">
+<!ENTITY pref.title "Opcije">
+<!ENTITY pref.highlightMinlength.label "Najmanja dužina za riječi koje će se isticati:">
+<!ENTITY pref.highlightMinlength.accesskey "d">

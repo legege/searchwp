@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://@NAME@-platform/skin/overlay.css" ?>
+<?xml-stylesheet href="chrome://@NAME@/skin/highlighting-agent.css" ?>
+
+<!DOCTYPE overlay SYSTEM "chrome://@NAME@/locale/searchwp.dtd">
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is SearchWP.
+   -
+   - The Initial Developer of the Original Code is 
+   -  Georges-Etienne Legendre <legege@legege.com> <http://legege.com>.
+   - Portions created by the Initial Developer are Copyright (C) 2004-2008.
+   - All Rights Reserved.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+<overlay id="searchwpOverlay"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <stringbundleset id="stringbundleset">
+    <stringbundle id="bundle-searchwp" src="chrome://@NAME@/locale/searchwp.properties" />
+  </stringbundleset>
+
+  <script type="application/x-javascript" src="chrome://@NAME@/content/highlighter/package-info.js" />
+  <script type="application/x-javascript" src="chrome://@NAME@/content/highlighter/nodeHighlighter.js" />
+  <script type="application/x-javascript" src="chrome://@NAME@/content/highlighter/nodeSearcher.js" />
+
+  <script type="application/x-javascript" src="chrome://@NAME@/content/package-info.js" />
+  <script type="application/x-javascript" src="chrome://@NAME@/content/preferences.js" />
+  <script type="application/x-javascript" src="chrome://@NAME@/content/highlighting.js" />
+  <script type="application/x-javascript" src="chrome://@NAME@/content/tokenizer.js" />  
+  <script type="application/x-javascript" src="chrome://@NAME@/content/overlay.js" />
+
+  <toolbarpalette id="BrowserToolbarPalette">
+    <toolbaritem id="searchwp-highlight-container" align="center">
+      <toolbarbutton id="searchwp-highlight-button"
+                     class="toolbarbutton-1 chromeclass-toolbar-additional"
+                     label="&button.highlight.label;"
+                     tooltiptext="&button.highlight.tooltiptext;"
+                     oncommand="gSearchWP.Highlighting.toggleHighlight(event); event.stopPropagation();"
+                     autocheck="false" />
+    </toolbaritem>
+  </toolbarpalette>
+
+</overlay>
