@@ -83,7 +83,7 @@ gSearchWP.Highlighter.NodeHighlighter = function(aName) {
         matchNode = node;
       } else {
         matchNode = node.splitText( pos );
-        node.data && fragment.appendChild( node );
+        fragment.appendChild( node );
       }
 
       node = matchNode.splitText( RegExp.lastMatch.length );
