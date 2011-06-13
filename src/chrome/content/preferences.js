@@ -13,7 +13,7 @@
  *
  * The Original Code is SearchWP.
  *
- * The Initial Developer of the Original Code is 
+ * The Initial Developer of the Original Code is
  *  Georges-Etienne Legendre <legege@legege.com> <http://legege.com>.
  * Portions created by the Initial Developer are Copyright (C) 2004-2008.
  * All Rights Reserved.
@@ -26,6 +26,7 @@ gSearchWP.Preferences = new function() {
   this.PREF_HIGHLIGHT_MINLENGTH = "highlight.minLength";
   this.PREF_HIGHLIGHT_STATE = "highlight.state";
   this.PREF_HIGHLIGHT_MATCH_CASE = "highlight.matchCase";
+  this.PREF_HIGHLIGHT_MAX_COLORIZED = "highlight.maxColorizedHighlights";
   this.PREF_FIRST_LAUNCH = "firstLaunch";
   this.PREF_TOKENS_DISPLAY_MODE = "tokens.displayMode";
 
@@ -126,6 +127,20 @@ gSearchWP.Preferences = new function() {
    */
   this.__defineSetter__("highlightMinLength", function(aValue) {
     this.branch.setIntPref(this.PREF_HIGHLIGHT_MINLENGTH, aValue);
+  });
+
+  /**
+   * @return The maximum number of colorized highlights per term
+   */
+  this.__defineGetter__("maxColorizedHighlights", function() {
+    return this.branch.getIntPref(this.PREF_HIGHLIGHT_MAX_COLORIZED);
+  });
+
+  /**
+   * @param aValue The maximum number of colorized highlights per term
+   */
+  this.__defineSetter__("maxColorizedHighlights", function(aValue) {
+    this.branch.setIntPref(this.PREF_HIGHLIGHT_MAX_COLORIZED, aValue);
   });
 
   /**

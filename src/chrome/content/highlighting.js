@@ -13,7 +13,7 @@
  *
  * The Original Code is SearchWP.
  *
- * The Initial Developer of the Original Code is 
+ * The Initial Developer of the Original Code is
  *  Georges-Etienne Legendre <legege@legege.com> <http://legege.com>.
  * Portions created by the Initial Developer are Copyright (C) 2004-2008.
  * All Rights Reserved.
@@ -26,7 +26,6 @@ gSearchWP.Highlighting = new function() {
   var _stringBundle = null;
   var _tokensArrayCache = [];
   var _highlightTimeout;
-  var _searcher = new gSearchWP.Highlighter.NodeSearcher();
   var _highlighter = new gSearchWP.Highlighter.NodeHighlighter("searchwp-highlighting");
 
   /**
@@ -159,24 +158,38 @@ gSearchWP.Highlighting = new function() {
 
     if (!aCriteria || !aWord) {
       _highlighter.clear(doc);
+      getSelectionOfType(aWindow, 128).removeAllRanges();
       return count;
     }
 
-    // Escape some RegExp characters
     var criteria = aWord.replace(/\s*/, "");
-    criteria = criteria.replace(/([.*+?^${}()|[\]\/\\])/g, '\\$1');
 
-    var matcher = new gSearchWP.Highlighter.RegexMatcher(criteria, aMatchCase);
+    var ranges = findRanges( doc.body, criteria, aMatchCase, true, true );
 
-    var rangeMatches = _searcher.search(doc, matcher);
+    if ( ranges.length ) {
+      if ( ranges.length > gSearchWP.Preferences.maxColorizedHighlights ) {
+        var findSelection = getSelectionOfType(aWindow, 128);
 
-    /* highlight the matches */
-    var elementCreator = new gSearchWP.Highlighter.DefaultElementCreator("layer", {class: "searchwp-term", highlight: aCriteria});
-    for (var n in rangeMatches) {
-      var node = rangeMatches[n].node;
-      var match = rangeMatches[n].match;
-      if (!rangeMatches[n].overlaps) {
-        count += _highlighter.highlight(doc, node, match, aMatchCase, elementCreator);
+        for ( var i = 0, l = ranges.length; i < l; ++i ) {
+          findSelection.addRange( ranges[i] );
+        }
+
+        count = ranges.length;
+
+      } else {
+        var elementCreator = new gSearchWP.Highlighter.DefaultElementCreator("layer", {"class": "searchwp-term", "highlight": aCriteria});
+        var regexpCriteria = new RegExp( rescape(criteria), aMatchCase ? "m" : "mi" );
+        var lastNode;
+
+        ranges.map(function( range ) {
+          return range.startContainer;
+        })
+        .forEach(function( node ) {
+          if ( node !== lastNode ) {
+            lastNode = node;
+            count += _highlighter.highlight( doc, node, regexpCriteria, elementCreator );
+          }
+        });
       }
     }
 
@@ -212,5 +225,74 @@ gSearchWP.Highlighting = new function() {
       }
       return r.length > p && (r.length = p), r.join("") + (new Array(p - r.length + 1)).join("0");
     }
+  }
+
+  function findRanges( topElement, word, caseSensitive, singleNodes, exludeEditable ) {
+    if ( exludeEditable && !singleNodes ) {
+      throw new Error("exludeEditable supported only if singleNodes");
+    }
+
+    var ranges = [], retRange;
+
+    // Workaround for bug https://bugzilla.mozilla.org/show_bug.cgi?id=488427
+    // (forcing a FlushPendingNotifications call)
+    topElement.offsetWidth;
+
+    var searchRange = topElement.ownerDocument.createRange();
+    searchRange.selectNodeContents( topElement );
+
+    var startPt = searchRange.cloneRange();
+    startPt.collapse( true );
+
+    var endPt = searchRange.cloneRange();
+    endPt.collapse( false );
+
+    var finder = Components.classes['@mozilla.org/embedcomp/rangefind;1']
+      .createInstance( Components.interfaces.nsIFind );
+
+    finder.caseSensitive = !!caseSensitive;
+
+    while (( retRange = finder.Find(word, searchRange, startPt, endPt) )) {
+      startPt = retRange;
+
+      if ( singleNodes && retRange.startContainer !== retRange.endContainer ) {
+        // Skip the first node.
+        startPt.setStartAfter( startPt.startContainer );
+
+      } else if ( !( exludeEditable && isNodeEditable(retRange.startContainer) ) )  {
+        // Store the cloned range.
+        ranges.push( retRange.cloneRange() );
+      }
+
+      startPt.collapse( false );
+    }
+
+    return ranges;
+  }
+
+  function isNodeEditable( node ) {
+    while ( node ) {
+      if ( node instanceof Components.interfaces.nsIDOMNSEditableElement ) {
+        return true;
+      }
+      node = node.parentNode;
+    }
+    return false;
+  }
+
+  function getSelectionOfType(aWindow, aType) {
+    var Ci = Components.interfaces;
+    return aWindow
+      .QueryInterface(Ci.nsIInterfaceRequestor)
+      .getInterface(Ci.nsIWebNavigation)
+      .QueryInterface(Ci.nsIDocShell)
+      .QueryInterface(Ci.nsIInterfaceRequestor)
+      .getInterface(Ci.nsISelectionDisplay)
+      .QueryInterface(Ci.nsISelectionController)
+      .getSelection(aType);
+  }
+
+  function rescape(aString) {
+    return aString.replace(/[-[\]{}()*+?.\\^$|,#\s]/g, '\\$&');
   }
 }

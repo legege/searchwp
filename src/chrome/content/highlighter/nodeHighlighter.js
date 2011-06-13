@@ -13,7 +13,7 @@
  *
  * The Original Code is SearchWP.
  *
- * The Initial Developer of the Original Code is 
+ * The Initial Developer of the Original Code is
  *  Georges-Etienne Legendre <legege@legege.com> <http://legege.com>.
  * Portions created by the Initial Developer are Copyright (C) 2004-2008.
  * All Rights Reserved.
@@ -23,6 +23,7 @@
 gSearchWP.Highlighter.NodeHighlighter = function(aName) {
   var self = this;
   var _name = aName;
+  var _className = "searchwp-highlight-" + _name;
 
   /**
    * Clear the highlighting for a particular document.
@@ -33,17 +34,22 @@ gSearchWP.Highlighter.NodeHighlighter = function(aName) {
       return;
     }
 
-    var documentMetaData = getNodeHighlighterMetaData(aDocument);
+    var elementList = aDocument.getElementsByClassName( _className );
+    var elements = Array.prototype.slice.call(elementList, 0);
 
-    // Find and remove all highlight nodes
-    while (documentMetaData.count > 0) {
-      var id = generateIdPrefix() + --documentMetaData.count;
-      var clone = documentMetaData.originalNodes[id];
-      var oldSpan = aDocument.getElementById(id);
-      var parent = oldSpan.parentNode;
-      parent.replaceChild(clone, oldSpan);
-      parent.normalize();
-    }
+    var lastParent;
+
+    elements.forEach(function( element ) {
+      var parent = element.parentNode;
+      parent.replaceChild( element.firstChild, element );
+
+      if ( parent !== lastParent ) {
+        lastParent && lastParent.normalize();
+        lastParent = parent;
+      }
+    });
+
+    lastParent && lastParent.normalize();
   }
 
   /**
@@ -55,52 +61,42 @@ gSearchWP.Highlighter.NodeHighlighter = function(aName) {
    * @param aMatchCase If highlighting should match case.
    * @param aElementCreator An element creator object (see DefaultElementCreator below).
    */
-  this.highlight = function(aDocument, aNode, aWord, aMatchCase, aElementCreator) {
+  this.highlight = function(aDocument, aNode, aSearchRegExp, aElementCreator) {
     if (aNode.nodeType != Node.TEXT_NODE) {
       return 0;
     }
 
-    var documentMetaData = getNodeHighlighterMetaData(aDocument);
+    var elementProto = aElementCreator.createElement(aDocument);
+    elementProto.className += " " + _className;
 
-    var node = aNode;
-    var text = node.data;
-    var word = aWord;
-    if (!aMatchCase) {
-      text = text.toUpperCase();
-      word = word.toUpperCase();
-    }
+    var node = aNode.cloneNode(false);
+    var fragment = aDocument.createDocumentFragment();
 
     var count = 0;
-    while (text.indexOf(word) != -1) {
-      var matchText = node.splitText(text.indexOf(word));
-      matchText.splitText(word.length);
+    var pos = 0;
 
-      var id = generateIdPrefix() + documentMetaData.count++;
-
-      // Check if id already exists.
-      while (aDocument.getElementById(id) != null) {
-        id = generateIdPrefix() + documentMetaData.count++;
-      }
-
-      var childNode = matchText.cloneNode(true);
-      var element = aElementCreator.createElement(aDocument, id, childNode);
-      matchText.parentNode.replaceChild(element, matchText);
-
-      documentMetaData.originalNodes[id] = childNode.cloneNode(true);
-
-      // Move to next node
-      node = element.nextSibling;
-      text = node.data;
-      if (!aMatchCase) {
-        text = text.toUpperCase();
-      }
-
+    while ( (pos = node.data.search( aSearchRegExp )) != -1 ) {
       count++;
 
-      if (text == word) {
-        break;
+      if ( pos == 0 ) {
+        matchNode = node;
+      } else {
+        matchNode = node.splitText( pos );
+        node.data && fragment.appendChild( node );
       }
+
+      node = matchNode.splitText( RegExp.lastMatch.length );
+
+      var element = elementProto.cloneNode(false);
+      element.appendChild( matchNode );
+      fragment.appendChild( element );
     }
+
+    if ( node && node.data ) {
+      fragment.appendChild( node );
+    }
+
+    aNode.parentNode.replaceChild( fragment, aNode );
 
     return count;
   }
@@ -131,8 +127,8 @@ gSearchWP.Highlighter.DefaultElementCreator = function(aElementName, aAttributes
       element.setAttribute(name, attributes[name]);
     }
 
-    element.setAttribute("id", aId);
-    element.appendChild(aChildNode);
+    aId && element.setAttribute("id", aId);
+    aChildNode && element.appendChild(aChildNode);
     return element;
   }
 }
