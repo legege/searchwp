@@ -13,7 +13,7 @@
  *
  * The Original Code is SearchWP.
  *
- * The Initial Developer of the Original Code is 
+ * The Initial Developer of the Original Code is
  *  Georges-Etienne Legendre <legege@legege.com> <http://legege.com>.
  * Portions created by the Initial Developer are Copyright (C) 2004-2008.
  * All Rights Reserved.
@@ -27,4 +27,5 @@ pref("extensions.searchwp.highlight.matchCase", false);
 pref("extensions.searchwp.highlight.minLength", 2);
 pref("extensions.searchwp.highlight.state", false);
 pref("extensions.searchwp.highlight.tokensCount", 5);
+pref("extensions.searchwp.highlight.maxColorizedHighlights", 10000);
 pref("extensions.searchwp.tokens.displayMode", 2);
