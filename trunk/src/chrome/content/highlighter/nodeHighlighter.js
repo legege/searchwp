@@ -74,6 +74,7 @@ gSearchWP.Highlighter.NodeHighlighter = function(aName) {
 
     var count = 0;
     var pos = 0;
+    var matchNode;
 
     while ( (pos = node.data.search( aSearchRegExp )) != -1 ) {
       count++;
