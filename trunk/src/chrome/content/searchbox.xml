@@ -63,41 +63,6 @@
       <field name="_cropped">false</field>
       <field name="_displayMode">0</field>
 
-      <!-- nsIController -->
-      <field name="searchbarController" readonly="true"><![CDATA[({
-        _self: this,
-        supportsCommand: function(aCommand) {
-          return aCommand == "cmd_clearhistory" ||
-                 aCommand == "cmd_togglesuggest";
-        },
-
-        isCommandEnabled: function(aCommand) {
-          if (aCommand == "cmd_clearhistory") {
-            var param = this._self.getAttribute("autocompletesearchparam");
-            return this._self._formHistSvc.nameExists(param);
-          }
-          return true;
-        },
-
-        doCommand: function (aCommand) {
-          switch (aCommand) {
-            case "cmd_clearhistory":
-              var param = this._self.getAttribute("autocompletesearchparam");
-              this._self._formHistSvc.removeEntriesForName(param);
-              this._self.value = "";
-              break;
-            case "cmd_togglesuggest":
-              // The pref observer will update _suggestEnabled and the menu
-              // checkmark.
-              this._self._prefBranch.setBoolPref("browser.search.suggest.enabled",
-                                                 !this._self._suggestEnabled);
-              break;
-            default:
-              // do nothing with unrecognized command
-          }
-        }
-      })]]></field>
-
       <property name="cropped" onget="return this._cropped;">
         <setter><![CDATA[
           this._cropped = val;
