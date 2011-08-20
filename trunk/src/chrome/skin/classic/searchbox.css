@@ -13,7 +13,7 @@
  *
  * The Original Code is SearchWP.
  *
- * The Initial Developer of the Original Code is 
+ * The Initial Developer of the Original Code is
  *  Georges-Etienne Legendre <legege@legege.com> <http://legege.com>.
  * Portions created by the Initial Developer are Copyright (C) 2004-2008.
  * All Rights Reserved.
@@ -173,11 +173,13 @@
   padding: 2px;
   cursor: pointer;
   -moz-margin-end: 6px;
+  -moz-box-shadow: -3px 0 2px rgba(0, 0, 0, 0.3);
 }
 
 *[tokensdisplaymode="3"] .searchbox-tokens-menu-button {
   list-style-image: url("chrome://@NAME@/skin/tokens-menu.png");
   padding: 0px 0;
+  -moz-box-shadow: none;
 }
 
 .searchbox-tokens-menu-popup {

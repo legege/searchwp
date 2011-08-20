@@ -13,7 +13,7 @@
  *
  * The Original Code is SearchWP.
  *
- * The Initial Developer of the Original Code is 
+ * The Initial Developer of the Original Code is
  *  Georges-Etienne Legendre <legege@legege.com> <http://legege.com>.
  * Portions created by the Initial Developer are Copyright (C) 2004-2008.
  * All Rights Reserved.
@@ -37,8 +37,8 @@ gSearchWP.Overlay = new function() {
     _stringBundle = document.getElementById("bundle-searchwp");
 
     this.preferencesObserver.register();
-    window.getBrowser().addProgressListener(this.progressListener,
-                                            Components.interfaces.nsIWebProgress.NOTIFY_STATE_DOCUMENT);
+    window.getBrowser().addProgressListener(this.progressListener);
+                                            //Components.interfaces.nsIWebProgress.NOTIFY_STATE_DOCUMENT);
 
     /* XXXLegege: Unfortunately, there is no event on the termisation of the
        toolbox customization. All EventListeners of the searchbar are lost when
