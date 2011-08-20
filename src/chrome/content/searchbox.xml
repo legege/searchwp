@@ -198,8 +198,6 @@
             observe: function( aSubject, aTopic, aData ) {
                // If any pref changed, we need to rebuild tokens to adjust presentation
                self._rebuildTokens( self.value );
-
-               self.observe( aSubject, aTopic, aData );
             }
           };
 
