@@ -158,7 +158,8 @@ gSearchWP.Highlighting = new function() {
 
     if (!aCriteria || !aWord) {
       _highlighter.clear(doc);
-      getSelectionOfType(aWindow, 128).removeAllRanges();
+      var findSelection = getSelectionOfType(aWindow, 128);
+      findSelection && findSelection.removeAllRanges();
       return count;
     }
 
@@ -170,11 +171,13 @@ gSearchWP.Highlighting = new function() {
       if ( ranges.length > gSearchWP.Preferences.maxColorizedHighlights ) {
         var findSelection = getSelectionOfType(aWindow, 128);
 
-        for ( var i = 0, l = ranges.length; i < l; ++i ) {
-          findSelection.addRange( ranges[i] );
-        }
+        if ( findSelection ) {
+          for ( var i = 0, l = ranges.length; i < l; ++i ) {
+            findSelection.addRange( ranges[i] );
+          }
 
-        count = ranges.length;
+          count = ranges.length;
+        }
 
       } else {
         var elementCreator = new gSearchWP.Highlighter.DefaultElementCreator("layer", {"class": "searchwp-term", "highlight": aCriteria});
@@ -281,15 +284,19 @@ gSearchWP.Highlighting = new function() {
   }
 
   function getSelectionOfType(aWindow, aType) {
-    var Ci = Components.interfaces;
-    return aWindow
-      .QueryInterface(Ci.nsIInterfaceRequestor)
-      .getInterface(Ci.nsIWebNavigation)
-      .QueryInterface(Ci.nsIDocShell)
-      .QueryInterface(Ci.nsIInterfaceRequestor)
-      .getInterface(Ci.nsISelectionDisplay)
-      .QueryInterface(Ci.nsISelectionController)
-      .getSelection(aType);
+    try {
+      var Ci = Components.interfaces;
+      return aWindow
+        .QueryInterface(Ci.nsIInterfaceRequestor)
+        .getInterface(Ci.nsIWebNavigation)
+        .QueryInterface(Ci.nsIDocShell)
+        .QueryInterface(Ci.nsIInterfaceRequestor)
+        .getInterface(Ci.nsISelectionDisplay)
+        .QueryInterface(Ci.nsISelectionController)
+        .getSelection(aType);
+    } catch (e) {
+      return null;
+    }
   }
 
   function rescape(aString) {
