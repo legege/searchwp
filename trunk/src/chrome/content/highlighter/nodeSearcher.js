@@ -13,142 +13,108 @@
  *
  * The Original Code is SearchWP.
  *
- * The Initial Developer of the Original Code is 
+ * The Initial Developer of the Original Code is
  *  Georges-Etienne Legendre <legege@legege.com> <http://legege.com>.
  * Portions created by the Initial Developer are Copyright (C) 2004-2008.
  * All Rights Reserved.
  *
  * ***** END LICENSE BLOCK ***** */
 
-gSearchWP.Highlighter.NodeSearcher = function() {
-  /**
-   * @param aDocument The Document to search in.
-   * @param aMatcher An object that has a <code>match</code> function taking
-   *   a string in argument. This function must returns the matched substring if
-   *   this searcher should consider this range as a valid result.
-   *   (see RegexMatcher below)
-   */
-  this.search = function(aDocument, aMatcher) {
-    var high = aDocument.createRange();
+gSearchWP.Highlighter.NodeSearcher = function NodeSearcher() {
 
-    if (!("body" in aDocument) || !aMatcher) {
-      return [];
-    }
+  this.search = function( topElement, word, caseSensitive, excludeEditable ) {
 
-    high.selectNodeContents(aDocument.body);
+    var ret = [], textNodes;
 
-    var startIndex = 0;
-    var endIndex = high.commonAncestorContainer.childNodes.length;
-    var rangeMatches = [];
+    // Workaround for bug https://bugzilla.mozilla.org/show_bug.cgi?id=488427
+    // (forcing a FlushPendingNotifications call)
+    topElement.offsetWidth;
 
-    /* search-limits */
-    var externalCounter = {countMax: 6000, matchMax: 6000, count: 0, matches: rangeMatches};
-    var lastMatch = aMatcher.match(high.toString());
-    if (lastMatch) {
-      binaryRangeSearch(high, startIndex, endIndex, aMatcher, lastMatch, rangeMatches, externalCounter);
-    }
+    var searchRange = topElement.ownerDocument.createRange();
+    searchRange.selectNodeContents( topElement );
 
-    return rangeMatches;
-  }
+    var startPt = searchRange.cloneRange();
+    startPt.collapse( true );
 
-  /**
-   * Binary Search Function
-   * Original code written by rue (http://homepage.mac.com/rue/binary-search-comparison.html)
-   */
-  function binaryRangeSearch(aHigh, aStartIndex, aEndIndex, aMatcher, aLastMatch, aRangeMatches, aExternalCounter) {
-    if (aExternalCounter.count++ > aExternalCounter.countMax || aExternalCounter.matches.length > aExternalCounter.matchMax) {
-      return;
-    }
+    var endPt = searchRange.cloneRange();
+    endPt.collapse( false );
 
-    var origNode;
-    var node = origNode = aHigh.startContainer;
-    var startIndex = aStartIndex;
-    var endIndex = aEndIndex;
+    var finder = Components.classes['@mozilla.org/embedcomp/rangefind;1']
+      .createInstance( Components.interfaces.nsIFind );
 
-    if (endIndex - startIndex == 1 && node.childNodes.length > 0) {
-      node = node.childNodes[endIndex - 1];
-      while (node.childNodes.length == 1) {
-        if (node.nodeName.toLowerCase() in {script: null, style: null, textarea: null, input: null}) {
-          return; // ignore these elements
-        }
-        node = node.firstChild;
+    finder.caseSensitive = !!caseSensitive;
+
+    while (( startPt = finder.Find(word, searchRange, startPt, endPt) )) {
+      textNodes = getTextNodesFromFindRange( startPt );
+
+      if ( excludeEditable && textNodes.some( isNodeEditable ) ) {
+        // Skip the first node.
+        startPt.setStartAfter( startPt.startContainer );
+
+      } else {
+        textNodes.range = startPt.cloneRange();
+        ret.push( textNodes );
       }
 
-      startIndex = 0;
-      endIndex = node.childNodes.length;
-
-      if (endIndex == 0) {
-        aRangeMatches.push({node: node, match: aLastMatch, overlaps: false});
-        return;
-      } // this *must* come before we change high's indices (next)
-
-      aHigh.setStart(node, startIndex);
-      aHigh.setEnd(node, endIndex);
+      startPt.collapse( false );
     }
 
-    var midIndex = startIndex + Math.ceil((endIndex - startIndex) / 2);
-    if (midIndex == endIndex || endIndex == 0) {
-      aRangeMatches.push({node: node, match: aLastMatch, overlaps: false});
-      return;
+    return ret;
+  };
+
+  function isNodeEditable( node ) {
+    while ( node ) {
+      if ( node instanceof Components.interfaces.nsIDOMNSEditableElement ) {
+        return true;
+      }
+      node = node.parentNode;
     }
-
-    aHigh.setEnd(node, midIndex);
-    var highString = aHigh.toString();
-
-    var newLastMatch = aMatcher.match(highString);
-    if (newLastMatch) {
-      var deeper = true;
-      binaryRangeSearch(aHigh, startIndex, midIndex, aMatcher, newLastMatch, aRangeMatches, aExternalCounter);
-    }
-
-    // split range
-    var low = aHigh;
-    low.setEnd(node, endIndex); // *must* come first: since we altered the end (above), we have to set it back.
-    low.setStart(node, midIndex);
-
-    if (!deeper) {
-      var highLength = highString.length;
-      var lowString = low.toString();
-      highString += lowString;
-      var lowMatch = aMatcher.match(lowString);
-      var overlaps = lowMatch && highString.indexOf(lowMatch) < highLength;
-    }
-    else {
-      var lowString = low.toString();
-      var lowMatch = aMatcher.match(lowString);
-    }
-
-    /*
-      this will log subsearches on 'low'. if you do this, you'll need to
-      restrict multi-element handling to just the First Contiguous Match
-      -- otherwise you'll duplicate handling
-    */
-
-    var subSearchLowerOverlap = false;
-    if (lowMatch && (!overlaps || subSearchLowerOverlap)) {
-      deeper = true;
-      binaryRangeSearch(low, midIndex, endIndex, aMatcher, lowMatch, aRangeMatches, aExternalCounter);
-    }
-
-    if (!deeper || overlaps) {
-      aRangeMatches.push({node: origNode, startIndex: aStartIndex, endIndex: aEndIndex, match: aLastMatch, overlaps: true});
-    }
-
-    return;
+    return false;
   }
-}
 
-/**
- * RegexMatcher for the NodeSearcher.
- */
-gSearchWP.Highlighter.RegexMatcher = function(aCriteria, aMatchCase) {
-  var _regex = new RegExp(aCriteria, aMatchCase ? "m" : "mi");
+  function getTextNodesFromFindRange( range ) {
+    var node = range.startContainer;
+    var last = range.endContainer;
+    var type, ret = [ node ];
 
-  this.match = function(aStr) {
-    var res = aStr.match(_regex);
-    if (res) {
-      return res[0];
+    if ( node !== last ) {
+      while ( node = getNextNode( node ) ) {
+        if ( node.nodeType == 3 && checkParents(node) ) {
+          ret.push( node );
+        }
+
+        if ( node === last ) {
+          break;
+        }
+      }
     }
-    return null;
+
+    return ret;
   }
-}
+
+  function getNextNode( node, skipChilds ) {
+    var next = !skipChilds && node.firstChild || node.nextSibling;
+    while ( !next ) {
+      node = node.parentNode;
+      if ( !node ) {
+        return null;
+      }
+      next = node.nextSibling;
+    }
+    return next;
+  }
+
+  function checkParents( node ) {
+    node = node.parentNode;
+
+    while ( node ) {
+      if ( /^(?:script|noframe|select)$/i.test(node.nodeName) ) {
+        return false;
+      }
+
+      node = node.parentNode;
+    }
+
+    return true;
+  }
+};

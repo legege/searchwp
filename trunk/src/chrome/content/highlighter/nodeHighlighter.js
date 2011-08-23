@@ -35,7 +35,7 @@ gSearchWP.Highlighter.NodeHighlighter = function(aName) {
     }
 
     var elementList = aDocument.getElementsByClassName( _className );
-    var elements = Array.prototype.slice.call(elementList, 0);
+    var elements = Array.slice( elementList, 0 );
 
     var lastParent;
 
@@ -50,86 +50,82 @@ gSearchWP.Highlighter.NodeHighlighter = function(aName) {
     });
 
     lastParent && lastParent.normalize();
-  }
+  };
 
-  /**
-   * Highlight all instances of a word in a particular node of
-   * the given document.
-   * @param aDocument The document.
-   * @param aNode The node contained in the document.
-   * @param aWord The word to highlight.
-   * @param aMatchCase If highlighting should match case.
-   * @param aElementCreator An element creator object (see DefaultElementCreator below).
-   */
-  this.highlight = function(aDocument, aNode, aSearchRegExp, aElementCreator) {
-    if (aNode.nodeType != Node.TEXT_NODE) {
-      return 0;
+
+  this.highlight = function( aTextNodesArray, aElementProto ) {
+    if ( aTextNodesArray.length === 0 ) {
+      return;
     }
 
-    var elementProto = aElementCreator.createElement(aDocument);
+    var document = aElementProto.ownerDocument;
+    var elementProto = aElementProto.cloneNode(false);
     elementProto.className += " " + _className;
 
-    var node = aNode.cloneNode(false);
-    var fragment = aDocument.createDocumentFragment();
+    // Used for fast wrapping of entire nodes...
+    var wrapping_range = document.createRange();
 
-    var count = 0;
-    var pos = 0;
-    var matchNode;
+    var range, prevNode, fragment, matchNode, usedOffset, offset, rest, left, towrap, element;
 
-    while ( (pos = node.data.search( aSearchRegExp )) != -1 ) {
-      count++;
+    for ( var i = 0, ii = aTextNodesArray.length; i < ii; ++i ) {
+      var textNodes = aTextNodesArray[i];
 
-      if ( pos == 0 ) {
-        matchNode = node;
-      } else {
-        matchNode = node.splitText( pos );
-        fragment.appendChild( node );
+      for ( var j = 0, jj = textNodes.length, n = jj-1; j < jj ; ++j ) {
+        var node = textNodes[j];
+
+        if ( node != prevNode && fragment ) {
+          rest && rest.data && fragment.appendChild( rest );
+          prevNode.parentNode.replaceChild( fragment, prevNode );
+          fragment = null;
+        }
+
+        // first or/and last
+        if ( j == 0 || j == n ) {
+          if ( !fragment ) {
+            fragment = document.createDocumentFragment();
+            rest = node.cloneNode(false);
+            usedOffset = 0;
+          }
+
+          towrap = rest;
+          rest = null;
+
+          if ( j == 0 ) {
+            offset = textNodes.range.startOffset - usedOffset;
+            if ( offset ) {
+              left = towrap;
+              towrap = towrap.splitText( offset );
+              fragment.appendChild( left );
+              usedOffset += offset;
+            }
+          }
+
+          if ( j == n ) {
+            offset = textNodes.range.endOffset - usedOffset;
+            rest = towrap.splitText( offset );
+            usedOffset += offset;
+          }
+
+          element = elementProto.cloneNode(false);
+          element.appendChild( towrap );
+          fragment.appendChild( element );
+
+        // others
+        } else {
+          wrapping_range.selectNodeContents( node );
+          wrapping_range.surroundContents( elementProto.cloneNode(false) );
+          //element = elementProto.cloneNode(false);
+          //node.parentNode.replaceChild( element, node );
+          //element.appendChild( node );
+        }
+
+        prevNode = node;
       }
-
-      node = matchNode.splitText( RegExp.lastMatch.length );
-
-      var element = elementProto.cloneNode(false);
-      element.appendChild( matchNode );
-      fragment.appendChild( element );
     }
 
-    if ( node && node.data ) {
-      fragment.appendChild( node );
+    if ( fragment ) {
+      rest && rest.data && fragment.appendChild( rest );
+      prevNode.parentNode.replaceChild( fragment, prevNode )
     }
-
-    aNode.parentNode.replaceChild( fragment, aNode );
-
-    return count;
-  }
-
-  function getNodeHighlighterMetaData(aDocument) {
-    if (!aDocument._nodeHighlighter) {
-      aDocument._nodeHighlighter = {};
-    }
-
-    if (!aDocument._nodeHighlighter[_name]) {
-      aDocument._nodeHighlighter[_name] = {count: 0, originalNodes: {}};
-    }
-    return aDocument._nodeHighlighter[_name];
-  }
-
-  function generateIdPrefix() {
-    return _name;
-  }
-}
-
-gSearchWP.Highlighter.DefaultElementCreator = function(aElementName, aAttributes) {
-  var elementName = aElementName;
-  var attributes = aAttributes;
-
-  this.createElement = function(aDocument, aId, aChildNode) {
-    var element = aDocument.createElement(elementName);
-    for (var name in attributes) {
-      element.setAttribute(name, attributes[name]);
-    }
-
-    aId && element.setAttribute("id", aId);
-    aChildNode && element.appendChild(aChildNode);
-    return element;
-  }
-}
+  };
+};

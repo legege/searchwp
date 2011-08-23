@@ -13,7 +13,7 @@
  *
  * The Original Code is SearchWP.
  *
- * The Initial Developer of the Original Code is 
+ * The Initial Developer of the Original Code is
  *  Georges-Etienne Legendre <legege@legege.com> <http://legege.com>.
  * Portions created by the Initial Developer are Copyright (C) 2004-2008.
  * All Rights Reserved.
@@ -22,3 +22,4 @@
 
 if (!this.gSearchWP) this.gSearchWP = {};
 if (!this.gSearchWP.Highlighter) this.gSearchWP.Highlighter = {};
+

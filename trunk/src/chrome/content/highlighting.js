@@ -27,6 +27,9 @@ gSearchWP.Highlighting = new function() {
   var _tokensArrayCache = [];
   var _highlightTimeout;
   var _highlighter = new gSearchWP.Highlighter.NodeHighlighter("searchwp-highlighting");
+  var _nodeSearcher = new gSearchWP.Highlighter.NodeSearcher();
+
+  var getTextNodesInRange = gSearchWP.Highlighter.getTextNodesInRange;
 
   /**
    * Initialize this class.
@@ -165,38 +168,36 @@ gSearchWP.Highlighting = new function() {
 
     var criteria = aWord.replace(/\s*/, "");
 
-    var ranges = findRanges( doc.body, criteria, aMatchCase, true, true );
+    var searchResults = _nodeSearcher.search( doc.body, criteria, aMatchCase, true );
 
-    if ( ranges.length ) {
-      if ( ranges.length > gSearchWP.Preferences.maxColorizedHighlights ) {
+    if ( searchResults.length ) {
+      if ( searchResults.length > gSearchWP.Preferences.maxColorizedHighlights ) {
         var findSelection = getSelectionOfType(aWindow, 128);
 
         if ( findSelection ) {
-          for ( var i = 0, l = ranges.length; i < l; ++i ) {
-            findSelection.addRange( ranges[i] );
+          for ( var i = 0, l = searchResults.length; i < l; ++i ) {
+            findSelection.addRange( searchResults[i].range );
           }
 
-          count = ranges.length;
+          count = searchResults.length;
         }
 
       } else {
-        var elementCreator = new gSearchWP.Highlighter.DefaultElementCreator("layer", {"class": "searchwp-term", "highlight": aCriteria});
-        var regexpCriteria = new RegExp( rescape(criteria), aMatchCase ? "m" : "mi" );
-        var lastNode;
+        var elementProto = createElementProto( doc, aCriteria );
+        _highlighter.highlight( searchResults, elementProto );
 
-        ranges.map(function( range ) {
-          return range.startContainer;
-        })
-        .forEach(function( node ) {
-          if ( node !== lastNode ) {
-            lastNode = node;
-            count += _highlighter.highlight( doc, node, regexpCriteria, elementCreator );
-          }
-        });
+        count = searchResults.length;
       }
     }
 
     return count;
+  }
+
+  function createElementProto( aDocument, aCriteria ) {
+    var element = aDocument.createElement("layer");
+    element.className = "searchwp-term";
+    element.setAttribute( "highlight", aCriteria );
+    return element;
   }
 
   /**
@@ -230,59 +231,6 @@ gSearchWP.Highlighting = new function() {
     }
   }
 
-  function findRanges( topElement, word, caseSensitive, singleNodes, exludeEditable ) {
-    if ( exludeEditable && !singleNodes ) {
-      throw new Error("exludeEditable supported only if singleNodes");
-    }
-
-    var ranges = [], retRange;
-
-    // Workaround for bug https://bugzilla.mozilla.org/show_bug.cgi?id=488427
-    // (forcing a FlushPendingNotifications call)
-    topElement.offsetWidth;
-
-    var searchRange = topElement.ownerDocument.createRange();
-    searchRange.selectNodeContents( topElement );
-
-    var startPt = searchRange.cloneRange();
-    startPt.collapse( true );
-
-    var endPt = searchRange.cloneRange();
-    endPt.collapse( false );
-
-    var finder = Components.classes['@mozilla.org/embedcomp/rangefind;1']
-      .createInstance( Components.interfaces.nsIFind );
-
-    finder.caseSensitive = !!caseSensitive;
-
-    while (( retRange = finder.Find(word, searchRange, startPt, endPt) )) {
-      startPt = retRange;
-
-      if ( singleNodes && retRange.startContainer !== retRange.endContainer ) {
-        // Skip the first node.
-        startPt.setStartAfter( startPt.startContainer );
-
-      } else if ( !( exludeEditable && isNodeEditable(retRange.startContainer) ) )  {
-        // Store the cloned range.
-        ranges.push( retRange.cloneRange() );
-      }
-
-      startPt.collapse( false );
-    }
-
-    return ranges;
-  }
-
-  function isNodeEditable( node ) {
-    while ( node ) {
-      if ( node instanceof Components.interfaces.nsIDOMNSEditableElement ) {
-        return true;
-      }
-      node = node.parentNode;
-    }
-    return false;
-  }
-
   function getSelectionOfType(aWindow, aType) {
     try {
       var Ci = Components.interfaces;
@@ -297,9 +245,5 @@ gSearchWP.Highlighting = new function() {
     } catch (e) {
       return null;
     }
-  }
-
-  function rescape(aString) {
-    return aString.replace(/[-[\]{}()*+?.\\^$|,#\s]/g, '\\$&');
   }
 }
