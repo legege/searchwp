@@ -156,7 +156,10 @@
 
           textboxInputBox.appendChild(
             // Tokens layer
-            _('hbox#tokens-layer.searchbox-tokens-layer', { flex: "1", mousethrough: "always", collapsed: "true" },
+            _('hbox#tokens-layer.searchbox-tokens-layer', {
+                 flex: "1", collapsed: "true",
+                 onmousedown: "this._bindingRoot.select();"
+              },
                 _('scrollbox#tokens-container.searchbox-tokens-container', {
                   flex: "1",
                   onoverflow: "this._bindingRoot.cropped = true;",
