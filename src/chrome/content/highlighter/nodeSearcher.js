@@ -49,7 +49,7 @@ gSearchWP.Highlighter.NodeSearcher = function NodeSearcher() {
 
       if ( excludeEditable && textNodes.some( isNodeEditable ) ) {
         // Skip the first node.
-        startPt.setStartAfter( startPt.startContainer );
+        startPt.setStartAfter( textNodes[0] );
 
       } else {
         textNodes.range = startPt.cloneRange();
@@ -75,17 +75,23 @@ gSearchWP.Highlighter.NodeSearcher = function NodeSearcher() {
   function getTextNodesFromFindRange( range ) {
     var node = range.startContainer;
     var last = range.endContainer;
-    var type, ret = [ node ];
+    var ret = [], isTextNode;
 
-    if ( node !== last ) {
-      while ( node = getNextNode( node ) ) {
-        if ( node.nodeType == 3 && checkParents(node) ) {
-          ret.push( node );
-        }
+    while ( 1 ) {
+      isTextNode = node.nodeType === 3;
 
-        if ( node === last ) {
-          break;
-        }
+      if ( isTextNode ) {
+        ret.push( node );
+      }
+
+      if ( node === last ) {
+        break;
+      }
+
+      // Skip childs as nsFind does...
+      node = getNextNode( node, isTextNode || /^(?:script|noframe|select)$/i.test(node.nodeName) );
+      if ( !node ) {
+        throw "last node in range not reached - check nsFind.cpp to see how childs are skipped";
       }
     }
 
@@ -104,17 +110,4 @@ gSearchWP.Highlighter.NodeSearcher = function NodeSearcher() {
     return next;
   }
 
-  function checkParents( node ) {
-    node = node.parentNode;
-
-    while ( node ) {
-      if ( /^(?:script|noframe|select)$/i.test(node.nodeName) ) {
-        return false;
-      }
-
-      node = node.parentNode;
-    }
-
-    return true;
-  }
 };
