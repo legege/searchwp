@@ -91,7 +91,7 @@ gSearchWP.Highlighter.NodeSearcher = function NodeSearcher() {
       // Skip childs as nsFind does...
       node = getNextNode( node, isTextNode || /^(?:script|noframe|select)$/i.test(node.nodeName) );
       if ( !node ) {
-        throw "last node in range not reached - check nsFind.cpp to see how childs are skipped";
+        throw "last node in range not reached - check nsFind.cpp to see which nodes are skipped";
       }
     }
 
