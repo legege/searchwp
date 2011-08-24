@@ -21,7 +21,6 @@
  * ***** END LICENSE BLOCK ***** */
 
 gSearchWP.Highlighter.NodeHighlighter = function(aName) {
-  var self = this;
   var _name = aName;
   var _className = "searchwp-highlight-" + _name;
 
@@ -65,7 +64,7 @@ gSearchWP.Highlighter.NodeHighlighter = function(aName) {
     // Used for fast wrapping of entire nodes...
     var wrapping_range = document.createRange();
 
-    var range, prevNode, fragment, matchNode, usedOffset, offset, rest, left, towrap, element;
+    var prevNode, fragment, usedOffset, offset, rest, left, towrap, element;
 
     for ( var i = 0, ii = aTextNodesArray.length; i < ii; ++i ) {
       var textNodes = aTextNodesArray[i];
