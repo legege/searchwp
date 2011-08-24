@@ -47,7 +47,7 @@ gSearchWP.Highlighter.NodeSearcher = function NodeSearcher() {
     while (( startPt = finder.Find(word, searchRange, startPt, endPt) )) {
       textNodes = getTextNodesFromFindRange( startPt );
 
-      if ( excludeEditable && textNodes.some( isNodeEditable ) ) {
+      if ( excludeEditable && textNodes.some( isEditable ) ) {
         // Skip the first node.
         startPt.setStartAfter( textNodes[0] );
 
@@ -62,12 +62,12 @@ gSearchWP.Highlighter.NodeSearcher = function NodeSearcher() {
     return ret;
   };
 
-  function isNodeEditable( node ) {
-    while ( node ) {
+  function isEditable( node ) {
+    // No need to check the text node itself (only parents).
+    while (( node = node.parentNode )) {
       if ( node instanceof Components.interfaces.nsIDOMNSEditableElement ) {
         return true;
       }
-      node = node.parentNode;
     }
     return false;
   }
