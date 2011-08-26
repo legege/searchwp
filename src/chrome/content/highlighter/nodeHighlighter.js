@@ -36,11 +36,19 @@ gSearchWP.Highlighter.NodeHighlighter = function(aName) {
     var elementList = aDocument.getElementsByClassName( _className );
     var elements = Array.slice( elementList, 0 );
 
+    var extracting_range = document.createRange();
     var lastParent;
 
     elements.forEach(function( element ) {
       var parent = element.parentNode;
-      parent.replaceChild( element.firstChild, element );
+
+      if ( element.firstChild === element.lastChild ) {
+        parent.replaceChild( element.firstChild, element );
+
+      } else {
+        extracting_range.selectNodeContents( element );
+        parent.replaceChild( extracting_range.extractContents(), element );
+      }
 
       if ( parent !== lastParent ) {
         lastParent && lastParent.normalize();
