@@ -208,6 +208,7 @@
           gSearchWP.Preferences.addObserver(gSearchWP.Preferences.PREF_TOKENS_DISPLAY_MODE, observer);
           gSearchWP.Preferences.addObserver(gSearchWP.Preferences.PREF_HIGHLIGHT_STATE, observer);
           gSearchWP.Preferences.addObserver(gSearchWP.Preferences.PREF_HIGHLIGHT_MINLENGTH, observer);
+          gSearchWP.Preferences.addObserver(gSearchWP.Preferences.PREF_HIGHLIGHT_SHOW_OVERLAPS, observer);
         ]]></body>
       </method>
 
@@ -219,6 +220,7 @@
             gSearchWP.Preferences.removeObserver(gSearchWP.Preferences.PREF_TOKENS_DISPLAY_MODE, observer);
             gSearchWP.Preferences.removeObserver(gSearchWP.Preferences.PREF_HIGHLIGHT_STATE, observer);
             gSearchWP.Preferences.removeObserver(gSearchWP.Preferences.PREF_HIGHLIGHT_MINLENGTH, observer);
+            gSearchWP.Preferences.removeObserver(gSearchWP.Preferences.PREF_HIGHLIGHT_SHOW_OVERLAPS, observer);
             this._SearchWPObservers = null;
           }
         ]]></body>
