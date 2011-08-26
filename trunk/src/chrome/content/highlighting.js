@@ -159,6 +159,12 @@ gSearchWP.Highlighting = new function() {
       return count;
     }
 
+    if ( gSearchWP.Preferences.showOverlaps ) {
+      doc.body.classList.add("searchwp-show-overlaps");
+    } else {
+      doc.body.classList.remove("searchwp-show-overlaps");
+    }
+
     if (!aCriteria || !aWord) {
       _highlighter.clear(doc);
       var findSelection = getSelectionOfType(aWindow, 128);

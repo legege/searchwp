@@ -27,6 +27,7 @@ gSearchWP.Preferences = new function() {
   this.PREF_HIGHLIGHT_STATE = "highlight.state";
   this.PREF_HIGHLIGHT_MATCH_CASE = "highlight.matchCase";
   this.PREF_HIGHLIGHT_MAX_COLORIZED = "highlight.maxColorizedHighlights";
+  this.PREF_HIGHLIGHT_SHOW_OVERLAPS = "highlight.showOverlaps";
   this.PREF_FIRST_LAUNCH = "firstLaunch";
   this.PREF_TOKENS_DISPLAY_MODE = "tokens.displayMode";
 
@@ -141,6 +142,20 @@ gSearchWP.Preferences = new function() {
    */
   this.__defineSetter__("maxColorizedHighlights", function(aValue) {
     this.branch.setIntPref(this.PREF_HIGHLIGHT_MAX_COLORIZED, aValue);
+  });
+
+  /**
+   * @return If overlaps are shown
+   */
+  this.__defineGetter__("showOverlaps", function() {
+    return this.branch.getBoolPref(this.PREF_HIGHLIGHT_SHOW_OVERLAPS);
+  });
+
+  /**
+   * @param aValue If overlaps have to be shown
+   */
+  this.__defineSetter__("showOverlaps", function(aValue) {
+    this.branch.setBoolPref(this.PREF_HIGHLIGHT_SHOW_OVERLAPS, aValue);
   });
 
   /**
