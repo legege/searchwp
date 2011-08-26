@@ -36,7 +36,7 @@ gSearchWP.Highlighter.NodeHighlighter = function(aName) {
     var elementList = aDocument.getElementsByClassName( _className );
     var elements = Array.slice( elementList, 0 );
 
-    var extracting_range = document.createRange();
+    var extracting_range = aDocument.createRange();
     var lastParent;
 
     elements.forEach(function( element ) {
