@@ -205,7 +205,7 @@ gSearchWP.Highlighting = new function() {
       }
 
       if ( overlapsDisplayMode == 3 ) { // multiply
-        Array.forEach(doc.body.querySelectorAll(".searchwp-term .searchwp-term"), recalculateColors);
+        Array.forEach(doc.body.querySelectorAll(".searchwp-term > .searchwp-term"), recalculateColors);
       }
     }
 
