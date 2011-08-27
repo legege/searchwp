@@ -159,13 +159,22 @@ gSearchWP.Highlighting = new function() {
       return count;
     }
 
-    if ( gSearchWP.Preferences.showOverlaps ) {
-      doc.body.classList.add("searchwp-show-overlaps");
+    var clearing = !aCriteria || !aWord;
+    var overlapsDisplayMode = gSearchWP.Preferences.overlapsDisplayMode;
+
+    if ( !clearing && overlapsDisplayMode == 1 ) { // fixed
+      doc.body.classList.add("searchwp-overlaps-display-mode-1");
     } else {
-      doc.body.classList.remove("searchwp-show-overlaps");
+      doc.body.classList.remove("searchwp-overlaps-display-mode-1");
     }
 
-    if (!aCriteria || !aWord) {
+    if ( !clearing && overlapsDisplayMode == 2 ) { // transparent
+      doc.body.classList.add("searchwp-overlaps-display-mode-2");
+    } else {
+      doc.body.classList.remove("searchwp-overlaps-display-mode-2");
+    }
+
+    if ( clearing ) {
       _highlighter.clear(doc);
       var findSelection = getSelectionOfType(aWindow, 128);
       findSelection && findSelection.removeAllRanges();
@@ -194,9 +203,55 @@ gSearchWP.Highlighting = new function() {
 
         count = searchResults.length;
       }
+
+      if ( overlapsDisplayMode == 3 ) { // multiply
+        var inners = Array.forEach(doc.body.querySelectorAll(".searchwp-term .searchwp-term"), function( node ) {
+          if ( !node._searchwp_recalculated_color ) {
+            var parent = node.parentNode;
+            var upperColor = colors[ node.getAttribute("highlight") ];
+            var lowerColor = parent._searchwp_recalculated_color || colors[ parent.getAttribute("highlight") ];
+            var bcolor = combineColors( upperColor, lowerColor, chanelBlanding.mutiply );
+            var color = colorLuminance( bcolor ) > 165 ? "black" : "white";
+
+            node._searchwp_recalculated_color = bcolor;
+
+            node.style.backgroundColor = "rgb(" + bcolor + ")";
+            node.style.color = color;
+          }
+        });
+      }
     }
 
     return count;
+  }
+
+  var colors = {
+    "term-1": [ 251, 237, 115 ],
+    "term-2": [ 255, 177, 140 ],
+    "term-3": [ 255, 210, 129 ],
+    "term-4": [ 195, 249, 145 ],
+    "term-5": [ 233, 184, 255 ]
+  };
+
+  var chanelBlanding = {
+    mutiply: function( a, b ) {
+      return Math.round( a / 255 * b );
+    },
+    difference: function( a, b ) {
+      return Math.abs( a - b );
+    }
+  };
+
+  function combineColors( a, b, method ) {
+    return [
+      method( a[0], b[0] ),
+      method( a[1], b[1] ),
+      method( a[2], b[2] )
+    ];
+  }
+
+  function colorLuminance( rgb ) {
+    return Math.min(255, Math.round( 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2] ));
   }
 
   function createElementProto( aDocument, aCriteria ) {
