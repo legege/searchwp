@@ -28,5 +28,5 @@ pref("extensions.searchwp.highlight.minLength", 2);
 pref("extensions.searchwp.highlight.state", false);
 pref("extensions.searchwp.highlight.tokensCount", 5);
 pref("extensions.searchwp.highlight.maxColorizedHighlights", 10000);
-pref("extensions.searchwp.highlight.showOverlaps", false);
+pref("extensions.searchwp.highlight.overlaps.displayMode", 0);
 pref("extensions.searchwp.tokens.displayMode", 2);

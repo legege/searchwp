@@ -27,7 +27,7 @@ gSearchWP.Preferences = new function() {
   this.PREF_HIGHLIGHT_STATE = "highlight.state";
   this.PREF_HIGHLIGHT_MATCH_CASE = "highlight.matchCase";
   this.PREF_HIGHLIGHT_MAX_COLORIZED = "highlight.maxColorizedHighlights";
-  this.PREF_HIGHLIGHT_SHOW_OVERLAPS = "highlight.showOverlaps";
+  this.PREF_HIGHLIGHT_OVERLAPS_DYSPLAY_MODE = "highlight.overlaps.displayMode";
   this.PREF_FIRST_LAUNCH = "firstLaunch";
   this.PREF_TOKENS_DISPLAY_MODE = "tokens.displayMode";
 
@@ -145,17 +145,17 @@ gSearchWP.Preferences = new function() {
   });
 
   /**
-   * @return If overlaps are shown
+   * @return the highlight overlaps dysplay mode (0: disabled, 1: fixed, 2: transparent, 3: multiply)
    */
-  this.__defineGetter__("showOverlaps", function() {
-    return this.branch.getBoolPref(this.PREF_HIGHLIGHT_SHOW_OVERLAPS);
+  this.__defineGetter__("overlapsDisplayMode", function() {
+    return this.branch.getIntPref(this.PREF_HIGHLIGHT_OVERLAPS_DYSPLAY_MODE);
   });
 
   /**
-   * @param aValue If overlaps have to be shown
+   * @param aValue the highlight overlaps dysplay mode (0: disabled, 1: fixed, 2: transparent, 3: multiply)
    */
-  this.__defineSetter__("showOverlaps", function(aValue) {
-    this.branch.setBoolPref(this.PREF_HIGHLIGHT_SHOW_OVERLAPS, aValue);
+  this.__defineSetter__("overlapsDisplayMode", function(aValue) {
+    this.branch.setIntPref(this.PREF_HIGHLIGHT_OVERLAPS_DYSPLAY_MODE, aValue);
   });
 
   /**
