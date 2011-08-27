@@ -216,7 +216,7 @@ gSearchWP.Highlighting = new function() {
     if ( !node._searchwp_recalculated_rgb ) {
       var parent = node.parentNode;
       var upperRgb = term2RGB[ node.getAttribute("highlight") ];
-      var lowerRgb = parent._searchwp_recalculated_color || term2RGB[ parent.getAttribute("highlight") ];
+      var lowerRgb = parent._searchwp_recalculated_rgb || term2RGB[ parent.getAttribute("highlight") ];
       var rgb = combineColors( upperRgb, lowerRgb, chanelBlanding.mutiply );
       var color = rgbLuminance( rgb ) > 165 ? "black" : "white";
 
