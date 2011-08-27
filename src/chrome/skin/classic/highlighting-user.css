@@ -44,27 +44,27 @@
   background-color: rgb(233, 184, 255);
 }
 
-.searchwp-overlaps-display-mode-1 .searchwp-term .searchwp-term {
+.searchwp-overlaps-display-mode-1 .searchwp-term > .searchwp-term {
   color: white;
   background-color: #3A3A3A;
 }
 
-.searchwp-overlaps-display-mode-2 .searchwp-term .searchwp-term[highlight="term-1"] {
+.searchwp-overlaps-display-mode-2 .searchwp-term > .searchwp-term[highlight="term-1"] {
   background-color: rgba(251, 237, 115, 0.5);
 }
 
-.searchwp-overlaps-display-mode-2 .searchwp-term .searchwp-term[highlight="term-2"] {
+.searchwp-overlaps-display-mode-2 .searchwp-term > .searchwp-term[highlight="term-2"] {
   background-color: rgba(255, 177, 140, 0.5);
 }
 
-.searchwp-overlaps-display-mode-2 .searchwp-term .searchwp-term[highlight="term-3"] {
+.searchwp-overlaps-display-mode-2 .searchwp-term > .searchwp-term[highlight="term-3"] {
   background-color: rgba(255, 210, 129, 0.5);
 }
 
-.searchwp-overlaps-display-mode-2 .searchwp-term .searchwp-term[highlight="term-4"] {
+.searchwp-overlaps-display-mode-2 .searchwp-term > .searchwp-term[highlight="term-4"] {
   background-color: rgba(195, 249, 145, 0.5);
 }
 
-.searchwp-overlaps-display-mode-2 .searchwp-term .searchwp-term[highlight="term-5"] {
+.searchwp-overlaps-display-mode-2 .searchwp-term > .searchwp-term[highlight="term-5"] {
   background-color: rgba(233, 184, 255, 0.5);
 }
