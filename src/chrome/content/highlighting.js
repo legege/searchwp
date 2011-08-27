@@ -205,27 +205,29 @@ gSearchWP.Highlighting = new function() {
       }
 
       if ( overlapsDisplayMode == 3 ) { // multiply
-        var inners = Array.forEach(doc.body.querySelectorAll(".searchwp-term .searchwp-term"), function( node ) {
-          if ( !node._searchwp_recalculated_color ) {
-            var parent = node.parentNode;
-            var upperColor = colors[ node.getAttribute("highlight") ];
-            var lowerColor = parent._searchwp_recalculated_color || colors[ parent.getAttribute("highlight") ];
-            var bcolor = combineColors( upperColor, lowerColor, chanelBlanding.mutiply );
-            var color = colorLuminance( bcolor ) > 165 ? "black" : "white";
-
-            node._searchwp_recalculated_color = bcolor;
-
-            node.style.backgroundColor = "rgb(" + bcolor + ")";
-            node.style.color = color;
-          }
-        });
+        Array.forEach(doc.body.querySelectorAll(".searchwp-term .searchwp-term"), recalculateColors);
       }
     }
 
     return count;
   }
 
-  var colors = {
+  function recalculateColors( node ) {
+    if ( !node._searchwp_recalculated_rgb ) {
+      var parent = node.parentNode;
+      var upperRgb = term2RGB[ node.getAttribute("highlight") ];
+      var lowerRgb = parent._searchwp_recalculated_color || term2RGB[ parent.getAttribute("highlight") ];
+      var rgb = combineColors( upperRgb, lowerRgb, chanelBlanding.mutiply );
+      var color = rgbLuminance( rgb ) > 165 ? "black" : "white";
+
+      node._searchwp_recalculated_rgb = rgb;
+
+      node.style.backgroundColor = "rgb(" + rgb + ")";
+      node.style.color = color;
+    }
+  }
+
+  var term2RGB = {
     "term-1": [ 251, 237, 115 ],
     "term-2": [ 255, 177, 140 ],
     "term-3": [ 255, 210, 129 ],
@@ -250,7 +252,7 @@ gSearchWP.Highlighting = new function() {
     ];
   }
 
-  function colorLuminance( rgb ) {
+  function rgbLuminance( rgb ) {
     return Math.min(255, Math.round( 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2] ));
   }
 
