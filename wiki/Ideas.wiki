@@ -16,8 +16,8 @@ Your feedback is important to me. I'll try to add new features regularly as time
 
 = Improvements =
 
- * Highlighting is too slow. Implement a faster algorithm
- * Some words are missed when highlighting: "my test phrase" in <b>my</b> <b>test</b> <b>phrase</b>
+ * Highlighting is too slow. Implement a faster algorithm (See issue 39)
+ * ~~Some words are missed when highlighting: "my test phrase" in <b>my</b> <i>test</i> <b>phrase</b>~~ (Fixed with r148)
 
 = Suggested, but not directly related to SearchWP =
  * Keep search history in Chronological order and retain it between searches
