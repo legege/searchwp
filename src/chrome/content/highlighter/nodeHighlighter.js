@@ -132,7 +132,7 @@ gSearchWP.Highlighter.NodeHighlighter = function(aName) {
 
     if ( fragment ) {
       rest && rest.data && fragment.appendChild( rest );
-      prevNode.parentNode.replaceChild( fragment, prevNode )
+      prevNode.parentNode.replaceChild( fragment, prevNode );
     }
   };
 };

@@ -29,8 +29,6 @@ gSearchWP.Highlighting = new function() {
   var _highlighter = new gSearchWP.Highlighter.NodeHighlighter("searchwp-highlighting");
   var _nodeSearcher = new gSearchWP.Highlighter.NodeSearcher();
 
-  var getTextNodesInRange = gSearchWP.Highlighter.getTextNodesInRange;
-
   /**
    * Initialize this class.
    */
