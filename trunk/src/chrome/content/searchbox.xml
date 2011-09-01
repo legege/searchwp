@@ -197,32 +197,28 @@
 
           var self = this;
 
-          var observer = this._SearchWPObservers = {
-            observe: function( aSubject, aTopic, aData ) {
+          this._SearchWPPreferencesObserver = new gSearchWP.Preferences.Observer(function( pref_name ) {
                // If any pref changed, we need to rebuild tokens to adjust presentation
-               self._rebuildTokens( self.value );
+               switch ( pref_name ) {
+                 case gSearchWP.Preferences.PREF_TOKENS_DISPLAY_MODE:
+                 case gSearchWP.Preferences.PREF_HIGHLIGHT_STATE:
+                 case gSearchWP.Preferences.PREF_HIGHLIGHT_MINLENGTH:
+                   self._rebuildTokens( self.value );
+                   break;
+                 case gSearchWP.Preferences.PREF_HIGHLIGHT_OVERLAPS_DYSPLAY_MODE:
+                   gSearchWP.Highlighting.refresh();
+                   break;
+               }
             }
-          };
+          );
 
-          // Register observer...
-          gSearchWP.Preferences.addObserver(gSearchWP.Preferences.PREF_TOKENS_DISPLAY_MODE, observer);
-          gSearchWP.Preferences.addObserver(gSearchWP.Preferences.PREF_HIGHLIGHT_STATE, observer);
-          gSearchWP.Preferences.addObserver(gSearchWP.Preferences.PREF_HIGHLIGHT_MINLENGTH, observer);
-          gSearchWP.Preferences.addObserver(gSearchWP.Preferences.PREF_HIGHLIGHT_SHOW_OVERLAPS, observer);
+          this._SearchWPPreferencesObserver.register();
         ]]></body>
       </method>
 
       <method name="tearDownSearchWP">
         <body><![CDATA[
-          var observer = this._SearchWPObservers;
-          if ( observer ) {
-            // Unregister observer...
-            gSearchWP.Preferences.removeObserver(gSearchWP.Preferences.PREF_TOKENS_DISPLAY_MODE, observer);
-            gSearchWP.Preferences.removeObserver(gSearchWP.Preferences.PREF_HIGHLIGHT_STATE, observer);
-            gSearchWP.Preferences.removeObserver(gSearchWP.Preferences.PREF_HIGHLIGHT_MINLENGTH, observer);
-            gSearchWP.Preferences.removeObserver(gSearchWP.Preferences.PREF_HIGHLIGHT_SHOW_OVERLAPS, observer);
-            this._SearchWPObservers = null;
-          }
+          this._SearchWPPreferencesObserver.unregister();
         ]]></body>
       </method>
 
@@ -278,7 +274,7 @@
           }
 
           if (aValue) {
-            var tokensScrollBoxObject = this._tokensContainer.boxObject.QueryInterface(Components.interfaces.nsIScrollBoxObject);
+            //var tokensScrollBoxObject = this._tokensContainer.boxObject.QueryInterface(Components.interfaces.nsIScrollBoxObject);
 
             // Create an array of terms and we add them to the tokens layer and the tokens popup
             var termsArray = gSearchWP.Tokenizer.createTokensArray(aValue);
