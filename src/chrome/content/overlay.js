@@ -169,24 +169,8 @@ gSearchWP.Overlay = new function() {
   /**
    * Preferences Observer
    */
-  this.preferencesObserver = new function() {
-    var branch = gSearchWP.Preferences.branch;
-
-    this.register = function() {
-      branch.addObserver("", this, false);
-    }
-
-    this.unregister = function() {
-      if (!branch) return;
-      branch.removeObserver("", this, false);
-    }
-
-    this.observe = function(aSubject, aTopic, aData) {
-      if (aTopic != "nsPref:changed") {
-        return;
-      }
-
-      switch (aData) {
+  this.preferencesObserver = new gSearchWP.Preferences.Observer(function( pref_name ) {
+      switch (pref_name) {
         case gSearchWP.Preferences.PREF_HIGHLIGHT_STATE:
           setTimeout(function() {
             var item = gSearchWP.Highlighting.highlightButton;
@@ -212,7 +196,8 @@ gSearchWP.Overlay = new function() {
           break;
       }
     }
-  }
-}
+  );
+
+};
 
 addEventListener("load", function(aEvent) { gSearchWP.Overlay.onLoad(aEvent); }, false);
