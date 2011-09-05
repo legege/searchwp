@@ -165,7 +165,7 @@
 
 .searchbox-embedded-actions-layer {
   background: url("chrome://@NAME@/skin/shade.png") repeat-y 100% 0;
-  margin: 1px 0 0 0;
+  margin: 0px 0 0 0;
 }
 
 *[tokensdisplaymode="3"] .searchbox-embedded-actions-layer {
@@ -177,13 +177,11 @@
   padding: 2px;
   cursor: pointer;
   -moz-margin-end: 6px;
-  -moz-box-shadow: -3px 0 2px rgba(0, 0, 0, 0.3);
 }
 
 *[tokensdisplaymode="3"] .searchbox-tokens-menu-button {
   list-style-image: url("chrome://@NAME@/skin/tokens-menu.png");
   padding: 0px 0;
-  -moz-box-shadow: none;
 }
 
 .searchbox-tokens-menu-popup {
