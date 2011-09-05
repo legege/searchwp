@@ -67,7 +67,7 @@
         <setter><![CDATA[
           this._cropped = val;
           if (gSearchWP.Preferences.tokensDisplayMode == 2) {
-            this._embeddedActionsLayer.collapsed = !val;
+            this._embeddedActionsLayer.hidden = !val;
           }
           return val;
         ]]></setter>
@@ -155,30 +155,41 @@
           );
 
           textboxInputBox.appendChild(
-            // Tokens layer
-            _('hbox#tokens-layer.searchbox-tokens-layer', {
-                 flex: "1", collapsed: "true",
-                 onmousedown: "this._bindingRoot.select();"
-              },
-                _('scrollbox#tokens-container.searchbox-tokens-container', {
-                  flex: "1",
-                  onoverflow: "this._bindingRoot.cropped = true;",
-                  onunderflow: "this._bindingRoot.cropped = false;"
-                })
+            _('stack#tokens-stack', { flex: "1", collapsed: "true" },
+              // Tokens layer
+              _('hbox#tokens-layer.searchbox-tokens-layer', {
+                   flex: "1",
+                   onmousedown: "this._bindingRoot.select();"
+                },
+                  _('scrollbox#tokens-container.searchbox-tokens-container', {
+                    flex: "1",
+                    onoverflow: "this._bindingRoot.cropped = true;",
+                    onunderflow: "this._bindingRoot.cropped = false;"
+                  })
+              ),
+              // Embedded actions layer (e.g. menu)
+              _('hbox#embedded-actions-layer.searchbox-embedded-actions-layer', {
+                   flex: "1", mousethrough: "always", align: "right", hidden: "true"
+                },
+                  _('image.searchbox-tokens-menu-button', {
+                    mousethrough: "never",
+                    onclick: "this._bindingRoot.openTokensMenuPopup(event);",
+                    tooltiptext: this._searchwpStringBundle.getString("tokensMenuTooltiptext")
+                  })
+              )
             )
           );
 
           textboxInputBox.appendChild(
-            // Embedded actions layer (e.g. menu)
-            _('hbox#embedded-actions-layer.searchbox-embedded-actions-layer', {
-                 flex: "1", mousethrough: "always", align: "right", collapsed: "true"
-              },
-                _('image#tokens-menu-button.searchbox-tokens-menu-button', {
-                  mousethrough: "never",
-                  onclick: "this._bindingRoot.openTokensMenuPopup(event);",
-                  tooltiptext: this._searchwpStringBundle.getString("tokensMenuTooltiptext")
-                })
-            )
+            _('hbox#complete-menu.searchbox-embedded-actions-layer', {
+                  flex: "1", mousethrough: "always", align: "right", collapsed: "true"
+               },
+                 _('image.searchbox-tokens-menu-button', {
+                   mousethrough: "never",
+                   onclick: "this._bindingRoot.openTokensMenuPopup(event);",
+                   tooltiptext: this._searchwpStringBundle.getString("tokensMenuTooltiptext")
+                 })
+             )
           );
 
           textboxInputBox.appendChild(
@@ -238,24 +249,25 @@
           }
           aEvent.stopPropagation();
 
-          // Adjust token visibility
-          var tokensScrollBoxObject = this._tokensContainer.boxObject.QueryInterface(Components.interfaces.nsIScrollBoxObject);
-          var rightLimitX = tokensScrollBoxObject.x + tokensScrollBoxObject.width - this._calculateEmbeddedActionsWidth();
+          var tokens = this._tokensContainer.childNodes;
+          var menuTokens = this._tokensMenuPopupContainer.childNodes;
 
-          for (var i = 0; i < this._tokensContainer.childNodes.length; i++) {
-            var tokenNode = this._tokensContainer.childNodes[i];
-            var tokenPopupNode = this._tokensMenuPopupContainer.childNodes[i];
-            if (this._tokensLayer.hidden || (tokenNode.boxObject.x + tokenNode.boxObject.width) > rightLimitX) {
-              tokenPopupNode.style.display = "-moz-box";
-            }
-            else {
-              tokenPopupNode.style.display = "none";
-            }
+          var showAll = this._tokensStack.collapsed;
+
+          // Adjust token visibility
+          if ( !showAll ) {
+            var tokensScrollBoxObject = this._tokensContainer.boxObject.QueryInterface(Components.interfaces.nsIScrollBoxObject);
+            var rightLimitX = tokensScrollBoxObject.x + tokensScrollBoxObject.width - this._calculateEmbeddedActionsWidth();
+          }
+
+          for ( var i = 0; i < tokens.length; ++i ) {
+            var box = tokens[i].boxObject;
+            menuTokens[i].collapsed = !( showAll || ( box.x + box.width ) > rightLimitX );
           }
 
           var popup = document.getAnonymousElementByAttribute(this, "anonid", "tokens-menu-popup");
           popup.hidden = false;
-          popup.openPopup(this._embeddedActionsLayer, 'after_end');
+          popup.openPopup(aEvent.target, 'after_end');
         ]]></body>
       </method>
 
@@ -318,19 +330,19 @@
           if (aValue && (!this.hasAttribute("tokenized")
                          || this._displayMode != gSearchWP.Preferences.tokensDisplayMode)) {
             if (gSearchWP.Preferences.tokensDisplayMode == 2) { // Overlay
-              this._embeddedActionsLayer.collapsed = true;
               this._input.style.maxWidth = "0";
-              this._tokensLayer.collapsed = false;
+              this._tokensStack.collapsed = false;
+              this._completeMenu.collapsed = true;
             }
             else if (gSearchWP.Preferences.tokensDisplayMode == 3) { // Complete menu
-              this._tokensLayer.collapsed = true;
-              this._embeddedActionsLayer.collapsed = false;
               this._input.style.maxWidth = "none";
+              this._tokensStack.collapsed = true;
+              this._completeMenu.collapsed = false;
             }
             else { // Disabled
-              this._embeddedActionsLayer.collapsed = true;
-              this._tokensLayer.collapsed = true;
               this._input.style.maxWidth = "none";
+              this._tokensStack.collapsed = true;
+              this._completeMenu.collapsed = true;
             }
 
             this._displayMode = gSearchWP.Preferences.tokensDisplayMode;
@@ -350,12 +362,12 @@
         <body><![CDATA[
           if (this.hasAttribute("tokenized")) {
             if (gSearchWP.Preferences.tokensDisplayMode == 3) {  // Complete menu
-              this._embeddedActionsLayer.collapsed = false;
+              this._completeMenu.collapsed = false;
             }
             else {
-              this._embeddedActionsLayer.collapsed = true;
+              this._completeMenu.collapsed = true;
             }
-            this._tokensLayer.collapsed = true;
+            this._tokensStack.collapsed = true;
             this._input.style.maxWidth = "none";
 
             this.removeAttribute("tokenized");
@@ -367,7 +379,7 @@
           }
           else {
             if (gSearchWP.Preferences.tokensDisplayMode == 3) {  // Complete menu
-              this._embeddedActionsLayer.collapsed = !(this._tokensMenuPopupContainer.childNodes.length > 0);
+              this._completeMenu.collapsed = !(this._tokensMenuPopupContainer.childNodes.length > 0);
             }
           }
         ]]></body>
