@@ -429,11 +429,21 @@
       <method name="_findFast">
         <parameter name="aFindBackwards" />
         <parameter name="aMatchCase" />
+        <parameter name="aEvent" />
         <body><![CDATA[
           // To handle F3 correctly, we have to clear this find bar search.
           // See chrome://global/content/bindings/findbar.xml#findbar-textbox for more info
           if (gFindBar.hidden) {
             gFindBar.getElement("findbar-textbox").value = this.value;
+          }
+
+          if ( aEvent ) {
+            if ( aEvent.shiftKey ) {
+              aFindBackwards = !aFindBackwards;
+            }
+            if ( aEvent.altKey || aEvent.ctrlKey ) {
+              aMatchCase = !aMatchCase;
+            }
           }
 
           var fastFind = window.getBrowser().fastFind;
@@ -495,14 +505,14 @@
           }
         }
 
-        var findBackwards = event.shiftKey;
-        if (event.button >= 1 && event.button <= 2) {
-          findBackwards = !findBackwards;
-        }
+        var findBackwards = event.button >= 1 && event.button <= 2;
 
-        var matchCase = event.altKey || event.ctrlKey;
+        this._findFast(findBackwards, false, event);
+      ]]></handler>
 
-        this._findFast(findBackwards, matchCase);
+      <handler event="DOMMouseScroll" phase="capturing"><![CDATA[
+        var findBackwards = event.detail < 0;
+        this._findFast(findBackwards, false, event);
       ]]></handler>
     </handlers>
   </binding>
