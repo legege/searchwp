@@ -397,6 +397,60 @@
           return width;
         ]]></body>
       </method>
+
+      <method name="_findFast">
+        <parameter name="aWord" />
+        <parameter name="aEvent" />
+        <body><![CDATA[
+          // To handle F3 correctly, we have to clear this find bar search.
+          // See chrome://global/content/bindings/findbar.xml#findbar-textbox for more info
+          if (gFindBar.hidden) {
+            gFindBar.getElement("findbar-textbox").value = aWord;
+          }
+
+          var findBackwards;
+
+          if ( aEvent.type == "DOMMouseScroll" ) {
+            findBackwards = aEvent.detail < 0;
+          } else {
+            findBackwards = aEvent.button >= 1 && aEvent.button <= 2;
+          }
+
+          if ( aEvent.shiftKey ) {
+            findBackwards = !findBackwards;
+          }
+
+          var fastFind = window.getBrowser().fastFind;
+          fastFind.caseSensitive = aEvent.altKey || aEvent.ctrlKey;
+
+          var result;
+          if (fastFind.searchString != aWord) {
+            result = fastFind.find(aWord, false);
+          }
+          else {
+            result = fastFind.findAgain(findBackwards, false);
+          }
+
+          var stringbundle = this._searchwpStringBundle;
+          switch ( result ) {
+            case 0: // Found
+              break;
+            case 1: // Not found
+              gSearchWP.displayMessage(stringbundle.getFormattedString("notFound", [aWord], 1), true);
+              break;
+            case 2: // Wrapped
+              if ( findBackwards ) {
+                gSearchWP.displayMessage(stringbundle.getString("wrappedToBottom"), true);
+              }
+              else {
+                gSearchWP.displayMessage(stringbundle.getString("wrappedToTop"), true);
+              }
+              break;
+          }
+
+          return result;
+        ]]></body>
+      </method>
     </implementation>
 
     <handlers>
@@ -406,6 +460,31 @@
       <handler event="blur" phase="capturing">this._showTokens(this.value);</handler>
       <handler event="dragover" phase="capturing">this._hideTokens();</handler>
       <handler event="dragexit" phase="capturing">this._showTokens(this.value);</handler>
+
+      <handler event="DOMMouseScroll"><![CDATA[
+        if ( event.rangeParent.nodeType != 3 ) {
+          return;
+        }
+
+        var value = this.value;
+        var offset = event.rangeOffset;
+        var a = this.selectionStart;
+        var b = this.selectionEnd;
+
+        if ( !this.focused || offset < a || offset >= b ) {
+          var re = value.substring(0, offset).split('"').length % 2 == 0 ? /[^"]/ : /[^"+()~?,\s]/;
+          var n = value.length;
+          a = b = offset;
+          while ( a > 0 && re.test(value[a-1]) ) { --a };
+          while ( b < n && re.test(value[b]) ) { ++b };
+          this.selectionStart = a;
+          this.selectionEnd = b;
+        }
+
+        value = value.substring( a, b );
+
+        this._findFast( value, event );
+      ]]></handler>
     </handlers>
   </binding>
 
@@ -427,61 +506,22 @@
       </property>
 
       <method name="_findFast">
-        <parameter name="aFindBackwards" />
-        <parameter name="aMatchCase" />
         <parameter name="aEvent" />
         <body><![CDATA[
-          // To handle F3 correctly, we have to clear this find bar search.
-          // See chrome://global/content/bindings/findbar.xml#findbar-textbox for more info
-          if (gFindBar.hidden) {
-            gFindBar.getElement("findbar-textbox").value = this.value;
-          }
+          var result = document.getBindingParent(this)._findFast( this.value, aEvent );
 
-          if ( aEvent ) {
-            if ( aEvent.shiftKey ) {
-              aFindBackwards = !aFindBackwards;
+          if ( result == 1 ) {
+            this.setAttribute("notfound", true);
+            if (this._notFoundTimeout) {
+              clearTimeout(this._notFoundTimeout);
             }
-            if ( aEvent.altKey || aEvent.ctrlKey ) {
-              aMatchCase = !aMatchCase;
-            }
+
+            this._notFoundTimeout = setTimeout(function(aToken, aEvent) {
+              aToken.removeAttribute("notfound");
+            }, 3000, this);
           }
 
-          var fastFind = window.getBrowser().fastFind;
-          fastFind.caseSensitive = aMatchCase;
-
-          var result;
-          if (fastFind.searchString != this.value) {
-            result = fastFind.find(this.value, false);
-          }
-          else {
-            result = fastFind.findAgain(aFindBackwards, false);
-          }
-
-          var stringbundle = document.getBindingParent(this)._searchwpStringBundle;
-          switch (result) {
-            case 0: // Found
-              break;
-            case 1: // Not found
-              this.setAttribute("notfound", true);
-              if (this._notFoundTimeout) {
-                clearTimeout(this._notFoundTimeout);
-              }
-
-              this._notFoundTimeout = setTimeout(function(aToken, aEvent) {
-                aToken.removeAttribute("notfound");
-              }, 3000, this);
-
-              gSearchWP.displayMessage(stringbundle.getFormattedString("notFound", [this.value], 1), true);
-              break;
-            case 2: // Wrapped
-              if (aFindBackwards) {
-                gSearchWP.displayMessage(stringbundle.getString("wrappedToBottom"), true);
-              }
-              else {
-                gSearchWP.displayMessage(stringbundle.getString("wrappedToTop"), true);
-              }
-              break;
-          }
+          return result;
         ]]></body>
       </method>
     </implementation>
@@ -496,23 +536,22 @@
         if (event.button == 2) {
           event.preventDefault();
 
-          var popup = document.getAnonymousElementByAttribute(
-                      document.getBindingParent(this), "anonid", "tokens-menu-popup");
-          if (popup.state != "open"){
-            document.getBindingParent(this).focus();
-            document.getBindingParent(this).select();
+          var bindingParent = document.getBindingParent(this);
+
+          var popup = document.getAnonymousElementByAttribute(bindingParent, "anonid", "tokens-menu-popup");
+          if ( popup.state != "open" ){
+            bindingParent.focus();
+            bindingParent.select();
             return;
           }
         }
 
-        var findBackwards = event.button >= 1 && event.button <= 2;
-
-        this._findFast(findBackwards, false, event);
+        this._findFast( event );
       ]]></handler>
 
       <handler event="DOMMouseScroll" phase="capturing"><![CDATA[
-        var findBackwards = event.detail < 0;
-        this._findFast(findBackwards, false, event);
+        event.stopPropagation();
+        this._findFast( event );
       ]]></handler>
     </handlers>
   </binding>
