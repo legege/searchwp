@@ -153,7 +153,7 @@ gSearchWP.Highlighting = new function() {
     }
 
     var doc = aWindow.document;
-    if (!doc || doc && !("body" in doc)) {
+    if ( !doc || !doc.body ) {
       return count;
     }
 
