@@ -177,7 +177,7 @@ gSearchWP.Overlay = new function() {
             if (item) {
               item.setAttribute("checked", gSearchWP.Preferences.highlighted);
             }
-            gSearchWP.Highlighting.refresh();
+            //gSearchWP.Highlighting.refresh();
           }, 0);
           break;
         case gSearchWP.Preferences.PREF_HIGHLIGHT_MATCH_CASE:
@@ -186,13 +186,13 @@ gSearchWP.Overlay = new function() {
             if (item) {
               item.setAttribute("matchcase", gSearchWP.Preferences.highlightMatchCase);
             }
-            gSearchWP.Highlighting.refresh();
+            //gSearchWP.Highlighting.refresh();
           }, 0);
           break;
         case gSearchWP.Preferences.PREF_HIGHLIGHT_MINLENGTH:
-          setTimeout(function() {
-            gSearchWP.Highlighting.refresh();
-          }, 0);
+          //setTimeout(function() {
+          //  gSearchWP.Highlighting.refresh();
+          //}, 0);
           break;
       }
     }
