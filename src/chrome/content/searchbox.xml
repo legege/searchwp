@@ -62,7 +62,7 @@
 
       <field name="_cropped">false</field>
       <field name="_displayMode">0</field>
-
+      
       <property name="cropped" onget="return this._cropped;">
         <setter><![CDATA[
           this._cropped = val;
@@ -73,88 +73,18 @@
         ]]></setter>
       </property>
 
-      <method name="findByAttr">
-         <parameter name="root" />
-         <parameter name="attrName" />
-         <parameter name="value" />
-         <body><![CDATA[
-            var i, node, list;
-
-            node = document.getAnonymousElementByAttribute( root, attrName, value );
-
-            if ( node ) {
-              return node;
-            }
-
-            list = document.getAnonymousNodes( root );
-
-            if ( list ) {
-              for ( i = 0; root = list[i]; ++i ) {
-                if ( root.nodeType === 1 ) {
-                  node = this.findByAttr( root, attrName, value );
-
-                  if ( node ) {
-                    return node;
-                  }
-                }
-              }
-            }
-
-            return null;
-         ]]></body>
-      </method>
-
-       <method name="buildTree">
-         <parameter name="name" />
-         <parameter name="attrMap" />
-         <parameter name="childs" />
-         <body><![CDATA[
-          var m = /^(\w+)(?:#([\w\-]+))?(?:\.([\w\-\.]+))?$/.exec( name );
-
-          var node = document.createElement( m[1] );
-
-          for ( var attr in attrMap ) {
-            node.setAttribute( attr, attrMap[ attr ] );
-          }
-
-          if ( m[2] ) {
-            node.setAttribute( "anonid", m[2] );
-            var fieldName = "_" + m[2].replace(/\-(\w)/g, function(_, c) {
-              return c.toUpperCase();
-            });
-            this[ fieldName ] = node;
-          }
-
-          if ( m[3] ) {
-            node.setAttribute( "class", m[3].split(".").join(" ") );
-          }
-
-          node._bindingRoot = this;
-
-          if ( childs ) {
-            childs = !childs.nodeType ? childs : Array.slice( arguments, 2 );
-            for ( var i = 0; childs[i]; ++i ) {
-              node.appendChild( childs[i] );
-            }
-          }
-
-          return node;
-         ]]></body>
-      </method>
-
       <method name="initializeSearchWPContent">
         <body><![CDATA[
-          var self = this;
-          var _ = function(){ return self.buildTree.apply( self, arguments ) };
+          var _ = gSearchWP.xblUtils.createBuilder( document, this, {_bindingRoot: this} );
 
-          this._input = this.findByAttr( this, "anonid", "input" );
-          var textboxInputBox = this._input.parentNode;
+          this._input = gSearchWP.xblUtils.getByAttr( this, "anonid", "input" );
+          var inputParent = this._input.parentNode;
 
-          textboxInputBox.appendChild(
+          inputParent.appendChild(
             _("stringbundle#searchwp-string-bundle", { src: "chrome://@NAME@/locale/searchbox.properties" })
           );
 
-          textboxInputBox.appendChild(
+          inputParent.appendChild(
             _('stack#tokens-stack', { flex: "1", collapsed: "true" },
               // Tokens layer
               _('hbox#tokens-layer.searchbox-tokens-layer', {
@@ -180,7 +110,7 @@
             )
           );
 
-          textboxInputBox.appendChild(
+          inputParent.appendChild(
             _('hbox#complete-menu.searchbox-embedded-actions-layer', {
                   flex: "1", mousethrough: "always", align: "right", collapsed: "true"
                },
@@ -192,7 +122,7 @@
              )
           );
 
-          textboxInputBox.appendChild(
+          inputParent.appendChild(
             _('panel#tokens-menu-popup.searchbox-tokens-menu-popup', { onclick: "event.stopPropagation();" },
                 _('vbox#tokens-menu-popup-container.searchbox-tokens-menu-popup-container')
             )
@@ -206,15 +136,24 @@
 
           this._displayMode = gSearchWP.Preferences.tokensDisplayMode;
 
+          var _rebuildTimeout;
           var self = this;
+          function rebuildCallback() {
+            _rebuildTimeout = 0;
+            self._rebuildTokens( self.value );
+            gSearchWP.Highlighting.flushUpdate();
+          }
 
           this._SearchWPPreferencesObserver = new gSearchWP.Preferences.Observer(function( pref_name ) {
                // If any pref changed, we need to rebuild tokens to adjust presentation
                switch ( pref_name ) {
+                 case gSearchWP.Preferences.PREF_HIGHLIGHT_MATCH_CASE:
                  case gSearchWP.Preferences.PREF_TOKENS_DISPLAY_MODE:
                  case gSearchWP.Preferences.PREF_HIGHLIGHT_STATE:
                  case gSearchWP.Preferences.PREF_HIGHLIGHT_MINLENGTH:
-                   self._rebuildTokens( self.value );
+                   // Ensures not multiple rebuilding are invoked at once.
+                   _rebuildTimeout && clearTimeout( _rebuildTimeout );
+                   _rebuildTimeout = setTimeout( rebuildCallback, 5 );
                    break;
                  case gSearchWP.Preferences.PREF_HIGHLIGHT_OVERLAPS_DYSPLAY_MODE:
                    gSearchWP.Highlighting.refresh();
@@ -272,7 +211,7 @@
       </method>
 
       <method name="_rebuildTokens">
-        <parameter name="aValue"/>
+        <parameter name="aValue" />
         <body><![CDATA[
           // Set the display mode attribute (for CSS)
           this.setAttribute("tokensdisplaymode", gSearchWP.Preferences.tokensDisplayMode);
@@ -285,35 +224,61 @@
             this._tokensMenuPopupContainer.removeChild(this._tokensMenuPopupContainer.firstChild);
           }
 
-          if (aValue) {
+          if ( aValue ) {
             //var tokensScrollBoxObject = this._tokensContainer.boxObject.QueryInterface(Components.interfaces.nsIScrollBoxObject);
 
             // Create an array of terms and we add them to the tokens layer and the tokens popup
-            var termsArray = gSearchWP.Tokenizer.createTokensArray(aValue);
-            for (var i = 0, j = 0; i < termsArray.length; i++) {
-              var tokenNode = this._tokenProto.cloneNode(true);
-              tokenNode.value = termsArray[i];
-              tokenNode.setAttribute("tooltiptext", this._searchwpStringBundle.getFormattedString("tokenTooltiptext", [termsArray[i]], 1));
 
-              if (gSearchWP.Preferences.highlighted && termsArray[i].length >= gSearchWP.Preferences.highlightMinLength) {
-                var criteria = "term-" + ((j++ % gSearchWP.Preferences.highlighterCount) + 1);
-                tokenNode.setAttribute("highlight", criteria);
+            var highlighted = gSearchWP.Preferences.highlighted;
+            var highlightMinLength = gSearchWP.Preferences.highlightMinLength;
+            var highlighterCount = gSearchWP.Preferences.highlighterCount;
+            var highlightMatchCase = gSearchWP.Preferences.highlightMatchCase;
+
+            var matches = gSearchWP.Tokenizer.findTerms( aValue );
+            var termsArray = [];
+            var criteriaMap = {};
+            var done = {};
+
+            var fragment = document.createDocumentFragment();
+
+            for (var i = 0, j = 0; i < matches.length; i++) {
+              var term = matches[i].value;
+              var key = " " + term;
+
+              if ( done[key] ) {
+                continue;
+              }
+              done[key] = true;
+
+              var tokenNode = this._tokenProto.cloneNode(true);
+              tokenNode.value = term;
+              tokenNode.setAttribute("tooltiptext", this._searchwpStringBundle.getFormattedString("tokenTooltiptext", [term], 1));
+
+              if ( highlighted && term.length >= highlightMinLength ) {
+                if ( !highlightMatchCase ) {
+                  key = key.toLowerCase();
+                }
+                if ( !criteriaMap[key] ) {
+                  criteriaMap[key] = "term-" + ( j++ % highlighterCount + 1 );
+                  termsArray.push( term );
+                }
+                tokenNode.setAttribute( "highlight", criteriaMap[key] );
               }
 
-              this._tokensContainer.appendChild(tokenNode);
-
-              // We add all tokens in the popup menu too.
-              var tokenPopupNode = tokenNode.cloneNode(true);
-              this._tokensMenuPopupContainer.appendChild(tokenPopupNode);
+              fragment.appendChild( tokenNode );
             }
 
-            gSearchWP.Highlighting.update(termsArray);
+            // We add all tokens in the popup menu too.
+            this._tokensContainer.appendChild( fragment.cloneNode(true) );
+            this._tokensMenuPopupContainer.appendChild( fragment );
+
+            gSearchWP.Highlighting.update( termsArray );
           }
           else {
             gSearchWP.Highlighting.update();
           }
 
-          if (aValue && !this.hasAttribute("focused")) {
+          if ( aValue && !this.hasAttribute("focused") ) {
             this._showTokens(aValue);
           }
           else {
@@ -420,11 +385,17 @@
             findBackwards = !findBackwards;
           }
 
+          var matchCase = aEvent.altKey || aEvent.ctrlKey;
+
           var fastFind = window.getBrowser().fastFind;
-          fastFind.caseSensitive = aEvent.altKey || aEvent.ctrlKey;
+          fastFind.caseSensitive = matchCase;
+
+          var isNewSearch = matchCase ?
+            fastFind.searchString != aWord :
+            fastFind.searchString.toLowerCase() != aWord.toLowerCase();
 
           var result;
-          if (fastFind.searchString != aWord) {
+          if ( isNewSearch ) {
             result = fastFind.find(aWord, false);
           }
           else {
@@ -454,7 +425,7 @@
     </implementation>
 
     <handlers>
-      <handler event="input" action="this._rebuildTokens(this.value)" />
+      <handler event="input" action="this._rebuildTokens( this.value )" />
 
       <handler event="focus" phase="capturing">this._hideTokens();</handler>
       <handler event="blur" phase="capturing">this._showTokens(this.value);</handler>
@@ -466,24 +437,24 @@
           return;
         }
 
-        var value = this.value;
+        var term;
         var offset = event.rangeOffset;
         var a = this.selectionStart;
         var b = this.selectionEnd;
 
         if ( !this.focused || offset < a || offset >= b ) {
-          var re = value.substring(0, offset).split('"').length % 2 == 0 ? /[^"]/ : /[^"+()~?,\s]/;
-          var n = value.length;
-          a = b = offset;
-          while ( a > 0 && re.test(value[a-1]) ) { --a };
-          while ( b < n && re.test(value[b]) ) { ++b };
-          this.selectionStart = a;
-          this.selectionEnd = b;
+          var match = gSearchWP.Tokenizer.getByOffset( this.value, offset );
+          term = match.value;
+          this.selectionStart = match.index;
+          this.selectionEnd = match.index + term.length;
+
+        } else {
+          term = this.value.substring( a, b );
         }
 
-        value = value.substring( a, b );
-
-        this._findFast( value, event );
+        if ( term ) {
+          this._findFast( term, event );
+        }
       ]]></handler>
     </handlers>
   </binding>
@@ -524,6 +495,7 @@
           return result;
         ]]></body>
       </method>
+
     </implementation>
 
     <handlers>

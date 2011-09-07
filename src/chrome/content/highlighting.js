@@ -48,7 +48,7 @@ gSearchWP.Highlighting = new function() {
    * Updates the highlighting according to the terms.
    */
   this.update = function(aTokensArray, aForce) {
-    if (aForce || !gSearchWP.Tokenizer.compare(_tokensArrayCache, aTokensArray)) {
+    if ( aForce || !_tokensArrayCache || !aTokensArray || !areArraysEqual(_tokensArrayCache, aTokensArray) ) {
       _tokensArrayCache = aTokensArray;
 
       setRefreshTimeout();
@@ -59,12 +59,20 @@ gSearchWP.Highlighting = new function() {
    * Refreshes the current highlighting.
    */
   this.refresh = function() {
+   clearRefreshTimeout();
+
     if (gSearchWP.Preferences.highlighted) {
       unhighlight();
       highlight();
     }
     else {
       unhighlight();
+    }
+  }
+
+  this.flushUpdate = function() {
+    if ( _highlightTimeout ) {
+      this.refresh();
     }
   }
 
@@ -100,10 +108,19 @@ gSearchWP.Highlighting = new function() {
    * Sets a refresh for the highlighting in 500ms.
    */
   function setRefreshTimeout() {
-    if (_highlightTimeout) {
-      clearTimeout(_highlightTimeout);
+    clearRefreshTimeout();
+    _highlightTimeout = setTimeout( refreshTimeoutCallback, 500 );
+  }
+
+  function clearRefreshTimeout() {
+    if ( _highlightTimeout ) {
+      clearTimeout( _highlightTimeout );
+      _highlightTimeout = 0;
     }
-    _highlightTimeout = setTimeout(function() { gSearchWP.Highlighting.refresh(); }, 500);
+  }
+
+  function refreshTimeoutCallback() {
+    gSearchWP.Highlighting.refresh();
   }
 
   /**
@@ -111,15 +128,14 @@ gSearchWP.Highlighting = new function() {
    */
   function highlight() {
     var termsArray = _tokensArrayCache;
-    if (termsArray) {
+    if ( termsArray ) {
       var count = 0;
-      var j = 0;
-      for (var term in termsArray) {
-        if (termsArray[term].length >= gSearchWP.Preferences.highlightMinLength) {
-          var criteria = "term-" + ((j++ % gSearchWP.Preferences.highlighterCount) + 1);
-          count = count + highlightBrowserWindow(termsArray[term], criteria,
-              gSearchWP.Preferences.highlightMatchCase);
-        }
+      var highlighterCount = gSearchWP.Preferences.highlighterCount;
+      var highlightMatchCase = gSearchWP.Preferences.highlightMatchCase;
+
+      for ( var i = 0, len = termsArray.length; i < len; ++i ) {
+        var criteria = "term-" + ( i % highlighterCount + 1 );
+        count += highlightBrowserWindow( termsArray[i], criteria, highlightMatchCase );
       }
 
       if (count > 1) {
@@ -306,5 +322,19 @@ gSearchWP.Highlighting = new function() {
     } catch (e) {
       return null;
     }
+  }
+
+  function areArraysEqual( aArray1, aArray2 ) {
+    if ( aArray1.length != aArray2.length ) {
+      return false;
+    }
+
+    for ( var i = 0, len = aArray1.length; i < len; ++i ) {
+      if ( aArray1[i] !== aArray2[i] ) {
+        return false;
+      }
+    }
+
+    return true;
   }
 }

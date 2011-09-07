@@ -13,7 +13,7 @@
  *
  * The Original Code is SearchWP.
  *
- * The Initial Developer of the Original Code is 
+ * The Initial Developer of the Original Code is
  *  Georges-Etienne Legendre <legege@legege.com> <http://legege.com>.
  * Portions created by the Initial Developer are Copyright (C) 2004-2008.
  * All Rights Reserved.
@@ -22,146 +22,75 @@
 
 gSearchWP.Tokenizer = new function() {
 
-  /**
-   * @param aSearchString The search string.
-   * @return an array that contains, for each words, the label to display and
-   *   the className when the term is highlighted.
-   */
-  this.createTokensArray = function(aSearchString) {
-    return parseTerms(aSearchString);
-  }
+  this.getByOffset = function( input, offset ) {
+    var inQuotes = input.substring(0, offset).split('"').length % 2 == 0;
+    var re = inQuotes ? reNotQuote : reNotTerm;
+    var a = offset, b = offset, n = input.length;
+    while ( a > 0 && re.test(input[a-1]) ) { --a };
+    while ( b < n && re.test(input[b]) ) { ++b };
 
-  /**
-   * @return true if the 2 tokens array are identicals
-   */
-  this.compare = function(aTokensArray1, aTokensArray2) {
-    if (aTokensArray1 && aTokensArray2) {
-      if (aTokensArray1.length == aTokensArray2.length) {
-        var i = 0;
-        while(i < aTokensArray2.length && aTokensArray2[i] == aTokensArray1[i]) {
-          i++;
-        }
-        if (i == aTokensArray2.length) { //Identical
-          return true;
-        }
+    if ( !inQuotes ) {
+      var t = input.indexOf(':', a);
+      if ( ~t && t < offset && reCmd.test( input.substring(a, t) ) ) {
+        a = t + 1;
       }
     }
-    return false;
+
+    return { value: input.substring(a, b), index: a };
   }
 
-  /**
-   * From the Googlebar project: googlebarUtil.js
-   *
-   * @param aCriteria The search string.
-   * @return an array of terms.
-   */
-  function parseTerms(aCriteria) {
-    // quotes only matter when preceded by a space or a quote.
-    var terms = new Array();
-    var inQuote = false;
-    var haveTerm = false;
+  // 1:special-char | 2:quoted | 3:not-quoted
+  var reDigest = /(?:(\-)|"([^"]+)"?|([^+()~?,\s]+))/g;
+  var reNotQuote = /[^"]/;
+  var reNotTerm = /[^+()~?,\s]/;
+  var reCmd = /^(?:allinanchor|allintext|allintitle|allinurl|author|bphonebook|cache|define|ext|filetype|group|id|inanchor|info|insubject|intext|intitle|inurl|link|location|movie|msgid|phonebook|related|rphonebook|safesearch|site|source|stocks|store|weather)$/
 
-    var currPtr  = 0; // the start of the current term
-    var prevChar = ' '; // the char we last saw
+  this.findTerms = function( input ) {
+    var terms = [];
+    var m, val, index, ignoreAt, toIgnore, t, groupLevel = 0;
 
-    var val;
+    reDigest.lastIndex = 0;
 
-    aCriteria = aCriteria.replace(/(allinanchor|allintext|allintitle|allinurl|author|bphonebook|cache|define|ext|filetype|group|id|inanchor|info|insubject|intext|intitle|inurl|link|location|movie|msgid|phonebook|related|rphonebook|safesearch|site|source|stocks|store|weather):/g, "");
-
-    for (var index = 0; index < aCriteria.length; index++) {
-      var currChar = aCriteria.charAt(index);
-
-      switch (currChar) {
-        case '+':
-        case '(':
-        case ')':
-        case '~':
-        case '?':
-        case ',':
-        case ' ':
-        // double-byte space
-        case decodeURIComponent('%E3%80%80'):
-          // these characters do not occur on the search term buttons,
-          // except in quoted phrases
-          if (!inQuote && !haveTerm) {
-            currPtr = index;
-          }
-          else if (!inQuote && haveTerm) {
-            val = trimString(aCriteria.substring(currPtr, index));
-
-            if (val[0] != '-' && val != 'OR' && val != 'AND' && !inArray(terms, val)) {
-              terms.push(val);
-              currPtr = index;
-            }
-            haveTerm = false;
-          }
-          else if (inQuote && !haveTerm) {
-            haveTerm = true;
-            currPtr = index;
-          }
-          break;
-
-        case '"':
-          if (haveTerm) {
-            val = aCriteria.substring(currPtr, index);
-            if (!inArray(terms, val)) {
-              terms.push(val);
-            }
-          }
-
-          // phrases (enclosed in "") should result in only one button
-          if (!inQuote) {
-            inQuote = true;
-          }
-          else if (inQuote && haveTerm) {
-            inQuote = false;
-          }
-
-          haveTerm = false;
-          break;
-
-        default:
-          if (!haveTerm) {
-            haveTerm = true;
-            currPtr = index;
-          }
+    while(( m = reDigest.exec(input) )) {
+      if ( m[1] ) {
+        ignoreAt = reDigest.lastIndex;
+        continue;
       }
-      prevChar = currChar;
-    }
 
-    val = trimString(aCriteria.substring(currPtr, index));
+      val = m[3];
+      index = m.index;
+      toIgnore = index === ignoreAt;
 
-    if (haveTerm && val[0] != '-' && val != 'OR' && val != 'AND' && !inArray(terms, val)) {
-      terms.push(val);
+      if ( val ) {
+        if ( val == "OR" || val == "AND" ) {
+          continue;
+        }
+
+        t = val.indexOf(':');
+        if ( ~t && reCmd.test( val.substring(0, t) ) ) {
+          reDigest.lastIndex = index + t + 1;
+          if ( toIgnore ) {
+            ignoreAt = reDigest.lastIndex;
+          }
+          continue;
+        }
+      }
+
+      if ( toIgnore ) {
+        continue;
+      }
+
+      if ( !val ) {
+        val = m[2];
+        ++index;
+      }
+
+      if ( val ) {
+        terms.push({ value: val, index: index });
+      }
     }
 
     return terms;
   }
 
-  /**
-   * Determines if a given string is contained in an array.
-   * @param aArr The array.
-   * @param aStr The string.
-   * @return true if the string is contained in the array, false if not.
-   */
-  function inArray(aArr, aStr) {
-    for (var i = 0; i < aArr.length; i++) {
-      if (aArr[i].toLowerCase() == trimString(aStr.toLowerCase())) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  /**
-   * Trim a string.
-   * @param aString the string.
-   * @return the modified string.
-   */
-  function trimString(aString) {
-    if (!aString) {
-      return "";
-    }
-    return aString.replace(/(^\s+)|(\s+$)/g, '');
-  }
 }
