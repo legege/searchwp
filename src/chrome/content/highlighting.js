@@ -24,7 +24,8 @@ gSearchWP.Highlighting = new function() {
   gSearchWP.loadStyleSheet("chrome://@NAME@/skin/highlighting-user.css");
 
   var _stringBundle = null;
-  var _tokensArrayCache = [];
+  var _tokensArrayCache;
+  var _matchCaseCache;
   var _highlightTimeout;
   var _highlighter = new gSearchWP.Highlighter.NodeHighlighter("searchwp-highlighting");
   var _nodeSearcher = new gSearchWP.Highlighter.NodeSearcher();
@@ -36,7 +37,7 @@ gSearchWP.Highlighting = new function() {
     _stringBundle = document.getElementById("bundle-searchwp");
 
     var tabBox = document.getElementById("content").mTabBox;
-    tabBox.addEventListener("select", function(aEvent) { gSearchWP.Highlighting.refresh() }, false);
+    tabBox.addEventListener("select", refreshCallback, false);
 
     if (this.highlightButton) {
       this.highlightButton.setAttribute("checked", gSearchWP.Preferences.highlighted);
@@ -48,8 +49,15 @@ gSearchWP.Highlighting = new function() {
    * Updates the highlighting according to the terms.
    */
   this.update = function(aTokensArray, aForce) {
-    if ( aForce || !_tokensArrayCache || !aTokensArray || !areArraysEqual(_tokensArrayCache, aTokensArray) ) {
+    var highlightMatchCase = gSearchWP.Preferences.highlightMatchCase;
+
+    if ( aForce ||
+      !_tokensArrayCache != !aTokensArray ||
+      !_matchCaseCache != !highlightMatchCase ||
+      !areArraysEqual( _tokensArrayCache, aTokensArray )
+    ) {
       _tokensArrayCache = aTokensArray;
+      _matchCaseCache = highlightMatchCase;
 
       setRefreshTimeout();
     }
@@ -109,7 +117,7 @@ gSearchWP.Highlighting = new function() {
    */
   function setRefreshTimeout() {
     clearRefreshTimeout();
-    _highlightTimeout = setTimeout( refreshTimeoutCallback, 500 );
+    _highlightTimeout = setTimeout( refreshCallback, 500 );
   }
 
   function clearRefreshTimeout() {
@@ -119,7 +127,7 @@ gSearchWP.Highlighting = new function() {
     }
   }
 
-  function refreshTimeoutCallback() {
+  function refreshCallback() {
     gSearchWP.Highlighting.refresh();
   }
 
