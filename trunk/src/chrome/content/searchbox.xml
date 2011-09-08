@@ -62,7 +62,7 @@
 
       <field name="_cropped">false</field>
       <field name="_displayMode">0</field>
-      
+
       <property name="cropped" onget="return this._cropped;">
         <setter><![CDATA[
           this._cropped = val;
