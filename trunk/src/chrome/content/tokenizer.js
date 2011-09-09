@@ -23,30 +23,26 @@
 gSearchWP.Tokenizer = new function() {
 
   this.getByOffset = function( input, offset ) {
-    var inQuotes = input.substring(0, offset).split('"').length % 2 == 0;
-    var re = inQuotes ? reNotQuote : reNotTerm;
-    var a = offset, b = offset, n = input.length;
-    while ( a > 0 && re.test(input[a-1]) ) { --a };
-    while ( b < n && re.test(input[b]) ) { ++b };
+    var matches = this.findTerms( input );
 
-    if ( !inQuotes ) {
-      var t = input.indexOf(':', a);
-      if ( ~t && t < offset && reCmd.test( input.substring(a, t) ) ) {
-        a = t + 1;
+    for ( var i = 0, m; m = matches[i]; ++i ) {
+      if ( m.index > offset ) {
+        break;
+      }
+      if ( (m.index + m.value.length) > offset ) {
+        return m;
       }
     }
 
-    return { value: input.substring(a, b), index: a };
+    return null;
   }
 
   // 1:special-char | 2:quoted | 3:not-quoted
   var reDigest = /(?:(\-)|"([^"]+)"?|([^+()~?,\s]+))/g;
-  var reNotQuote = /[^"]/;
-  var reNotTerm = /[^+()~?,\s]/;
   var reCmd = /^(?:allinanchor|allintext|allintitle|allinurl|author|bphonebook|cache|define|ext|filetype|group|id|inanchor|info|insubject|intext|intitle|inurl|link|location|movie|msgid|phonebook|related|rphonebook|safesearch|site|source|stocks|store|weather)$/
 
   this.findTerms = function( input ) {
-    var terms = [];
+    var matches = [];
     var m, val, index, ignoreAt, toIgnore, t, groupLevel = 0;
 
     reDigest.lastIndex = 0;
@@ -86,11 +82,11 @@ gSearchWP.Tokenizer = new function() {
       }
 
       if ( val ) {
-        terms.push({ value: val, index: index });
+        matches.push({ value: val, index: index });
       }
     }
 
-    return terms;
+    return matches;
   }
 
 }
