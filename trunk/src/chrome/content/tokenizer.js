@@ -38,7 +38,7 @@ gSearchWP.Tokenizer = new function() {
   }
 
   // 1:special-char | 2:quoted | 3:not-quoted
-  var reDigest = /(?:(\-)|"([^"]*)"?|([^+()~?,\s]+))/g;
+  var reDigest = /(?:(\-)|"([^"]*)"?|([^"+()~?,\s]+))/g;
   var reCmd = /^(?:allinanchor|allintext|allintitle|allinurl|author|bphonebook|cache|define|ext|filetype|group|id|inanchor|info|insubject|intext|intitle|inurl|link|location|movie|msgid|phonebook|related|rphonebook|safesearch|site|source|stocks|store|weather)$/
 
   this.findTerms = function( input ) {
