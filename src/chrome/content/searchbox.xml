@@ -488,7 +488,7 @@
               clearTimeout(this._notFoundTimeout);
             }
 
-            this._notFoundTimeout = setTimeout(function(aToken, aEvent) {
+            this._notFoundTimeout = setTimeout(function( aToken ) {
               aToken.removeAttribute("notfound");
             }, 3000, this);
           }

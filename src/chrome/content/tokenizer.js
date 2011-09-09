@@ -43,7 +43,7 @@ gSearchWP.Tokenizer = new function() {
 
   this.findTerms = function( input ) {
     var matches = [];
-    var m, val, index, ignoreAt, toIgnore, t, groupLevel = 0;
+    var m, val, index, ignoreAt, toIgnore, t;
 
     reDigest.lastIndex = 0;
 
