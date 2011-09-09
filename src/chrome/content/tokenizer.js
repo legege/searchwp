@@ -43,19 +43,19 @@ gSearchWP.Tokenizer = new function() {
 
   this.findTerms = function( input ) {
     var matches = [];
-    var m, val, index, ignoreAt, toIgnore, t;
+    var m, val, index, notAt, not, t;
 
     reDigest.lastIndex = 0;
 
     while(( m = reDigest.exec(input) )) {
       if ( m[1] ) {
-        ignoreAt = reDigest.lastIndex;
+        notAt = reDigest.lastIndex;
         continue;
       }
 
       val = m[3];
       index = m.index;
-      toIgnore = index === ignoreAt;
+      not = index === notAt;
 
       if ( val ) {
         if ( val == "OR" || val == "AND" ) {
@@ -65,24 +65,19 @@ gSearchWP.Tokenizer = new function() {
         t = val.indexOf(':');
         if ( ~t && reCmd.test( val.substring(0, t) ) ) {
           reDigest.lastIndex = index + t + 1;
-          if ( toIgnore ) {
-            ignoreAt = reDigest.lastIndex;
+          if ( not ) {
+            notAt = reDigest.lastIndex;
           }
           continue;
         }
-      }
 
-      if ( toIgnore ) {
-        continue;
-      }
-
-      if ( !val ) {
+      } else {
         val = m[2];
         ++index;
       }
 
       if ( val ) {
-        matches.push({ value: val, index: index });
+        matches.push({ value: val, index: index, not: not });
       }
     }
 

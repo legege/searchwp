@@ -245,7 +245,7 @@
               var term = matches[i].value;
               var key = " " + term;
 
-              if ( done[key] ) {
+              if ( matches[i].not || done[key] ) {
                 continue;
               }
               done[key] = true;
