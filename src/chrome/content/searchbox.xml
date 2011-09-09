@@ -444,10 +444,11 @@
 
         if ( !this.focused || offset < a || offset >= b ) {
           var match = gSearchWP.Tokenizer.getByOffset( this.value, offset );
-          term = match.value;
-          this.selectionStart = match.index;
-          this.selectionEnd = match.index + term.length;
-
+          if ( match ) {
+            term = match.value;
+            this.selectionStart = match.index;
+            this.selectionEnd = match.index + term.length;
+          }
         } else {
           term = this.value.substring( a, b );
         }
