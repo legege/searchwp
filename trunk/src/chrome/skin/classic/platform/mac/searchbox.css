@@ -24,6 +24,11 @@
 @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
 @namespace html url("http://www.w3.org/1999/xhtml");
 
+.searchbar-textbox[tokenized="true"] {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
 .searchbox-tokens-layer {
   margin-top: 0px;
 }
