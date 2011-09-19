@@ -1,7 +1,7 @@
 #summary Change Log
 #labels Featured
 
-== SearchWP 2.6.0 (NOT RELEASED) ==
+== SearchWP 2.6.0 (September 18th, 2011) ==
  * Fixed: Context menu incomplete for text field (Show suggestions and clear history). (issue 13)
  * New: Highlighting of split/overlapping terms. (issue 5, issue 9, issue 58)
  * New: Fast searching by mouse scrolling over terms in all modes (buttons, grouped, edit). (issue 67, issue 70)
