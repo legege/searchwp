@@ -54,7 +54,7 @@ gSearchWP.Highlighting = new function() {
     if ( aForce ||
       !_tokensArrayCache != !aTokensArray ||
       !_matchCaseCache != !highlightMatchCase ||
-      !areArraysEqual( _tokensArrayCache, aTokensArray )
+      !areArraysEqual( _tokensArrayCache || [], aTokensArray || [] )
     ) {
       _tokensArrayCache = aTokensArray;
       _matchCaseCache = highlightMatchCase;
