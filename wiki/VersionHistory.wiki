@@ -1,6 +1,9 @@
 #summary Change Log
 #labels Featured
 
+== SearchWP 2.6.1 (NOT RELEASED) ==
+ * Fixed: Fx App Menu button color does not change when stopping Private Browsing mode. (issue 71)
+
 == SearchWP 2.6.0 (September 18th, 2011) ==
  * Fixed: Context menu incomplete for text field (Show suggestions and clear history). (issue 13)
  * New: Highlighting of split/overlapping terms. (issue 5, issue 9, issue 58)
