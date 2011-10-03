@@ -50,7 +50,11 @@
       ]]></constructor>
 
       <destructor><![CDATA[
-        this.tearDownSearchWP();
+        // Seams that destructor is also called after deletion of properties,
+        // so be sure those are still there.
+        if ( this._SearchWP_Initialized ) {
+          this.tearDownSearchWP();
+        }
       ]]></destructor>
 
       <field name="_tokenProto"><![CDATA[
@@ -132,6 +136,8 @@
 
       <method name="initializeSearchWP">
         <body><![CDATA[
+          this._SearchWP_Initialized = true;
+
           this.initializeSearchWPContent();
 
           this._displayMode = gSearchWP.Preferences.tokensDisplayMode;
