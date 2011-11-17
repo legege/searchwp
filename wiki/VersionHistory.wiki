@@ -1,7 +1,7 @@
 #summary Change Log
 #labels Featured
 
-== SearchWP 2.6.1 (November 17th, 2011) ==
+== SearchWP 2.6.1 (November 16th, 2011) ==
  * Fixed: Fx App Menu button color does not change when stopping Private Browsing mode. (issue 71)
  * Fixed: Tokens cause urlbar to change in height with Firefox 8+. (issue 72)
 
