@@ -13,7 +13,7 @@
  *
  * The Original Code is SearchWP.
  *
- * The Initial Developer of the Original Code is 
+ * The Initial Developer of the Original Code is
  *  Georges-Etienne Legendre <legege@legege.com> <http://legege.com>.
  * Portions created by the Initial Developer are Copyright (C) 2004-2008.
  * All Rights Reserved.
@@ -24,7 +24,7 @@
 @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
 @namespace html url("http://www.w3.org/1999/xhtml");
 
-.searchbar-textbox[tokenized="true"] {
+.searchbar-textbox[tokenized="true"][has-padding="true"] {
   padding-top: 0 !important;
   padding-bottom: 0 !important;
 }

@@ -138,6 +138,12 @@
         <body><![CDATA[
           this._SearchWP_Initialized = true;
 
+          // https://bugzilla.mozilla.org/show_bug.cgi?id=686671
+          var padding = window.getComputedStyle(this, null).getPropertyValue("padding-top");
+          if ( parseFloat(padding) > 0 ) {
+            this.setAttribute("has-padding", "true");
+          }
+
           this.initializeSearchWPContent();
 
           this._displayMode = gSearchWP.Preferences.tokensDisplayMode;
