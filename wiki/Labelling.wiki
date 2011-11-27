@@ -2,6 +2,6 @@ Custom labels explained. Also to keep track of used ones.
 
 || *Conflict* || Conflict with other extensions is the cause of the problem. ||
 || *App-bug* || The issue is actually because of an Firefox bug. ||
-|| *Localization* || New translation or changes to an existent ones. ||
+|| *Localization* || New translation or changes to existent ones. ||
 || *Usability* || tweaking of existent UI behaviors to improve usability. (?) ||
  
