@@ -1,4 +1,6 @@
-Custom labels explained. Also to keep track of used ones.
+#summary Issue labelling
+
+Custom labels explained:
 
 || *`Conflict`* || Conflict with other extensions is the cause of the problem. ||
 || *`AppBug`* || The issue is actually because of an Firefox bug. ||
