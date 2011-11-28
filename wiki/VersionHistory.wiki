@@ -1,7 +1,7 @@
 #summary Change Log
 #labels Featured
 
-== SearchWP 2.6.2 (NOT RELEASED) ==
+== SearchWP 2.6.2 (November 28th, 2011) ==
  * Fixed: Tokens cause search-bar to shrink in height with Firefox 8. (issue 76)
  * New translation: Swedish. (issue 75)
  * Speed improvements on highlighting.
