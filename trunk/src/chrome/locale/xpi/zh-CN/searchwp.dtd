@@ -1,8 +1,0 @@
-<!ENTITY searchbox.tokens.menu.tooltiptext "更多快速查找按钮...">
-<!ENTITY button.highlight.label "高亮">
-<!ENTITY button.highlight.tooltiptext "切换高亮时是否大小写匹配">
-<!ENTITY pref.title "选项">
-<!ENTITY pref.highlightMinlength.label "单词高亮最短长度:">
-<!ENTITY pref.highlightMinlength.accesskey "L">
-<!ENTITY pref.groupTokensSingleMenu.label "在单个菜单中显示搜索字串">
-<!ENTITY pref.groupTokensSingleMenu.accesskey "M">

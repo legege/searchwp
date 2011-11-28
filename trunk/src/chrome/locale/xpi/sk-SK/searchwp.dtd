@@ -1,8 +1,0 @@
-<!ENTITY searchbox.tokens.menu.tooltiptext "Viac tlačidiel pre rýchle vyhľadávanie...">
-<!ENTITY button.highlight.label "Zvýrazniť">
-<!ENTITY button.highlight.tooltiptext "Zapnúť a vypnúť zvýraznenie s alebo bez možnosti porovnania">
-<!ENTITY pref.title "Možnosti">
-<!ENTITY pref.highlightMinlength.label "Minimálna dĺžka pre slová , ktoré majú byť zvýraznené:">
-<!ENTITY pref.highlightMinlength.accesskey "M">
-<!ENTITY pref.groupTokensSingleMenu.label "Zoskupiť slovné znaky do jedinej ponuky">
-<!ENTITY pref.groupTokensSingleMenu.accesskey "Z">
