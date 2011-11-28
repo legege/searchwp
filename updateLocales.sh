@@ -1,9 +1,13 @@
 #!/usr/bin/env bash
-echo "Adding locale files..."
-LOCALES="$(dirname $0)/src/chrome/locale"
+echo "Copying locale files..."
+LOCALES_SRC="$1"
+LOCALES_DEST="$(dirname $0)/src/chrome/locale/xpi"
 
-for locale in `ls $LOCALES`; do
-  echo "Adding files for $locale..."
-  svn add $LOCALES/$locale 2> /dev/null
-  svn add $LOCALES/$locale/* 2> /dev/null
+echo "Destination: $LOCALES_DEST"
+for locale in `ls $LOCALES_SRC`; do
+  echo "Copying file for $locale..."
+  mkdir -p $LOCALES_DEST/$locale/
+  cp -r $LOCALES_SRC/$locale/* $LOCALES_DEST/$locale/
+  svn add $LOCALES_DEST/$locale 2> /dev/null
+  svn add $LOCALES_DEST/$locale/* 2> /dev/null
 done

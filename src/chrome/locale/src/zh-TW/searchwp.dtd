@@ -1,0 +1,4 @@
+<!ENTITY button.highlight.label "高亮度標示">
+<!ENTITY pref.title "選項">
+<!ENTITY pref.highlightMinlength.label "需要標示的關鍵字最小長度:">
+<!ENTITY pref.highlightMinlength.accesskey "L">

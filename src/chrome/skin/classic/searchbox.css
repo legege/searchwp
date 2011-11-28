@@ -30,11 +30,8 @@
 
 .searchbar-textbox[tokenized="true"] {
   min-width: 5em !important;
-}
-
-.searchbar-textbox[tokenized="true"][has-padding="true"] {
-  padding-top: 1.5px !important;
-  padding-bottom: 1.5px !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
 }
 
 .searchbar-textbox[tokensdisplaymode="3"] .searchbox-input-layer {

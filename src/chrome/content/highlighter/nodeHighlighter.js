@@ -36,15 +36,19 @@ gSearchWP.Highlighter.NodeHighlighter = function(aName) {
     var elementList = aDocument.getElementsByClassName( _className );
     var elements = Array.slice( elementList, 0 );
 
+    var extracting_range = aDocument.createRange();
     var lastParent;
 
     elements.forEach(function( element ) {
       var parent = element.parentNode;
 
-      while ( element.firstChild ) {
-        parent.insertBefore( element.firstChild, element );
+      if ( element.firstChild === element.lastChild ) {
+        parent.replaceChild( element.firstChild, element );
+
+      } else {
+        extracting_range.selectNodeContents( element );
+        parent.replaceChild( extracting_range.extractContents(), element );
       }
-      parent.removeChild( element );
 
       if ( parent !== lastParent ) {
         lastParent && lastParent.normalize();
@@ -64,6 +68,9 @@ gSearchWP.Highlighter.NodeHighlighter = function(aName) {
     var document = aElementProto.ownerDocument;
     var elementProto = aElementProto.cloneNode(false);
     elementProto.className += " " + _className;
+
+    // Used for fast wrapping of entire nodes...
+    var wrapping_range = document.createRange();
 
     var prevNode, fragment, usedOffset, offset, rest, left, towrap, element;
 
@@ -112,9 +119,11 @@ gSearchWP.Highlighter.NodeHighlighter = function(aName) {
 
         // others
         } else {
-          element = elementProto.cloneNode(false);
-          node.parentNode.replaceChild( element, node );
-          element.appendChild( node );
+          wrapping_range.selectNodeContents( node );
+          wrapping_range.surroundContents( elementProto.cloneNode(false) );
+          //element = elementProto.cloneNode(false);
+          //node.parentNode.replaceChild( element, node );
+          //element.appendChild( node );
         }
 
         prevNode = node;
