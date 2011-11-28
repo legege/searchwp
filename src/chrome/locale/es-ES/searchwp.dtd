@@ -4,5 +4,5 @@
 <!ENTITY pref.title "Opciones">
 <!ENTITY pref.highlightMinlength.label "Longitud mínima de las palabras para ser resaltadas:">
 <!ENTITY pref.highlightMinlength.accesskey "L">
-<!ENTITY pref.groupTokensSingleMenu.label "Unir los grupos de palabras en un menú único">
+<!ENTITY pref.groupTokensSingleMenu.label "Agrupar botones de palabras en un único menú">
 <!ENTITY pref.groupTokensSingleMenu.accesskey "g">
