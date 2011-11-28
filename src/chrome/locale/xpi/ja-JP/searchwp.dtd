@@ -1,8 +1,0 @@
-<!ENTITY searchbox.tokens.menu.tooltiptext "より高速な検索ボタン...">
-<!ENTITY button.highlight.label "強調">
-<!ENTITY button.highlight.tooltiptext "大文字小文字の区別あり・なしと共に強調表示を切り替えます">
-<!ENTITY pref.title "オプション">
-<!ENTITY pref.highlightMinlength.label "強調される語の最小長:">
-<!ENTITY pref.highlightMinlength.accesskey "L">
-<!ENTITY pref.groupTokensSingleMenu.label "語のトークンを一つのメニューにグループ化する">
-<!ENTITY pref.groupTokensSingleMenu.accesskey "M">

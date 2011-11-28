@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
   Mozilla Extension ANT Build Script
-  See <http://legege.com> for more information 
+  See <http://legege.com> for more information
   -->
 <project name="searchwp" default="all">
   <!-- Include some global extension properties -->
@@ -20,10 +20,7 @@
   <target name="xpi-base">
     <!-- Copy everything -->
     <copy todir="${target.xpi.dir}" preservelastmodified="true" overwrite="true">
-      <fileset dir="${src.dir}" includes="**/*" excludes="chrome/locale/**" />
-    </copy>
-    <copy todir="${target.xpi.dir}/chrome/locale" preservelastmodified="true" overwrite="true">
-      <fileset dir="${locale.dir}" includes="**/*" />
+      <fileset dir="${src.dir}" includes="**/*" />
     </copy>
 
     <!-- Replace tokens everything -->
@@ -50,15 +47,7 @@
 
   <target name="xpi" description="Build the extension">
     <antcall target="xpi-base">
-      <param name="locale.dir" value="${src.dir}/chrome/locale/xpi" />
       <param name="xpi.suffix" value="" />
-    </antcall>
-  </target>
-
-  <target name="xpi-babelzilla" description="Build the extension for BabelZilla">
-    <antcall target="xpi-base">
-      <param name="locale.dir" value="${src.dir}/chrome/locale/src"/>
-      <param name="xpi.suffix" value="-babelzilla" />
     </antcall>
   </target>
 
@@ -124,4 +113,3 @@
     <property name="install.dir" value="${profile.dir}/extensions/${extension.id}" />
   </target>
 </project>
-
