@@ -1,0 +1,53 @@
+/* ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is SearchWP.
+ *
+ * The Initial Developer of the Original Code is 
+ *  Georges-Etienne Legendre <legege@legege.com> <http://legege.com>.
+ * Portions created by the Initial Developer are Copyright (C) 2004-2008.
+ * All Rights Reserved.
+ *
+ * ***** END LICENSE BLOCK ***** */
+
+/* Highlight Button for OSX */
+#searchwp-highlight-button {
+  list-style-image: url("chrome://@NAME@-platform/skin/highlight.png");
+  -moz-image-region: rect(0px, 18px, 16px, 0px);
+}
+
+#searchwp-highlight-button:hover:active { 
+  -moz-image-region: rect(16px, 18px, 32px, 0px);
+  background-color: transparent;
+  border-color: transparent;
+}
+
+#searchwp-highlight-button[checked="true"] {
+  -moz-image-region: rect(0px, 36px, 16px, 18px);
+  background-color: transparent;
+  border-color: transparent;
+}
+
+#searchwp-highlight-button[checked="true"]:hover:active {
+  -moz-image-region: rect(16px, 36px, 32px, 18px);
+}
+
+#searchwp-highlight-button[checked="true"][matchcase="true"] {
+  -moz-image-region: rect(0px, 54px, 16px, 36px);
+  background-color: transparent;
+  border-color: transparent;
+}
+
+#searchwp-highlight-button[checked="true"][matchcase="true"]:hover:active {
+  -moz-image-region: rect(16px, 54px, 32px, 36px);
+}
