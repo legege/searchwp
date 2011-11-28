@@ -1,0 +1,537 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE bindings SYSTEM "chrome://@NAME@/locale/searchwp.dtd">
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is SearchWP.
+   -
+   - The Initial Developer of the Original Code is
+   -  Georges-Etienne Legendre <legege@legege.com> <http://legege.com>.
+   - Portions created by the Initial Developer are Copyright (C) 2004-2008.
+   - All Rights Reserved.
+   -
+   - Contributor(s):
+   -  Dão Gottwald <dao@design-noir.de> (source of LocationBar^2)
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+<bindings xmlns="http://www.mozilla.org/xbl"
+          xmlns:html="http://www.w3.org/1999/xhtml"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+          xmlns:xbl="http://www.mozilla.org/xbl">
+
+  <!-- SearchBox Binding -->
+  <binding id="searchbox" extends="chrome://browser/content/search/search.xml#searchbar-textbox">
+    <resources>
+      <stylesheet src="chrome://@NAME@/skin/searchbox.css" />
+      <stylesheet src="chrome://@NAME@-platform/skin/searchbox.css" />
+    </resources>
+
+    <implementation>
+      <constructor><![CDATA[
+        if (document.getBindingParent(this).parentNode.parentNode.localName == "toolbarpaletteitem") {
+          return;
+        }
+        setTimeout(function(a) {
+          a.initializeSearchWP();
+        }, 0, this);
+      ]]></constructor>
+
+      <destructor><![CDATA[
+        // Seams that destructor is also called after deletion of properties,
+        // so be sure those are still there.
+        if ( this._SearchWP_Initialized ) {
+          this.tearDownSearchWP();
+        }
+      ]]></destructor>
+
+      <field name="_tokenProto"><![CDATA[
+        var node = document.createElement("label");
+        node.className = "searchbox-token";
+        node.setAttribute("mousethrough", "never");
+        node;
+      ]]></field>
+
+      <field name="_cropped">false</field>
+      <field name="_displayMode">0</field>
+
+      <property name="cropped" onget="return this._cropped;">
+        <setter><![CDATA[
+          this._cropped = val;
+          if (gSearchWP.Preferences.tokensDisplayMode == 2) {
+            this._embeddedActionsLayer.hidden = !val;
+          }
+          return val;
+        ]]></setter>
+      </property>
+
+      <method name="initializeSearchWPContent">
+        <body><![CDATA[
+          var _ = gSearchWP.xblUtils.createBuilder( document, this, {_bindingRoot: this} );
+
+          this._input = gSearchWP.xblUtils.getByAttr( this, "anonid", "input" );
+          var inputParent = this._input.parentNode;
+
+          inputParent.appendChild(
+            _("stringbundle#searchwp-string-bundle", { src: "chrome://@NAME@/locale/searchbox.properties" })
+          );
+
+          inputParent.appendChild(
+            _('stack#tokens-stack', { flex: "1", collapsed: "true" },
+              // Tokens layer
+              _('hbox#tokens-layer.searchbox-tokens-layer', {
+                   flex: "1",
+                   onmousedown: "this._bindingRoot.select();"
+                },
+                  _('scrollbox#tokens-container.searchbox-tokens-container', {
+                    flex: "1",
+                    onoverflow: "this._bindingRoot.cropped = true;",
+                    onunderflow: "this._bindingRoot.cropped = false;"
+                  })
+              ),
+              // Embedded actions layer (e.g. menu)
+              _('hbox#embedded-actions-layer.searchbox-embedded-actions-layer', {
+                   flex: "1", mousethrough: "always", align: "right", hidden: "true"
+                },
+                  _('image.searchbox-tokens-menu-button', {
+                    mousethrough: "never",
+                    onclick: "this._bindingRoot.openTokensMenuPopup(event);",
+                    tooltiptext: this._searchwpStringBundle.getString("tokensMenuTooltiptext")
+                  })
+              )
+            )
+          );
+
+          inputParent.appendChild(
+            _('hbox#complete-menu.searchbox-embedded-actions-layer', {
+                  flex: "1", mousethrough: "always", align: "right", collapsed: "true"
+               },
+                 _('image.searchbox-tokens-menu-button', {
+                   mousethrough: "never",
+                   onclick: "this._bindingRoot.openTokensMenuPopup(event);",
+                   tooltiptext: this._searchwpStringBundle.getString("tokensMenuTooltiptext")
+                 })
+             )
+          );
+
+          inputParent.appendChild(
+            _('panel#tokens-menu-popup.searchbox-tokens-menu-popup', { onclick: "event.stopPropagation();" },
+                _('vbox#tokens-menu-popup-container.searchbox-tokens-menu-popup-container')
+            )
+          );
+        ]]></body>
+      </method>
+
+      <method name="initializeSearchWP">
+        <body><![CDATA[
+          this._SearchWP_Initialized = true;
+
+          this.initializeSearchWPContent();
+
+          this._displayMode = gSearchWP.Preferences.tokensDisplayMode;
+
+          var _rebuildTimeout;
+          var self = this;
+          function rebuildCallback() {
+            _rebuildTimeout = 0;
+            self._rebuildTokens( self.value );
+            gSearchWP.Highlighting.flushUpdate();
+          }
+
+          this._SearchWPPreferencesObserver = new gSearchWP.Preferences.Observer(function( pref_name ) {
+               // If any pref changed, we need to rebuild tokens to adjust presentation
+               switch ( pref_name ) {
+                 case gSearchWP.Preferences.PREF_HIGHLIGHT_MATCH_CASE:
+                 case gSearchWP.Preferences.PREF_TOKENS_DISPLAY_MODE:
+                 case gSearchWP.Preferences.PREF_HIGHLIGHT_STATE:
+                 case gSearchWP.Preferences.PREF_HIGHLIGHT_MINLENGTH:
+                   // Ensures not multiple rebuilding are invoked at once.
+                   _rebuildTimeout && clearTimeout( _rebuildTimeout );
+                   _rebuildTimeout = setTimeout( rebuildCallback, 5 );
+                   break;
+                 case gSearchWP.Preferences.PREF_HIGHLIGHT_OVERLAPS_DYSPLAY_MODE:
+                   gSearchWP.Highlighting.refresh();
+                   break;
+               }
+            }
+          );
+
+          this._SearchWPPreferencesObserver.register();
+        ]]></body>
+      </method>
+
+      <method name="tearDownSearchWP">
+        <body><![CDATA[
+          this._SearchWPPreferencesObserver.unregister();
+        ]]></body>
+      </method>
+
+      <method name="onBeforeValueSet">
+        <parameter name="aValue"/>
+        <body><![CDATA[
+          this._rebuildTokens(aValue);
+          return aValue;
+        ]]></body>
+      </method>
+
+      <method name="openTokensMenuPopup">
+        <parameter name="aEvent" />
+        <body><![CDATA[
+          if (aEvent.button != 0) {
+            return;
+          }
+          aEvent.stopPropagation();
+
+          var tokens = this._tokensContainer.childNodes;
+          var menuTokens = this._tokensMenuPopupContainer.childNodes;
+
+          var showAll = this._tokensStack.collapsed;
+
+          // Adjust token visibility
+          if ( !showAll ) {
+            var tokensScrollBoxObject = this._tokensContainer.boxObject.QueryInterface(Components.interfaces.nsIScrollBoxObject);
+            var rightLimitX = tokensScrollBoxObject.x + tokensScrollBoxObject.width - this._calculateEmbeddedActionsWidth();
+          }
+
+          for ( var i = 0; i < tokens.length; ++i ) {
+            var box = tokens[i].boxObject;
+            menuTokens[i].collapsed = !( showAll || ( box.x + box.width ) > rightLimitX );
+          }
+
+          var popup = document.getAnonymousElementByAttribute(this, "anonid", "tokens-menu-popup");
+          popup.hidden = false;
+          popup.openPopup(aEvent.target, 'after_end');
+        ]]></body>
+      </method>
+
+      <method name="_rebuildTokens">
+        <parameter name="aValue" />
+        <body><![CDATA[
+          // Set the display mode attribute (for CSS)
+          this.setAttribute("tokensdisplaymode", gSearchWP.Preferences.tokensDisplayMode);
+
+          // Removes all tokens
+          while (this._tokensContainer.hasChildNodes()) {
+            this._tokensContainer.removeChild(this._tokensContainer.firstChild);
+          }
+          while (this._tokensMenuPopupContainer.hasChildNodes()) {
+            this._tokensMenuPopupContainer.removeChild(this._tokensMenuPopupContainer.firstChild);
+          }
+
+          if ( aValue ) {
+            //var tokensScrollBoxObject = this._tokensContainer.boxObject.QueryInterface(Components.interfaces.nsIScrollBoxObject);
+
+            // Create an array of terms and we add them to the tokens layer and the tokens popup
+
+            var highlighted = gSearchWP.Preferences.highlighted;
+            var highlightMinLength = gSearchWP.Preferences.highlightMinLength;
+            var highlighterCount = gSearchWP.Preferences.highlighterCount;
+            var highlightMatchCase = gSearchWP.Preferences.highlightMatchCase;
+
+            var matches = gSearchWP.Tokenizer.findTerms( aValue );
+            var termsArray = [];
+            var criteriaMap = {};
+            var done = {};
+
+            var fragment = document.createDocumentFragment();
+
+            for (var i = 0, j = 0; i < matches.length; i++) {
+              var term = matches[i].value;
+              var key = " " + term;
+
+              if ( matches[i].not || done[key] ) {
+                continue;
+              }
+              done[key] = true;
+
+              var tokenNode = this._tokenProto.cloneNode(true);
+              tokenNode.value = term;
+              tokenNode.setAttribute("tooltiptext", this._searchwpStringBundle.getFormattedString("tokenTooltiptext", [term], 1));
+
+              if ( highlighted && term.length >= highlightMinLength ) {
+                if ( !highlightMatchCase ) {
+                  key = key.toLowerCase();
+                }
+                if ( !criteriaMap[key] ) {
+                  criteriaMap[key] = "term-" + ( j++ % highlighterCount + 1 );
+                  termsArray.push( term );
+                }
+                tokenNode.setAttribute( "highlight", criteriaMap[key] );
+              }
+
+              fragment.appendChild( tokenNode );
+            }
+
+            // We add all tokens in the popup menu too.
+            this._tokensContainer.appendChild( fragment.cloneNode(true) );
+            this._tokensMenuPopupContainer.appendChild( fragment );
+
+            gSearchWP.Highlighting.update( termsArray );
+          }
+          else {
+            gSearchWP.Highlighting.update();
+          }
+
+          if ( aValue && !this.hasAttribute("focused") ) {
+            this._showTokens(aValue);
+          }
+          else {
+            this._hideTokens();
+          }
+        ]]></body>
+      </method>
+
+      <method name="_showTokens">
+        <parameter name="aValue"/>
+        <body><![CDATA[
+          // Should only show tokens when they're already shown, and
+          // if the tokens display mode hasn't changed.
+          if (aValue && (!this.hasAttribute("tokenized")
+                         || this._displayMode != gSearchWP.Preferences.tokensDisplayMode)) {
+            if (gSearchWP.Preferences.tokensDisplayMode == 2) { // Overlay
+              this._input.style.maxWidth = "0";
+              this._tokensStack.collapsed = false;
+              this._completeMenu.collapsed = true;
+            }
+            else if (gSearchWP.Preferences.tokensDisplayMode == 3) { // Complete menu
+              this._input.style.maxWidth = "none";
+              this._tokensStack.collapsed = true;
+              this._completeMenu.collapsed = false;
+            }
+            else { // Disabled
+              this._input.style.maxWidth = "none";
+              this._tokensStack.collapsed = true;
+              this._completeMenu.collapsed = true;
+            }
+
+            this._displayMode = gSearchWP.Preferences.tokensDisplayMode;
+
+            // Compatibility warning: The Searchbar Autosizer extension depends on
+            // the "tokenized" attribute to automatically adjust the width of the search box
+            this.setAttribute("tokenized", true);
+
+            var event = document.createEvent('Events');
+            event.initEvent('tokenized', true, true);
+            this.dispatchEvent(event);
+          }
+        ]]></body>
+      </method>
+
+      <method name="_hideTokens">
+        <body><![CDATA[
+          if (this.hasAttribute("tokenized")) {
+            if (gSearchWP.Preferences.tokensDisplayMode == 3) {  // Complete menu
+              this._completeMenu.collapsed = false;
+            }
+            else {
+              this._completeMenu.collapsed = true;
+            }
+            this._tokensStack.collapsed = true;
+            this._input.style.maxWidth = "none";
+
+            this.removeAttribute("tokenized");
+            this._displayMode = 0;
+
+            var event = document.createEvent('Events');
+            event.initEvent('untokenized', true, true);
+            this.dispatchEvent(event);
+          }
+          else {
+            if (gSearchWP.Preferences.tokensDisplayMode == 3) {  // Complete menu
+              this._completeMenu.collapsed = !(this._tokensMenuPopupContainer.childNodes.length > 0);
+            }
+          }
+        ]]></body>
+      </method>
+
+      <method name="_calculateEmbeddedActionsWidth">
+        <body><![CDATA[
+          var width = 0;
+          for (var i = 0; i < this._embeddedActionsLayer.childNodes.length; i++) {
+            var element = this._embeddedActionsLayer.childNodes[i];
+            if (!element.hidden) {
+              width += element.boxObject.width
+            }
+          }
+          return width;
+        ]]></body>
+      </method>
+
+      <method name="_findFast">
+        <parameter name="aWord" />
+        <parameter name="aEvent" />
+        <body><![CDATA[
+          // To handle F3 correctly, we have to clear this find bar search.
+          // See chrome://global/content/bindings/findbar.xml#findbar-textbox for more info
+          if (gFindBar.hidden) {
+            gFindBar.getElement("findbar-textbox").value = aWord;
+          }
+
+          var findBackwards;
+
+          if ( aEvent.type == "DOMMouseScroll" ) {
+            findBackwards = aEvent.detail < 0;
+          } else {
+            findBackwards = aEvent.button >= 1 && aEvent.button <= 2;
+          }
+
+          if ( aEvent.shiftKey ) {
+            findBackwards = !findBackwards;
+          }
+
+          var matchCase = aEvent.altKey || aEvent.ctrlKey;
+
+          var fastFind = window.getBrowser().fastFind;
+          fastFind.caseSensitive = matchCase;
+
+          var isNewSearch = matchCase ?
+            fastFind.searchString != aWord :
+            fastFind.searchString.toLowerCase() != aWord.toLowerCase();
+
+          var result;
+          if ( isNewSearch ) {
+            result = fastFind.find(aWord, false);
+          }
+          else {
+            result = fastFind.findAgain(findBackwards, false);
+          }
+
+          var stringbundle = this._searchwpStringBundle;
+          switch ( result ) {
+            case 0: // Found
+              break;
+            case 1: // Not found
+              gSearchWP.displayMessage(stringbundle.getFormattedString("notFound", [aWord], 1), true);
+              break;
+            case 2: // Wrapped
+              if ( findBackwards ) {
+                gSearchWP.displayMessage(stringbundle.getString("wrappedToBottom"), true);
+              }
+              else {
+                gSearchWP.displayMessage(stringbundle.getString("wrappedToTop"), true);
+              }
+              break;
+          }
+
+          return result;
+        ]]></body>
+      </method>
+    </implementation>
+
+    <handlers>
+      <handler event="input" action="this._rebuildTokens( this.value )" />
+
+      <handler event="focus" phase="capturing">this._hideTokens();</handler>
+      <handler event="blur" phase="capturing">this._showTokens(this.value);</handler>
+      <handler event="dragover" phase="capturing">this._hideTokens();</handler>
+      <handler event="dragexit" phase="capturing">this._showTokens(this.value);</handler>
+
+      <handler event="DOMMouseScroll"><![CDATA[
+        if ( event.rangeParent.nodeType != 3 ) {
+          return;
+        }
+
+        var term;
+        var offset = event.rangeOffset;
+        var a = this.selectionStart;
+        var b = this.selectionEnd;
+
+        if ( !this.focused || offset < a || offset >= b ) {
+          var match = gSearchWP.Tokenizer.getByOffset( this.value, offset );
+          if ( match ) {
+            term = match.value;
+            this.selectionStart = match.index;
+            this.selectionEnd = match.index + term.length;
+          }
+        } else {
+          term = this.value.substring( a, b );
+        }
+
+        if ( term ) {
+          this._findFast( term, event );
+        }
+      ]]></handler>
+    </handlers>
+  </binding>
+
+  <!-- Token Binding -->
+  <binding id="searchbox-token" display="xul:hbox">
+    <content>
+      <xul:label class="searchbox-token-label" anonid="label" />
+    </content>
+
+    <implementation>
+      <field name="_notFoundTimeout" />
+
+      <property name="value" onget="return this.getAttribute('value');">
+        <setter><![CDATA[
+          this.setAttribute("value", val);
+          document.getAnonymousElementByAttribute(this, "anonid", "label").value = val;
+          return val;
+        ]]></setter>
+      </property>
+
+      <method name="_findFast">
+        <parameter name="aEvent" />
+        <body><![CDATA[
+          var result = document.getBindingParent(this)._findFast( this.value, aEvent );
+
+          if ( result == 1 ) {
+            this.setAttribute("notfound", true);
+            if (this._notFoundTimeout) {
+              clearTimeout(this._notFoundTimeout);
+            }
+
+            this._notFoundTimeout = setTimeout(function( aToken ) {
+              aToken.removeAttribute("notfound");
+            }, 3000, this);
+          }
+
+          return result;
+        ]]></body>
+      </method>
+
+    </implementation>
+
+    <handlers>
+      <handler event="mousedown" phase="capturing"><![CDATA[
+        event.stopPropagation();
+      ]]></handler>
+
+      <handler event="click" phase="capturing"><![CDATA[
+        event.stopPropagation();
+        if (event.button == 2) {
+          event.preventDefault();
+
+          var bindingParent = document.getBindingParent(this);
+
+          var popup = document.getAnonymousElementByAttribute(bindingParent, "anonid", "tokens-menu-popup");
+          if ( popup.state != "open" ){
+            bindingParent.focus();
+            bindingParent.select();
+            return;
+          }
+        }
+
+        this._findFast( event );
+      ]]></handler>
+
+      <handler event="DOMMouseScroll" phase="capturing"><![CDATA[
+        event.stopPropagation();
+        this._findFast( event );
+      ]]></handler>
+    </handlers>
+  </binding>
+</bindings>
