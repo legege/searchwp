@@ -21,6 +21,7 @@ locale @NAME@ pl-PL jar:chrome/@NAME@.jar!/locale/pl-PL/
 locale @NAME@ pt-BR jar:chrome/@NAME@.jar!/locale/pt-BR/
 locale @NAME@ ru-RU jar:chrome/@NAME@.jar!/locale/ru-RU/
 locale @NAME@ sk-SK jar:chrome/@NAME@.jar!/locale/sk-SK/
+locale @NAME@ sv-SE jar:chrome/@NAME@.jar!/locale/sv-SE/
 locale @NAME@ zh-CN jar:chrome/@NAME@.jar!/locale/zh-CN/
 locale @NAME@ zh-TW jar:chrome/@NAME@.jar!/locale/zh-TW/
 
