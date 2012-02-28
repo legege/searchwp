@@ -72,6 +72,22 @@ gSearchWP.dump = function( msg ) {
     .logStringMessage( "SearchWP: " + msg );
 }
 
+gSearchWP.getSelectionOfType = function(aWindow, aType) {
+  try {
+    var Ci = Components.interfaces;
+    return aWindow
+      .QueryInterface(Ci.nsIInterfaceRequestor)
+      .getInterface(Ci.nsIWebNavigation)
+      .QueryInterface(Ci.nsIDocShell)
+      .QueryInterface(Ci.nsIInterfaceRequestor)
+      .getInterface(Ci.nsISelectionDisplay)
+      .QueryInterface(Ci.nsISelectionController)
+      .getSelection(aType);
+  } catch (e) {
+    return null;
+  }
+}
+
 gSearchWP.xblUtils = {
 
   getByAttr: function( root, attrName, value ) {

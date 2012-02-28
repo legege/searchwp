@@ -414,6 +414,29 @@
             result = fastFind.findAgain(findBackwards, false);
           }
 
+          var paddingY = gSearchWP.Preferences.scrollPaddingY;
+          if ( paddingY ) {
+            var sel = gSearchWP.getSelectionOfType( content, 1 );
+            if ( sel && !sel.isCollapsed ) {
+              var toScroll = 0;
+              var bb = sel.getRangeAt(0).getBoundingClientRect();
+
+              if ( bb.top < paddingY ) {
+                toScroll = -( paddingY - bb.top );
+
+              } else {
+                var dy = content.innerHeight - bb.bottom;
+                if ( dy < paddingY ) {
+                  toScroll = paddingY - dy;
+                }
+              }
+
+              if ( toScroll ) {
+                content.document.documentElement.scrollTop += toScroll;
+              }
+            }
+          }
+
           var stringbundle = this._searchwpStringBundle;
           switch ( result ) {
             case 0: // Found

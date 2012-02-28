@@ -198,7 +198,7 @@ gSearchWP.Highlighting = new function() {
 
     if ( clearing ) {
       _highlighter.clear(doc);
-      var findSelection = getSelectionOfType(aWindow, 128);
+      var findSelection = getFindSelection( aWindow );
       findSelection && findSelection.removeAllRanges();
       return count;
     }
@@ -209,7 +209,7 @@ gSearchWP.Highlighting = new function() {
 
     if ( searchResults.length ) {
       if ( searchResults.length > gSearchWP.Preferences.maxColorizedHighlights ) {
-        var findSelection = getSelectionOfType(aWindow, 128);
+        var findSelection = getFindSelection( aWindow );
 
         if ( findSelection ) {
           for ( var i = 0, l = searchResults.length; i < l; ++i ) {
@@ -316,20 +316,8 @@ gSearchWP.Highlighting = new function() {
     }
   }
 
-  function getSelectionOfType(aWindow, aType) {
-    try {
-      var Ci = Components.interfaces;
-      return aWindow
-        .QueryInterface(Ci.nsIInterfaceRequestor)
-        .getInterface(Ci.nsIWebNavigation)
-        .QueryInterface(Ci.nsIDocShell)
-        .QueryInterface(Ci.nsIInterfaceRequestor)
-        .getInterface(Ci.nsISelectionDisplay)
-        .QueryInterface(Ci.nsISelectionController)
-        .getSelection(aType);
-    } catch (e) {
-      return null;
-    }
+  function getFindSelection( aWindow ) {
+    return gSearchWP.getSelectionOfType( aWindow, 128 );
   }
 
   function areArraysEqual( aArray1, aArray2 ) {
