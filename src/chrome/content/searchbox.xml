@@ -414,32 +414,7 @@
             result = fastFind.findAgain(findBackwards, false);
           }
 
-          var paddingY = gSearchWP.Preferences.scrollPaddingY;
-          if ( paddingY ) {
-            var sel = gSearchWP.getSelectionOfType( content, 1 );
-            if ( sel && !sel.isCollapsed ) {
-              var toScroll = 0;
-              var bb = sel.getRangeAt(0).getBoundingClientRect();
-
-              if ( paddingY > 0 ) {
-                if ( bb.top < paddingY ) {
-                  toScroll = -( paddingY - bb.top );
-
-                } else {
-                  var dy = content.innerHeight - bb.bottom;
-                  if ( dy < paddingY ) {
-                    toScroll = paddingY - dy;
-                  }
-                }
-              } else {
-                toScroll = Math.round( bb.top + ( bb.bottom - bb.top ) / 2 - content.innerHeight / 2 );
-              }
-
-              if ( toScroll ) {
-                content.document.documentElement.scrollTop += toScroll;
-              }
-            }
-          }
+          this._fixScroll( content );
 
           var stringbundle = this._searchwpStringBundle;
           switch ( result ) {
@@ -459,6 +434,46 @@
           }
 
           return result;
+        ]]></body>
+      </method>
+
+      <method name="_fixScroll">
+        <parameter name="aWindow" />
+        <body><![CDATA[
+          var str = gSearchWP.Preferences.findFastScrollFixY;
+          var relative = str.slice(-1) == "%";
+          var val = parseInt( str, 10 );
+          var delta = 0;
+
+          if ( val ) {
+            var sel = gSearchWP.getSelectionOfType( aWindow, 1 );
+            if ( sel && !sel.isCollapsed ) {
+              var rect = sel.getRangeAt(0).getBoundingClientRect();
+              var viewHeight = aWindow.innerHeight;
+
+              if ( relative ) {
+                val = viewHeight * ( val / 100 );
+                var mid = rect.top + ( rect.bottom - rect.top ) / 2;
+
+                delta = val - viewHeight + mid;
+
+                if ( delta < 0 ) {
+                  delta = Math.min( 0, mid - val );
+                }
+
+              } else {
+                delta = val - viewHeight + rect.bottom;
+
+                if ( delta < 0 ) {
+                  delta = Math.min( 0, rect.top - val );
+                }
+              }
+
+              if ( delta ) {
+                content.document.documentElement.scrollTop += Math.round( delta );
+              }
+            }
+          }
         ]]></body>
       </method>
     </implementation>

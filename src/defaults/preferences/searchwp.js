@@ -30,4 +30,4 @@ pref("extensions.searchwp.highlight.tokensCount", 5);
 pref("extensions.searchwp.highlight.maxColorizedHighlights", 10000);
 pref("extensions.searchwp.highlight.overlaps.displayMode", 0);
 pref("extensions.searchwp.tokens.displayMode", 2);
-pref("extensions.searchwp.findFast.scrollPaddingY", 100);
+pref("extensions.searchwp.findFast.scrollFixY", "30%");

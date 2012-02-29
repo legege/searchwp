@@ -30,7 +30,7 @@ gSearchWP.Preferences = new function() {
   this.PREF_HIGHLIGHT_OVERLAPS_DYSPLAY_MODE = "highlight.overlaps.displayMode";
   this.PREF_FIRST_LAUNCH = "firstLaunch";
   this.PREF_TOKENS_DISPLAY_MODE = "tokens.displayMode";
-  this.PREF_FINDFAST_SCROLL_PADDING_Y = "findFast.scrollPaddingY";
+  this.PREF_FINDFAST_SCROLL_Y = "findFast.scrollFixY";
 
   var PREF_BRANCH = "extensions.@NAME@.";
 
@@ -177,14 +177,14 @@ gSearchWP.Preferences = new function() {
   /**
    * @return the Y padding on scrolling after fastFind
    */
-  this.__defineGetter__("scrollPaddingY", function() {
-    return branch.getIntPref(this.PREF_FINDFAST_SCROLL_PADDING_Y);
+  this.__defineGetter__("findFastScrollFixY", function() {
+    return branch.getCharPref(this.PREF_FINDFAST_SCROLL_Y);
   });
 
   /**
    * @param aValue the Y padding on scrolling after fastFind
    */
-  this.__defineSetter__("scrollPaddingY", function(aValue) {
-    branch.setIntPref(this.PREF_FINDFAST_SCROLL_PADDING_Y, aValue);
+  this.__defineSetter__("findFastScrollFixY", function(aValue) {
+    branch.setCharPref(this.PREF_FINDFAST_SCROLL_Y, aValue);
   });
 }
