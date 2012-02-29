@@ -421,14 +421,18 @@
               var toScroll = 0;
               var bb = sel.getRangeAt(0).getBoundingClientRect();
 
-              if ( bb.top < paddingY ) {
-                toScroll = -( paddingY - bb.top );
+              if ( paddingY > 0 ) {
+                if ( bb.top < paddingY ) {
+                  toScroll = -( paddingY - bb.top );
 
-              } else {
-                var dy = content.innerHeight - bb.bottom;
-                if ( dy < paddingY ) {
-                  toScroll = paddingY - dy;
+                } else {
+                  var dy = content.innerHeight - bb.bottom;
+                  if ( dy < paddingY ) {
+                    toScroll = paddingY - dy;
+                  }
                 }
+              } else {
+                toScroll = Math.round( bb.top + ( bb.bottom - bb.top ) / 2 - content.innerHeight / 2 );
               }
 
               if ( toScroll ) {
