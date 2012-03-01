@@ -470,7 +470,7 @@
               }
 
               if ( delta ) {
-                content.document.documentElement.scrollTop += Math.round( delta );
+                aWindow.document.documentElement.scrollTop += Math.round( delta );
               }
             }
           }
