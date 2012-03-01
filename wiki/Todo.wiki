@@ -1,3 +1,5 @@
 #summary A simple todo that are not issues...
 
+ * Create a documentation of other preferences (wiki page).
+
  * ~~Add a comment in the source code about Autosizer compatibility fix: looks for "tokenized" attribute, and base its calculation on the "tokens-container" element.~~
