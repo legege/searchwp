@@ -414,7 +414,10 @@
             result = fastFind.findAgain(findBackwards, false);
           }
 
-          this._fixScroll( content );
+          if ( result != 1 ) {
+            // Avoid scrolling if not found.
+            this._fixScroll( content );
+          }
 
           var stringbundle = this._searchwpStringBundle;
           switch ( result ) {
