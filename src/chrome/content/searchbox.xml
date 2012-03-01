@@ -444,7 +444,6 @@
         <parameter name="aWindow" />
         <body><![CDATA[
           var str = gSearchWP.Preferences.findFastScrollFixY;
-          var relative = str.slice(-1) == "%";
           var val = parseInt( str, 10 );
           var delta = 0;
 
@@ -454,22 +453,14 @@
               var rect = sel.getRangeAt(0).getBoundingClientRect();
               var viewHeight = aWindow.innerHeight;
 
-              if ( relative ) {
+              if ( str.slice(-1) == "%" ) {
                 val = viewHeight * ( val / 100 );
-                var mid = rect.top + ( rect.bottom - rect.top ) / 2;
+              }
 
-                delta = val - viewHeight + mid;
+              delta = val - viewHeight + rect.bottom;
 
-                if ( delta < 0 ) {
-                  delta = Math.min( 0, mid - val );
-                }
-
-              } else {
-                delta = val - viewHeight + rect.bottom;
-
-                if ( delta < 0 ) {
-                  delta = Math.min( 0, rect.top - val );
-                }
+              if ( delta < 0 ) {
+                delta = Math.min( 0, rect.top - val );
               }
 
               if ( delta ) {
