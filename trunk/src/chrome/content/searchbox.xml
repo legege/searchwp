@@ -414,6 +414,8 @@
             result = fastFind.findAgain(findBackwards, false);
           }
 
+          // TODO: Remove scroll-fix, since not needed any more
+          // (https://bugzilla.mozilla.org/show_bug.cgi?id=171237)
           if ( result != 1 ) {
             // Avoid scrolling if not found.
             this._fixScroll( content );
@@ -443,29 +445,15 @@
       <method name="_fixScroll">
         <parameter name="aWindow" />
         <body><![CDATA[
-          var str = gSearchWP.Preferences.findFastScrollFixY;
-          var val = parseInt( str, 10 );
-          var delta = 0;
+          var sel = gSearchWP.getSelectionOfType( aWindow, 1 );
 
-          if ( val ) {
-            var sel = gSearchWP.getSelectionOfType( aWindow, 1 );
-            if ( sel && !sel.isCollapsed ) {
-              var rect = sel.getRangeAt(0).getBoundingClientRect();
-              var viewHeight = aWindow.innerHeight;
+          if ( sel && !sel.isCollapsed ) {
+            var rect = sel.getRangeAt(0).getBoundingClientRect();
 
-              if ( str.slice(-1) == "%" ) {
-                val = viewHeight * ( val / 100 );
-              }
+            var delta = rect.top + rect.bottom - aWindow.innerHeight >> 1;
 
-              delta = val - viewHeight + rect.bottom;
-
-              if ( delta < 0 ) {
-                delta = Math.min( 0, rect.top - val );
-              }
-
-              if ( delta ) {
-                aWindow.document.documentElement.scrollTop += Math.round( delta );
-              }
+            if ( delta ) {
+              aWindow.document.documentElement.scrollTop += delta;
             }
           }
         ]]></body>
