@@ -225,22 +225,11 @@
       <method name="_rebuildTokens">
         <parameter name="aValue" />
         <body><![CDATA[
-          // Set the display mode attribute (for CSS)
-          this.setAttribute("tokensdisplaymode", gSearchWP.Preferences.tokensDisplayMode);
-
           // Removes all tokens
-          while (this._tokensContainer.hasChildNodes()) {
-            this._tokensContainer.removeChild(this._tokensContainer.firstChild);
-          }
-          while (this._tokensMenuPopupContainer.hasChildNodes()) {
-            this._tokensMenuPopupContainer.removeChild(this._tokensMenuPopupContainer.firstChild);
-          }
+          gSearchWP.removeChildNodes( this._tokensContainer );
+          gSearchWP.removeChildNodes( this._tokensMenuPopupContainer );
 
           if ( aValue ) {
-            //var tokensScrollBoxObject = this._tokensContainer.boxObject.QueryInterface(Components.interfaces.nsIScrollBoxObject);
-
-            // Create an array of terms and we add them to the tokens layer and the tokens popup
-
             var highlighted = gSearchWP.Preferences.highlighted;
             var highlightMinLength = gSearchWP.Preferences.highlightMinLength;
             var highlighterCount = gSearchWP.Preferences.highlighterCount;
@@ -302,34 +291,28 @@
       <method name="_showTokens">
         <parameter name="aValue"/>
         <body><![CDATA[
-          // Should only show tokens when they're already shown, and
-          // if the tokens display mode hasn't changed.
-          if (aValue && (!this.hasAttribute("tokenized")
-                         || this._displayMode != gSearchWP.Preferences.tokensDisplayMode)) {
-            if (gSearchWP.Preferences.tokensDisplayMode == 2) { // Overlay
-              this._input.style.maxWidth = "0";
-              this._tokensStack.collapsed = false;
-              this._completeMenu.collapsed = true;
-            }
-            else if (gSearchWP.Preferences.tokensDisplayMode == 3) { // Complete menu
-              this._input.style.maxWidth = "none";
-              this._tokensStack.collapsed = true;
-              this._completeMenu.collapsed = false;
-            }
-            else { // Disabled
-              this._input.style.maxWidth = "none";
-              this._tokensStack.collapsed = true;
-              this._completeMenu.collapsed = true;
-            }
+          var mode = gSearchWP.Preferences.tokensDisplayMode;
+          mode = aValue || mode == 3 && this._tokensMenuPopupContainer.firstChild ? mode : 0;
+          var tokenized = mode == 2;
 
-            this._displayMode = gSearchWP.Preferences.tokensDisplayMode;
+          if ( mode != this._displayMode ) {
+            this._input.style.maxWidth = tokenized ? "0" : "none";
+            this._tokensStack.collapsed = !tokenized;
+            this._completeMenu.collapsed = !(mode == 3);
+            this._displayMode = mode;
+            // Set the display mode attribute (for CSS)
+            this.setAttribute("tokensdisplaymode", mode);
+          }
 
-            // Compatibility warning: The Searchbar Autosizer extension depends on
-            // the "tokenized" attribute to automatically adjust the width of the search box
-            this.setAttribute("tokenized", true);
+          if ( tokenized || this.hasAttribute("tokenized") ) {
+            if ( tokenized ) {
+              this.setAttribute("tokenized", true);
+            } else {
+              this.removeAttribute("tokenized");
+            }
 
             var event = document.createEvent('Events');
-            event.initEvent('tokenized', true, true);
+            event.initEvent(tokenized ? "tokenized" : "untokenized", true, true);
             this.dispatchEvent(event);
           }
         ]]></body>
@@ -337,28 +320,7 @@
 
       <method name="_hideTokens">
         <body><![CDATA[
-          if (this.hasAttribute("tokenized")) {
-            if (gSearchWP.Preferences.tokensDisplayMode == 3) {  // Complete menu
-              this._completeMenu.collapsed = false;
-            }
-            else {
-              this._completeMenu.collapsed = true;
-            }
-            this._tokensStack.collapsed = true;
-            this._input.style.maxWidth = "none";
-
-            this.removeAttribute("tokenized");
-            this._displayMode = 0;
-
-            var event = document.createEvent('Events');
-            event.initEvent('untokenized', true, true);
-            this.dispatchEvent(event);
-          }
-          else {
-            if (gSearchWP.Preferences.tokensDisplayMode == 3) {  // Complete menu
-              this._completeMenu.collapsed = !(this._tokensMenuPopupContainer.childNodes.length > 0);
-            }
-          }
+          this._showTokens( false );
         ]]></body>
       </method>
 

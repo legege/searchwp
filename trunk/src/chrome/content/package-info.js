@@ -88,6 +88,12 @@ gSearchWP.getSelectionOfType = function(aWindow, aType) {
   }
 }
 
+gSearchWP.removeChildNodes = function( parent ) {
+  while ( parent.firstChild ) {
+    parent.removeChild( parent.firstChild );
+  }
+}
+
 gSearchWP.xblUtils = {
 
   getByAttr: function( root, attrName, value ) {
