@@ -1,6 +1,10 @@
 #summary Change Log
 #labels Featured
 
+== SearchWP 2.6.3 (UNPUBLISHED) ==
+ * Fixed: When grouping of tokens in a single menu is activated, space between search text and the menu icon is added. (issue 81, issue 86)
+ * Fixed: Token buttons are not rounded since Firefox 13. (issue 82)
+
 == SearchWP 2.6.2 (November 28th, 2011) ==
  * Fixed: Tokens cause search-bar to shrink in height with Firefox 8. (issue 76)
  * New translation: Swedish. (issue 75)
