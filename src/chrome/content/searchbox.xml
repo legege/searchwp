@@ -116,7 +116,7 @@
 
           inputParent.appendChild(
             _('hbox#complete-menu.searchbox-embedded-actions-layer', {
-                  flex: "1", mousethrough: "always", align: "right", collapsed: "true"
+                  flex: "0", mousethrough: "always", align: "right", collapsed: "true"
                },
                  _('image.searchbox-tokens-menu-button', {
                    mousethrough: "never",
