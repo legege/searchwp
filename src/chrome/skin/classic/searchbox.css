@@ -63,8 +63,6 @@
 .searchbox-token {
   border: 1px solid #a4bdec;
   background: #dee7f8;
-  -moz-border-radius: .9em;
-  border-radius: .9em;
   color: #000;
   text-align: center;
   padding: 0 .33em;
