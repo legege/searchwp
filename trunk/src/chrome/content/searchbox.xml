@@ -296,7 +296,9 @@
           var tokenized = mode == 2;
 
           if ( mode != this._displayMode ) {
+            // Hiding input keep it responding on mouse events!
             this._input.style.maxWidth = tokenized ? "0" : "none";
+            this._input.style.opacity = tokenized ? "0" : ""; // (issue 88)
             this._tokensStack.collapsed = !tokenized;
             this._completeMenu.collapsed = !(mode == 3);
             this._displayMode = mode;
