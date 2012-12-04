@@ -72,6 +72,14 @@
   -moz-margin-end: .28em !important;
 }
 
+.searchbox-token:first-child {
+  margin-left: 0 !important;
+}
+
+.searchbox-token:last-child {
+  margin-right: 0 !important;
+}
+
 .searchbox-token:hover {
   border-color: #6d95e0;
   background: #bbcef1;
