@@ -304,6 +304,8 @@
             this.setAttribute("tokensdisplaymode", mode);
           }
 
+          // Compatibility warning: The Searchbar Autosizer extension depends on
+          // the "tokenized" attribute to automatically adjust the width of the search box
           if ( tokenized || this.hasAttribute("tokenized") ) {
             if ( tokenized ) {
               this.setAttribute("tokenized", true);
