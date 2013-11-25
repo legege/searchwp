@@ -365,7 +365,8 @@
 
           var matchCase = aEvent.altKey || aEvent.ctrlKey;
 
-          var fastFind = window.getBrowser().fastFind;
+          var fastFind = window.getBrowser().fastFind
+            || window.getBrowser().selectedTab.linkedBrowser.fastFind;
           fastFind.caseSensitive = matchCase;
 
           var isNewSearch = matchCase ?
