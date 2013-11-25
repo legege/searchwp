@@ -1,7 +1,7 @@
 #summary Change Log
 #labels Featured
 
-== SearchWP 2.6.3 (UNPUBLISHED) ==
+== SearchWP 2.6.3 (December 25th, 2013) ==
  * Changed: Token buttons less rounded on Windows and Linux. (issue 87)
  * Fixed: Jump-to-word not working in Firefox 25. (issue 90)
  * Fixed: Input text slightly visible at left of first token. (issue 88)
