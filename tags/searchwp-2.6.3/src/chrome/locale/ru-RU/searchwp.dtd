@@ -1,0 +1,8 @@
+<!ENTITY searchbox.tokens.menu.tooltiptext "More fast search buttons...">
+<!ENTITY button.highlight.label "Подсветка">
+<!ENTITY button.highlight.tooltiptext "Turn on and off highlighting with or without case matching">
+<!ENTITY pref.title "Настройки">
+<!ENTITY pref.highlightMinlength.label "Минимальная длина подсвечиваемых слов">
+<!ENTITY pref.highlightMinlength.accesskey "Д">
+<!ENTITY pref.groupTokensSingleMenu.label "Group word tokens in a single menu">
+<!ENTITY pref.groupTokensSingleMenu.accesskey "M">
