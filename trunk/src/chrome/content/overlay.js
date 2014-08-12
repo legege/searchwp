@@ -175,7 +175,9 @@ gSearchWP.Overlay = new function() {
           setTimeout(function() {
             var item = gSearchWP.Highlighting.highlightButton;
             if (item) {
-              item.setAttribute("checked", gSearchWP.Preferences.highlighted);
+              gSearchWP.Preferences.highlighted ? 
+                item.setAttribute("checked", true) :
+                item.removeAttribute("checked");
             }
             //gSearchWP.Highlighting.refresh();
           }, 0);
