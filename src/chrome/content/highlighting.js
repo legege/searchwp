@@ -40,7 +40,9 @@ gSearchWP.Highlighting = new function() {
     tabBox.addEventListener("select", refreshCallback, false);
 
     if (this.highlightButton) {
-      this.highlightButton.setAttribute("checked", gSearchWP.Preferences.highlighted);
+      gSearchWP.Preferences.highlighted ? 
+        this.highlightButton.setAttribute("checked", true) :
+        this.highlightButton.removeAttribute("checked");
       this.highlightButton.setAttribute("matchcase", gSearchWP.Preferences.highlightMatchCase);
     }
   }

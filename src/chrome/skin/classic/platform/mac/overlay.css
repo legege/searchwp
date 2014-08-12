@@ -32,17 +32,17 @@
   border-color: transparent;
 }
 
-#searchwp-highlight-button[checked="true"] {
+#searchwp-highlight-button[checked] {
   -moz-image-region: rect(0px, 36px, 16px, 18px);
   background-color: transparent;
   border-color: transparent;
 }
 
-#searchwp-highlight-button[checked="true"]:hover:active {
+#searchwp-highlight-button[checked]:hover:active {
   -moz-image-region: rect(16px, 36px, 32px, 18px);
 }
 
-#searchwp-highlight-button[checked="true"][matchcase="true"] {
+#searchwp-highlight-button[checked][matchcase="true"] {
   -moz-image-region: rect(0px, 54px, 16px, 36px);
   background-color: transparent;
   border-color: transparent;

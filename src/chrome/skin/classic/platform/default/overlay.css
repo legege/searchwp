@@ -34,14 +34,14 @@
   -moz-image-region: rect(32px 16px 48px 0px);
 }
 
-#searchwp-highlight-button[checked="true"][matchcase="true"] {
+#searchwp-highlight-button[checked][matchcase="true"] {
   -moz-image-region: rect(0px 32px 16px 16px);
 }
 
-#searchwp-highlight-button[checked="true"][matchcase="true"]:hover {
+#searchwp-highlight-button[checked][matchcase="true"]:hover {
   -moz-image-region: rect(16px 32px 32px 16px);
 }
 
-#searchwp-highlight-button[checked="true"][matchcase="true"]:hover:active {
+#searchwp-highlight-button[checked][matchcase="true"]:hover:active {
   -moz-image-region: rect(32px 32px 48px 16px);
 }
