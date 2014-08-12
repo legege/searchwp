@@ -22,7 +22,7 @@
 
 @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
 
-.searchbar-textbox {
+[anonid="searchbar-textbox"] {
   -moz-binding: url("chrome://@NAME@/content/searchbox.xml#searchbox") !important;
 }
 
