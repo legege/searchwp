@@ -58,6 +58,10 @@ gSearchWP.Overlay = new function() {
       }, 50);
     }
 
+    // migration code for changed button ID in r237
+    // can be removed in one of the next versions
+    gSearchWP.Overlay.migrateButtonId();
+
     // Add platform CSS selection
     var win = document.getElementById("main-window");
     win.setAttribute("searchwp-moz-platform", navigator.platform);
@@ -118,6 +122,26 @@ gSearchWP.Overlay = new function() {
     catch(e) { }
 
     gSearchWP.Preferences.firstLaunch = false;
+  }
+
+  /**
+   * migration code for changed button ID in r237
+   * can be removed in one of the next versions
+   */
+  this.migrateButtonId = function() {
+    toolbars = document.getElementsByTagName("toolbar");
+    for (var i = 0; i < toolbars.length; i++) {
+      try {
+        var toolbar = toolbars[i];
+        var curSet = toolbar.getAttribute("currentset");
+        if (curSet.indexOf("searchwp-highlight-container") != -1) {
+          curSet = curSet.replace(/searchwp-highlight-container/, "searchwp-highlight-button");
+          toolbar.setAttribute("currentset", curSet);
+          toolbar.currentSet = curSet;
+          document.persist(toolbar.id, "currentset");
+        }
+      } catch (e) {}
+    }
   }
 
   /**
