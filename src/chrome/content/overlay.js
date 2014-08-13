@@ -96,14 +96,14 @@ gSearchWP.Overlay = new function() {
     try {
       var nav = document.getElementById("nav-bar");
       var curSet = nav.currentSet;
-      if (curSet.indexOf("searchwp-highlight-container") == -1) {
+      if (curSet.indexOf("searchwp-highlight-button") == -1) {
         var set;
         // Place the button before the searchbox
         if (curSet.indexOf("search-container") != -1) {
-          set = curSet.replace(/search-container/, "search-container,searchwp-highlight-container");
+          set = curSet.replace(/search-container/, "search-container,searchwp-highlight-button");
         }
         else { // at the end
-          set = nav.currentSet + ",searchwp-highlight-container";
+          set = nav.currentSet + ",searchwp-highlight-button";
         }
         nav.setAttribute("currentset", set);
         nav.currentSet = set;
