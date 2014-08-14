@@ -21,12 +21,12 @@
  * ***** END LICENSE BLOCK ***** */
 
 pref("extensions.@ID@.description", "chrome://@NAME@/locale/searchwp.properties");
-pref("extensions.searchwp.beepNotFound", true);
-pref("extensions.searchwp.firstLaunch", true);
-pref("extensions.searchwp.highlight.matchCase", false);
-pref("extensions.searchwp.highlight.minLength", 2);
-pref("extensions.searchwp.highlight.state", false);
-pref("extensions.searchwp.highlight.tokensCount", 5);
-pref("extensions.searchwp.highlight.maxColorizedHighlights", 10000);
-pref("extensions.searchwp.highlight.overlaps.displayMode", 0);
-pref("extensions.searchwp.tokens.displayMode", 2);
+pref("extensions.@NAME@.beepNotFound", true);
+pref("extensions.@NAME@.firstLaunch", true);
+pref("extensions.@NAME@.highlight.matchCase", false);
+pref("extensions.@NAME@.highlight.minLength", 2);
+pref("extensions.@NAME@.highlight.state", false);
+pref("extensions.@NAME@.highlight.tokensCount", 5);
+pref("extensions.@NAME@.highlight.maxColorizedHighlights", 10000);
+pref("extensions.@NAME@.highlight.overlaps.displayMode", 0);
+pref("extensions.@NAME@.tokens.displayMode", 2);
