@@ -31,33 +31,45 @@
    -
    - ***** END LICENSE BLOCK ***** -->
 
-<dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" id="searchwpPref"
-  title="&pref.title;" buttons="accept"
-  onload="gSearchWP.Options.OptionsDialog.onLoad();"
-  ondialogaccept="return gSearchWP.Options.OptionsDialog.onAccept();">
+<prefwindow xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+            id="searchwpPref" title="&pref.title;" buttons="accept">
 
   <script type="application/x-javascript" src="chrome://@NAME@/content/package-info.js" />
   <script type="application/x-javascript" src="chrome://@NAME@/content/preferences.js" />
 
   <script type="application/x-javascript" src="chrome://@NAME@/content/options/package-info.js" />
-  <script type="application/x-javascript" src="chrome://@NAME@/content/options/optionsDialog.js" />
+  
+  <prefpane id="searchwpPrefpane">
 
-  <vbox>
-    <hbox align="center">
-      <label control="highlightMinlength" accesskey="&pref.highlightMinlength.accesskey;">&pref.highlightMinlength.label;</label>
-      <menulist id="highlightMinlength" preference="extensions.@NAME@.highlight.minLength">
-        <menupopup>
-          <menuitem label="1" />
-          <menuitem label="2" />
-          <menuitem label="3" />
-          <menuitem label="4" />
-          <menuitem label="5" />
-        </menupopup>
-      </menulist>
-    </hbox>
-    <hbox align="center">
-      <checkbox id="groupTokensSingleMenu" label="&pref.groupTokensSingleMenu.label;"
-                accesskey="&pref.groupTokensSingleMenu.accesskey;" />
-    </hbox>
-  </vbox>
-</dialog>
+    <preferences>
+      <preference id="pref-highlightMinlength" name="extensions.@NAME@.highlight.minLength" type="int"/>
+      <preference id="pref-groupTokensSingleMenu" name="extensions.@NAME@.tokens.displayMode" type="int"/>
+    </preferences>
+
+    <vbox>
+      <hbox align="center">
+        <label control="highlightMinlength" accesskey="&pref.highlightMinlength.accesskey;">&pref.highlightMinlength.label;</label>
+        <menulist id="highlightMinlength" preference="pref-highlightMinlength">
+          <menupopup>
+            <menuitem label="1" value="1" />
+            <menuitem label="2" value="2" />
+            <menuitem label="3" value="3" />
+            <menuitem label="4" value="4" />
+            <menuitem label="5" value="5" />
+          </menupopup>
+        </menulist>
+      </hbox>
+      <hbox align="center">
+        <checkbox id="groupTokensSingleMenu" label="&pref.groupTokensSingleMenu.label;"
+                  preference="pref-groupTokensSingleMenu"
+                  onsyncfrompreference="var pref = document.getElementById('pref-groupTokensSingleMenu');
+                                        return pref.value == 3;"
+                  onsynctopreference="var checkbox = document.getElementById('groupTokensSingleMenu');
+                                      return checkbox.checked ? 3 : 2;"
+                  accesskey="&pref.groupTokensSingleMenu.accesskey;" />
+      </hbox>
+    </vbox>
+
+  </prefpane>
+
+</prefwindow>
