@@ -42,12 +42,17 @@
   <prefpane id="searchwpPrefpane">
 
     <preferences>
+      <preference id="pref-highlightState" name="extensions.@NAME@.highlight.state" type="bool" instantApply="true"/>
       <preference id="pref-highlightMinLength" name="extensions.@NAME@.highlight.minLength" type="int"/>
       <preference id="pref-groupTokensSingleMenu" name="extensions.@NAME@.tokens.displayMode" type="int"/>
     </preferences>
 
     <vbox>
-      <hbox align="center">
+      <groupbox orient="horizontal" align="center">
+        <caption>
+          <checkbox id="highlightState" label="&pref.highlightState.label;"
+                    preference="pref-highlightState" accesskey="&pref.highlightState.accesskey;" />
+        </caption>
         <label control="highlightMinLength" accesskey="&pref.highlightMinLength.accesskey;">&pref.highlightMinLength.label;</label>
         <menulist id="highlightMinLength" preference="pref-highlightMinLength">
           <menupopup>
@@ -58,7 +63,7 @@
             <menuitem label="5" value="5" />
           </menupopup>
         </menulist>
-      </hbox>
+      </groupbox>
       <hbox align="center">
         <checkbox id="groupTokensSingleMenu" label="&pref.groupTokensSingleMenu.label;"
                   preference="pref-groupTokensSingleMenu"

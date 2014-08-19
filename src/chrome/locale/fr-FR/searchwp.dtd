@@ -2,6 +2,8 @@
 <!ENTITY button.highlight.label "Surligner">
 <!ENTITY button.highlight.tooltiptext "Surligner tous les termes en respectant ou non la case">
 <!ENTITY pref.title "Options">
+<!ENTITY pref.highlightState.label "Activate highlighting">
+<!ENTITY pref.highlightState.accesskey "H">
 <!ENTITY pref.highlightMinLength.label "Longueur minimale des mots pour qu&apos;ils soient surlignés :">
 <!ENTITY pref.highlightMinLength.accesskey "L">
 <!ENTITY pref.groupTokensSingleMenu.label "Grouper les boutons des mots dans un menu unique">

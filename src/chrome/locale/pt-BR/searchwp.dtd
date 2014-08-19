@@ -2,6 +2,8 @@
 <!ENTITY button.highlight.label "Realçar">
 <!ENTITY button.highlight.tooltiptext "Ativar ou desativar realçamento com ou sem de diferença de maiúsc./minúsc.">
 <!ENTITY pref.title "Opções">
+<!ENTITY pref.highlightState.label "Activate highlighting">
+<!ENTITY pref.highlightState.accesskey "H">
 <!ENTITY pref.highlightMinLength.label "Tamanho mínimo para as palavras a serem realçados:">
 <!ENTITY pref.highlightMinLength.accesskey "L">
 <!ENTITY pref.groupTokensSingleMenu.label "Grupo de palavras chave num único menu">

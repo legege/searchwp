@@ -2,6 +2,8 @@
 <!ENTITY button.highlight.label "Markeren">
 <!ENTITY button.highlight.tooltiptext "Turn on and off highlighting with or without case matching">
 <!ENTITY pref.title "Opties">
+<!ENTITY pref.highlightState.label "Activate highlighting">
+<!ENTITY pref.highlightState.accesskey "H">
 <!ENTITY pref.highlightMinLength.label "Minimumlengte van woorden om te worden gemarkeerd:">
 <!ENTITY pref.highlightMinLength.accesskey "M">
 <!ENTITY pref.groupTokensSingleMenu.label "Group word tokens in a single menu">

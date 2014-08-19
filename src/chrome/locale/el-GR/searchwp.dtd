@@ -2,6 +2,8 @@
 <!ENTITY button.highlight.label "Επισήμανση">
 <!ENTITY button.highlight.tooltiptext "Ενεργοποίηση και απενεργοποίηση της επισήμανσης με ή χωρίς ταίριασμα χαρακτήρα">
 <!ENTITY pref.title "Επιλογές">
+<!ENTITY pref.highlightState.label "Activate highlighting">
+<!ENTITY pref.highlightState.accesskey "H">
 <!ENTITY pref.highlightMinLength.label "Ελάχιστο μήκος των λέξεων που θα επισημανθούν(σε χαρακτήρες) :">
 <!ENTITY pref.highlightMinLength.accesskey "Ε">
 <!ENTITY pref.groupTokensSingleMenu.label "Σύμπτυξη ενδείξεων λέξεων σε ένα μενού">

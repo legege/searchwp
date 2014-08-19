@@ -2,6 +2,8 @@
 <!ENTITY button.highlight.label "Markera">
 <!ENTITY button.highlight.tooltiptext "Slå markering på och av, med eller utan skiftlägeskänslig matchning">
 <!ENTITY pref.title "Inställningar">
+<!ENTITY pref.highlightState.label "Activate highlighting">
+<!ENTITY pref.highlightState.accesskey "H">
 <!ENTITY pref.highlightMinLength.label "Minimilängd för de ord som skall markeras:">
 <!ENTITY pref.highlightMinLength.accesskey "M">
 <!ENTITY pref.groupTokensSingleMenu.label "Gruppera ordtoken i en enda meny">
