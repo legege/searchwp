@@ -2,7 +2,7 @@
 <!ENTITY button.highlight.label "Wyróżnij">
 <!ENTITY button.highlight.tooltiptext "Włącza/wyłącza wyróżnianie z lub bez uwzględniania wielkości liter">
 <!ENTITY pref.title "Opcje">
-<!ENTITY pref.highlightMinlength.label "Minimalna długość wyróżnianych wyrażeń:">
-<!ENTITY pref.highlightMinlength.accesskey "M">
+<!ENTITY pref.highlightMinLength.label "Minimalna długość wyróżnianych wyrażeń:">
+<!ENTITY pref.highlightMinLength.accesskey "M">
 <!ENTITY pref.groupTokensSingleMenu.label "Grupuj znaczniki wyrażeń w pojedyncze menu">
 <!ENTITY pref.groupTokensSingleMenu.accesskey "G">

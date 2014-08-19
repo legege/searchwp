@@ -42,14 +42,14 @@
   <prefpane id="searchwpPrefpane">
 
     <preferences>
-      <preference id="pref-highlightMinlength" name="extensions.@NAME@.highlight.minLength" type="int"/>
+      <preference id="pref-highlightMinLength" name="extensions.@NAME@.highlight.minLength" type="int"/>
       <preference id="pref-groupTokensSingleMenu" name="extensions.@NAME@.tokens.displayMode" type="int"/>
     </preferences>
 
     <vbox>
       <hbox align="center">
-        <label control="highlightMinlength" accesskey="&pref.highlightMinlength.accesskey;">&pref.highlightMinlength.label;</label>
-        <menulist id="highlightMinlength" preference="pref-highlightMinlength">
+        <label control="highlightMinLength" accesskey="&pref.highlightMinLength.accesskey;">&pref.highlightMinLength.label;</label>
+        <menulist id="highlightMinLength" preference="pref-highlightMinLength">
           <menupopup>
             <menuitem label="1" value="1" />
             <menuitem label="2" value="2" />
