@@ -2,7 +2,7 @@
 <!ENTITY button.highlight.label "Evidenziature di SearchWP">
 <!ENTITY button.highlight.tooltiptext "Attiva/disattiva le evidenziature indipendentemente da maiuscole/minuscole">
 <!ENTITY pref.title "Opzioni di SearchWP">
-<!ENTITY pref.highlightMinlength.label "Numero minimo di caratteri affinché i lemmi siano evidenziati:">
-<!ENTITY pref.highlightMinlength.accesskey "N">
+<!ENTITY pref.highlightMinLength.label "Numero minimo di caratteri affinché i lemmi siano evidenziati:">
+<!ENTITY pref.highlightMinLength.accesskey "N">
 <!ENTITY pref.groupTokensSingleMenu.label "Effettua ricerca rapida facendo clic sui tre puntini di sospensione nella barra di ricerca">
 <!ENTITY pref.groupTokensSingleMenu.accesskey "E">

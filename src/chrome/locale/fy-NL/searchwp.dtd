@@ -2,7 +2,7 @@
 <!ENTITY button.highlight.label "Markeare">
 <!ENTITY button.highlight.tooltiptext "Turn on and off highlighting with or without case matching">
 <!ENTITY pref.title "Opsjes">
-<!ENTITY pref.highlightMinlength.label "Minimum lengte foar de wurden om op te ljochtsjen">
-<!ENTITY pref.highlightMinlength.accesskey "L">
+<!ENTITY pref.highlightMinLength.label "Minimum lengte foar de wurden om op te ljochtsjen">
+<!ENTITY pref.highlightMinLength.accesskey "L">
 <!ENTITY pref.groupTokensSingleMenu.label "Group word tokens in a single menu">
 <!ENTITY pref.groupTokensSingleMenu.accesskey "M">

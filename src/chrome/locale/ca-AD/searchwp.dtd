@@ -2,7 +2,7 @@
 <!ENTITY button.highlight.label "Ressalta">
 <!ENTITY button.highlight.tooltiptext "Turn on and off highlighting with or without case matching">
 <!ENTITY pref.title "Opcions">
-<!ENTITY pref.highlightMinlength.label "Minimum length for the words to be highlighted:">
-<!ENTITY pref.highlightMinlength.accesskey "L">
+<!ENTITY pref.highlightMinLength.label "Minimum length for the words to be highlighted:">
+<!ENTITY pref.highlightMinLength.accesskey "L">
 <!ENTITY pref.groupTokensSingleMenu.label "Group word tokens in a single menu">
 <!ENTITY pref.groupTokensSingleMenu.accesskey "M">

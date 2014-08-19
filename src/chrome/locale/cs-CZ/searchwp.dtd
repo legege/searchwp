@@ -2,7 +2,7 @@
 <!ENTITY button.highlight.label "Zvýraznit">
 <!ENTITY button.highlight.tooltiptext "Zapnout nebo vypnout zvýrazňování s nebo bez rozlišování velikosti písmen">
 <!ENTITY pref.title "Možnosti">
-<!ENTITY pref.highlightMinlength.label "Minimální délka zvýrazněného slova:">
-<!ENTITY pref.highlightMinlength.accesskey "L">
+<!ENTITY pref.highlightMinLength.label "Minimální délka zvýrazněného slova:">
+<!ENTITY pref.highlightMinLength.accesskey "L">
 <!ENTITY pref.groupTokensSingleMenu.label "Seskupit slova do jediného menu">
 <!ENTITY pref.groupTokensSingleMenu.accesskey "M">
