@@ -2,6 +2,8 @@
 <!ENTITY button.highlight.label "Wyróżnij">
 <!ENTITY button.highlight.tooltiptext "Włącza/wyłącza wyróżnianie z lub bez uwzględniania wielkości liter">
 <!ENTITY pref.title "Opcje">
+<!ENTITY pref.highlightState.label "Activate highlighting">
+<!ENTITY pref.highlightState.accesskey "H">
 <!ENTITY pref.highlightMinLength.label "Minimalna długość wyróżnianych wyrażeń:">
 <!ENTITY pref.highlightMinLength.accesskey "M">
 <!ENTITY pref.groupTokensSingleMenu.label "Grupuj znaczniki wyrażeń w pojedyncze menu">

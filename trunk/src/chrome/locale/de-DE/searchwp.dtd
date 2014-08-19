@@ -2,6 +2,8 @@
 <!ENTITY button.highlight.label "Hervorheben">
 <!ENTITY button.highlight.tooltiptext "Hervorheben ein- oder ausschalten. Groß-/Kleinschreibung wird nicht beachtet.">
 <!ENTITY pref.title "SearchWP - Einstellungen">
+<!ENTITY pref.highlightState.label "Activate highlighting">
+<!ENTITY pref.highlightState.accesskey "H">
 <!ENTITY pref.highlightMinLength.label "Mindestzeichenlänge für hervorzuhebende Wörter:">
 <!ENTITY pref.highlightMinLength.accesskey "L">
 <!ENTITY pref.groupTokensSingleMenu.label "Schnellsuche-Schaltflächen in einem eigenen Menü zusammenfassen">
