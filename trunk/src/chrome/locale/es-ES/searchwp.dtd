@@ -2,9 +2,9 @@
 <!ENTITY button.highlight.label "Marcar">
 <!ENTITY button.highlight.tooltiptext "Activar y desactivar el resaltado con o sin coincidencia de mayúsculas">
 <!ENTITY pref.title "Opciones">
-<!ENTITY pref.highlightState.label "Activate highlighting">
-<!ENTITY pref.highlightState.accesskey "H">
+<!ENTITY pref.highlightState.label "Activar el resaltado">
+<!ENTITY pref.highlightState.accesskey "R">
 <!ENTITY pref.highlightMinLength.label "Longitud mínima de las palabras para ser resaltadas:">
 <!ENTITY pref.highlightMinLength.accesskey "L">
 <!ENTITY pref.groupTokensSingleMenu.label "Agrupar botones de palabras en un único menú">
-<!ENTITY pref.groupTokensSingleMenu.accesskey "g">
+<!ENTITY pref.groupTokensSingleMenu.accesskey "G">
