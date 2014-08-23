@@ -53,7 +53,7 @@
   </toolbarpalette>
 
   <keyset id="mainKeyset">
-    <key id="searchwp-key" keycode="VK_F8" oncommand="gSearchWP.Highlighting.toggleHighlight(event);" />
+    <key id="searchwp-key" modifiers="alt control any" keycode="VK_F8" oncommand="gSearchWP.Highlighting.toggleHighlight(event);" />
   </keyset>
 
 </overlay>
