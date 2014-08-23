@@ -49,7 +49,7 @@
                    class="toolbarbutton-1 chromeclass-toolbar-additional"
                    label="&button.highlight.label;"
                    tooltiptext="&button.highlight.tooltiptext;"
-                   oncommand="gSearchWP.Highlighting.toggleHighlight(event);" />
+                   onclick="gSearchWP.Overlay.buttonClicked(event);" />
   </toolbarpalette>
 
   <keyset id="mainKeyset">
