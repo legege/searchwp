@@ -154,6 +154,24 @@ gSearchWP.Overlay = new function() {
   }
 
   /**
+   * Executed when the higlighting button is clicked
+   */
+  this.buttonClicked = function(aEvent) {
+    switch (aEvent.button) {
+      case 0: // left mouse button
+        gSearchWP.Highlighting.toggleHighlight(aEvent);
+        break;
+      case 1: // middle mouse button
+        openDialog("chrome://@NAME@/content/options/optionsDialog.xul",
+                   "", "chrome,titlebar,toolbar,centerscreen,dialog=no");
+        break;
+      case 2: // right mouse button
+        // do nothing (right mouse button allows to customize toolbar by default)
+        break;
+    }
+  }
+
+  /**
    * Progress Listener to automatically highlight terms on page load.
    */
   this.progressListener = new function() {
