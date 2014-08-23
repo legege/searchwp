@@ -49,8 +49,11 @@
                    class="toolbarbutton-1 chromeclass-toolbar-additional"
                    label="&button.highlight.label;"
                    tooltiptext="&button.highlight.tooltiptext;"
-                   oncommand="gSearchWP.Highlighting.toggleHighlight(event); event.stopPropagation();"
-                   autocheck="false" />
+                   oncommand="gSearchWP.Highlighting.toggleHighlight(event);" />
   </toolbarpalette>
+
+  <keyset id="mainKeyset">
+    <key id="searchwp-key" keycode="VK_F8" oncommand="gSearchWP.Highlighting.toggleHighlight(event);" />
+  </keyset>
 
 </overlay>
