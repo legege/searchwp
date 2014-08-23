@@ -6,5 +6,7 @@
 <!ENTITY pref.highlightState.accesskey "H">
 <!ENTITY pref.highlightMinLength.label "需要標示的關鍵字最小長度:">
 <!ENTITY pref.highlightMinLength.accesskey "L">
+<!ENTITY pref.highlightMatchCase.label "Highlighting is case sensitive">
+<!ENTITY pref.highlightMatchCase.accesskey "C">
 <!ENTITY pref.groupTokensSingleMenu.label "Group word tokens in a single menu">
 <!ENTITY pref.groupTokensSingleMenu.accesskey "M">

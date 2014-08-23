@@ -6,5 +6,7 @@
 <!ENTITY pref.highlightState.accesskey "H">
 <!ENTITY pref.highlightMinLength.label "Minimálna dĺžka pre slová , ktoré majú byť zvýraznené:">
 <!ENTITY pref.highlightMinLength.accesskey "M">
+<!ENTITY pref.highlightMatchCase.label "Highlighting is case sensitive">
+<!ENTITY pref.highlightMatchCase.accesskey "C">
 <!ENTITY pref.groupTokensSingleMenu.label "Zoskupiť slovné znaky do jedinej ponuky">
 <!ENTITY pref.groupTokensSingleMenu.accesskey "Z">
