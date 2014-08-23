@@ -6,5 +6,7 @@
 <!ENTITY pref.highlightState.accesskey "H">
 <!ENTITY pref.highlightMinLength.label "Mindestzeichenlänge für hervorzuhebende Wörter:">
 <!ENTITY pref.highlightMinLength.accesskey "L">
+<!ENTITY pref.highlightMatchCase.label "Groß-/Kleinschreibung beim Hervorheben beachten">
+<!ENTITY pref.highlightMatchCase.accesskey "G">
 <!ENTITY pref.groupTokensSingleMenu.label "Schnellsuche-Schaltflächen in einem eigenen Menü zusammenfassen">
 <!ENTITY pref.groupTokensSingleMenu.accesskey "M">
