@@ -27,7 +27,7 @@
    - ***** END LICENSE BLOCK ***** -->
 
 <prefwindow xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-            id="searchwpPref" title="&pref.title;" buttons="accept">
+            id="searchwpPref" title="SearchWP &#8211; &pref.title;" buttons="accept">
 
   <script type="application/x-javascript" src="chrome://@NAME@/content/package-info.js" />
   <script type="application/x-javascript" src="chrome://@NAME@/content/preferences.js" />
