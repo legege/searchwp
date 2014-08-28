@@ -2,11 +2,18 @@
 #labels Featured
 
 == Windows == 
-http://searchwp.googlecode.com/svn/meta/searchwp-2.0-win.png
-http://searchwp.googlecode.com/svn/meta/searchwp-2.0-win-highlight.png
+http://searchwp.googlecode.com/svn/meta/searchwp-2.7-win7.png
+http://searchwp.googlecode.com/svn/meta/searchwp-2.7-win7-highlight.png
+
+SearchWP 2.7 on Windows 7.
+
 
 == Mac OS X == 
 http://searchwp.googlecode.com/svn/meta/searchwp-2.0-osx.png
 http://searchwp.googlecode.com/svn/meta/searchwp-2.0-osx-highlight.png
 
- * Video: [http://video.google.com/videoplay?docid=-6212809882398677899 SearchWP Quick Look on Mac OS X]
+
+== Linux ==
+http://searchwp.googlecode.com/svn/meta/searchwp-2.7-ubuntu14.04-full.png
+
+SearchWP 2.7 on Ubuntu 14.04.
