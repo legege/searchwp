@@ -46,7 +46,9 @@ Note that most of these options are also accessible by using the handy keyboard 
 || *Enable case sensitive highlighting* || `Ctrl + F8`   *or*   `Alt + F8` ||  `Ctrl + left click` (on highlighter button)   *or*   `Alt + left click` (on highlighter button) ||
 || || || ||
 || *Repeat last jump-to-word search* || `F3` || `left click` (on jump-to-word button)   *or*<br>`mouse wheel down` (while on a jump-to-word button) ||
-|| *Repeat last jump-to-word search<br>(with reversed search direction)* || `Shift + F3` ||  `Shift + left click` (on highlighter button)   *or*   `right click` (on highlighter button)   *or*<br>`mouse wheel up` (while on a jump-to-word button) ||
+|| *Repeat last jump-to-word search<br>(with reversed search direction)* || `Shift + F3` ||  `Shift + left click` (on jump-to-word button)   *or*   `right click` (on jump-to-word button)   *or*<br>`mouse wheel up` (while on a jump-to-word button) ||
+|| || || ||
+|| *Select text in search box* || `Ctrl + K` || `right click` (into search box) ||
 || || || ||
 || *Open options dialog* || || `middle click` (on highlighter button) ||
 
