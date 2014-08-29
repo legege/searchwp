@@ -1,5 +1,5 @@
+#summary Documentation of SearchWP. Read this first if you need help.
 #labels Featured
-#Documentation of SearchWP. Read this first if you need help.
 
 <h1>Documentation</h1>
 <wiki:toc max_depth="2" />
