@@ -1,0 +1,63 @@
+#labels Featured
+#Documentation of SearchWP. Read this first if you need help.
+
+<h1>Documentation</h1>
+<wiki:toc max_depth="2" />
+
+= Installation =
+
+If you have not installed SearchWP yet you can do so from [http://addons.mozilla.org/firefox/addon/searchwp/ its add-on page] on addons.mozilla.org.
+
+After installation you have to restart Firefox for the changes to take effect. On startup SearchWP will automatically add the highlighter button to the tool-bar. It should be located directly after the search-box as visible in the screen-shot below and you're good to go. If for some reason you do _not_ see the button you can try to add it manually as [Documentation#Manually_adding,_moving_or_removing_the_highlighter_button described below].
+
+http://searchwp.googlecode.com/svn/meta/doc_icon.png
+
+== Manually adding, moving or removing the highlighter button==
+
+If you want to manually (re-)add, move or remove the SearchWP highlighter button follow Mozilla's guidelines for [http://support.mozilla.org/kb/customize-firefox-controls-buttons-and-toolbars customizing Firefox].
+
+In short you have to either navigate to _View > Toolbars > Customize..._ or right click somewhere on the tool-bar and choose _Customize..._ from the context menu.
+
+Find the highlighter button (labeled "Highlight") and drag it around with the mouse to a position of your liking. To remove the button simply pull it into the _Additional Tools and Features_ area and exit the customization dialog (you'll still be able to control SearchWP via the [Documentation#Configuration options dialog] or by using [Documentation#Keyboard_Shortcuts keyboard shortcuts]).
+
+= Usage =
+
+ * Jump-to-word buttons are enabled by default. Just enter some text into the search-box and hit enter (or click somewhere outside the box). Your search terms will turn into buttons. Just click on any of those word buttons and SearchWP will search the first occurrence of this word on the currently loaded page for you!
+ * To enable highlighting just click on the highlighter button. All occurrences of words entered in the search-box will be highlighted on the currently loaded page. Each search term will be highlighted in a different color so they are easily distinguishable.
+
+To see some examples of SearchWP in action have a look at our [Screenshots screen shots page].
+
+== Configuration ==
+
+To configure SearchWP open its options dialog. It'ss accessible from Firefox's Add-ons Manager (_Tools > Add-ons_). Find SearchWP in the _Extensions_ tab and click _Options_. Alternatively you can access the options dialog by middle clicking the highlighter button.
+
+ * *Activate Highlighting* – Lets you activate highlighting of search terms on the page (it's functionality is identical to clicking the highlighter button).
+ * *Highlihgting is case sensitive* – Makes the highlighting case sensitive (e.g. the search term _searchwp_ wouldn't highlight the capitalized version _SearchWP_ anymore). You can also activate case sensitive mode by holding the `Ctrl` or `Alt` key when clicking the highlighter button.
+ * *Minimum length for the words to be highlighted* – Words shorter than the chosen number won't be highlighted on the page.
+
+ * *Group word tokens in a single menu* – This activates an alternative way to display the jump-to-word buttons: Instead of turning the search terms themselves into buttons, a single (space-saving) button is added. Clicking this button expands the list of jump-to-word buttons.
+
+Note that most of these options are also accessible by using the handy keyboard shortcuts and mouse combinations described in the next section!
+
+== Keyboard Shortcuts and Mouse Combinations ==
+
+|| || *Keyboard shortcut(s)* || *Mouse Combination(s)* ||
+|| *Enable highlighting* || `F8` || `left click` (on highlighter button) ||
+|| *Enable case sensitive highlighting* || `Ctrl + F8`   *or*   `Alt + F8` ||  `Ctrl + left click` (on highlighter button)   *or*   `Alt + left click` (on highlighter button) ||
+|| || || ||
+|| *Repeat last jump-to-word search* || `F3` || `left click` (on jump-to-word button)   *or*<br>`mouse wheel down` (while on a jump-to-word button) ||
+|| *Repeat last jump-to-word search<br>(with reversed search direction)* || `Shift + F3` ||  `Shift + left click` (on highlighter button)   *or*   `right click` (on highlighter button)   *or*<br>`mouse wheel up` (while on a jump-to-word button) ||
+|| || || ||
+|| *Open options dialog* || || `middle click` (on highlighter button) ||
+
+
+== Hidden Settings ==
+
+There are some hidden settings that are not available in the options dialog or through any shortcut but might still be useful for a small portion of users.
+
+To access them you need to edit your advanced Firefox settings (type `about:config` into the location bar and confirm with `Enter`). However if you're not familiar with the advanced settings dialog or don't understand what a setting does you shouldn't proceed.
+
+|| *Preference Name* || *Description* ||
+|| `extensions.searchwp.highlight.maxColorizedHighlights` || Sets the maximum number of search terms that will be highlighted by SearchWP. If there are more occurrences of the search terms on the current page SearchWP switches to Firefox's built-in (monochrome) highlighting which is considerably faster. If you're experiencing performance problems on pages with many hits (and are okay with monochrome highlighting on these pages) you can lower this value. ||
+|| `extensions.searchwp.highlight.overlaps.displayMode` || Determines what happens if two highlights overlap each other (e.g. suppose you're searching for _bug_ and _debugger_). Possible values:<br>*0* (overwrite): the highlighting is simply done "on top" of each other, effectively overwriting any previous highlighting colour.<br>*1* (fixed): creates a solid color in the overlap region which is fixed.<br>*2* (transparent): highlights are partially transparent; therefore color values are added in the overlap region.<br>*3* (multiply): color values are multiplied in the overlap region which looks nice but has a considerable performance impact. ||
+|| `extensions.searchwp.highlight.tokensCount` || Specifies the number of different highlighting colors used for search terms. The maximum value is *5* unless you add additional user defined highlighting colors. ||
