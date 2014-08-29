@@ -18,7 +18,7 @@ If you want to manually (re-)add, move or remove the SearchWP highlighter button
 
 In short you have to either navigate to _View > Toolbars > Customize..._ or right click somewhere on the tool-bar and choose _Customize..._ from the context menu.
 
-Find the highlighter button (labeled "Highlight") and drag it around with the mouse to a position of your liking. To remove the button simply pull it into the _Additional Tools and Features_ area and exit the customization dialog (you'll still be able to control SearchWP via the [#Configuration options dialog] or by using [#Keyboard_Shortcuts_and Mouse_Combinations keyboard shortcuts]).
+Find the highlighter button (labeled "Highlight") and drag it around with the mouse to a position of your liking. To remove the button simply pull it into the _Additional Tools and Features_ area and exit the customization dialog (you'll still be able to control SearchWP via the [#Configuration options dialog] or by using [#Keyboard_Shortcuts_and_Mouse_Combinations keyboard shortcuts]).
 
 = Usage =
 
