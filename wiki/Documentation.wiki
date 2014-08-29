@@ -29,10 +29,10 @@ To see some examples of SearchWP in action have a look at our [Screenshots scree
 
 == Configuration ==
 
-To configure SearchWP open its options dialog. It'ss accessible from Firefox's Add-ons Manager (_Tools > Add-ons_). Find SearchWP in the _Extensions_ tab and click _Options_. Alternatively you can access the options dialog by middle clicking the highlighter button.
+To configure SearchWP open its options dialog. It's accessible from Firefox's Add-ons Manager (_Tools > Add-ons_). Find SearchWP in the _Extensions_ tab and click _Options_. Alternatively you can access the options dialog by middle clicking the highlighter button.
 
  * *Activate Highlighting* – Lets you activate highlighting of search terms on the page (it's functionality is identical to clicking the highlighter button).
- * *Highlihgting is case sensitive* – Makes the highlighting case sensitive (e.g. the search term _searchwp_ wouldn't highlight the capitalized version _SearchWP_ anymore). You can also activate case sensitive mode by holding the `Ctrl` or `Alt` key when clicking the highlighter button.
+ * *Highlighting is case sensitive* – Makes the highlighting case sensitive (e.g. the search term _searchwp_ wouldn't highlight the capitalized version _SearchWP_ anymore). You can also activate case sensitive mode by holding the `Ctrl` or `Alt` key when clicking the highlighter button.
  * *Minimum length for the words to be highlighted* – Words shorter than the chosen number won't be highlighted on the page.
 
  * *Group word tokens in a single menu* – This activates an alternative way to display the jump-to-word buttons: Instead of turning the search terms themselves into buttons, a single (space-saving) button is added. Clicking this button expands the list of jump-to-word buttons.
@@ -43,10 +43,10 @@ Note that most of these options are also accessible by using the handy keyboard 
 
 || || *Keyboard shortcut(s)* || *Mouse Combination(s)* ||
 || *Enable highlighting* || `F8` || `left click` (on highlighter button) ||
-|| *Enable case sensitive highlighting* || `Ctrl + F8`   *or*   `Alt + F8` ||  `Ctrl + left click` (on highlighter button)   *or*   `Alt + left click` (on highlighter button) ||
+|| *Enable case sensitive highlighting* || `Ctrl + F8`   *or*   `Alt + F8` ||  `Ctrl + left click` (on highlighter button)   *or*   `Alt + left click` (on highlighter button) ||
 || || || ||
-|| *Repeat last jump-to-word search* || `F3` || `left click` (on jump-to-word button)   *or*<br>`mouse wheel down` (while on a jump-to-word button) ||
-|| *Repeat last jump-to-word search<br>(with reversed search direction)* || `Shift + F3` ||  `Shift + left click` (on highlighter button)   *or*   `right click` (on highlighter button)   *or*<br>`mouse wheel up` (while on a jump-to-word button) ||
+|| *Repeat last jump-to-word search* || `F3` || `left click` (on jump-to-word button)   *or*<br>`mouse wheel down` (while on a jump-to-word button) ||
+|| *Repeat last jump-to-word search<br>(with reversed search direction)* || `Shift + F3` ||  `Shift + left click` (on highlighter button)   *or*   `right click` (on highlighter button)   *or*<br>`mouse wheel up` (while on a jump-to-word button) ||
 || || || ||
 || *Open options dialog* || || `middle click` (on highlighter button) ||
 
@@ -59,5 +59,5 @@ To access them you need to edit your advanced Firefox settings (type `about:conf
 
 || *Preference Name* || *Description* ||
 || `extensions.searchwp.highlight.maxColorizedHighlights` || Sets the maximum number of search terms that will be highlighted by SearchWP. If there are more occurrences of the search terms on the current page SearchWP switches to Firefox's built-in (monochrome) highlighting which is considerably faster. If you're experiencing performance problems on pages with many hits (and are okay with monochrome highlighting on these pages) you can lower this value. ||
-|| `extensions.searchwp.highlight.overlaps.displayMode` || Determines what happens if two highlights overlap each other (e.g. suppose you're searching for _bug_ and _debugger_). Possible values:<br>*0* (overwrite): the highlighting is simply done "on top" of each other, effectively overwriting any previous highlighting colour.<br>*1* (fixed): creates a solid color in the overlap region which is fixed.<br>*2* (transparent): highlights are partially transparent; therefore color values are added in the overlap region.<br>*3* (multiply): color values are multiplied in the overlap region which looks nice but has a considerable performance impact. ||
+|| `extensions.searchwp.highlight.overlaps.displayMode` || Determines what happens if two highlights overlap each other (e.g. suppose you're searching for _bug_ and _debugger_). Possible values:<br>*0* (overwrite): the highlighting is simply done "on top" of each other, effectively overwriting any previous highlighting color.<br>*1* (fixed): creates a solid color in the overlap region which is fixed.<br>*2* (transparent): highlights are partially transparent; therefore color values are added in the overlap region.<br>*3* (multiply): color values are multiplied in the overlap region which looks nice but has a considerable performance impact. ||
 || `extensions.searchwp.highlight.tokensCount` || Specifies the number of different highlighting colors used for search terms. The maximum value is *5* unless you add additional user defined highlighting colors. ||
