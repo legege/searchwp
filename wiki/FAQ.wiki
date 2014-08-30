@@ -1,15 +1,16 @@
-#summary FAQ
+#summary Frequently Asked Questions
 #labels Featured
 
-= FAQ =
+<h1>FAQ</h1>
+<wiki:toc max_depth="2" />
 
- * *How to activate SearchWP 1.0 once installed?*
-  Under View > Toolbar > Customize, drag the items "Terms toolbar" and "Highlight" up to the toolbars. Or follow this animation.
+== How do I change highlighting colors? ==
 
- * *How do I change highlighting colors?*
-  You have to change the userContent.css and userChrome.css files. Here is an example.
+You have to set custom CSS rules in the files `userContent.css` and `userChrome.css` files. They are located in the folder `chrome` in your [http://support.mozilla.org/kb/profiles-where-firefox-stores-user-data Firefox profile directory] (if they do not exist create them).
 
-userChrome.css
+The following is an example using SearchWP's default colors.
+
+`userChrome.css`
 {{{
 @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"); 
 
@@ -46,7 +47,8 @@ userChrome.css
 ...
 }}}
 
-userContent.css
+
+`userContent.css`
 {{{
 .searchwp-term {
   color: black;
@@ -73,12 +75,22 @@ userContent.css
 }
 }}}
 
- * *Whenever a term is shown in the SearchWP area, an extra "term" displays, called "undefined".*
-  Uninstall the McAfee SiteAdvisor add-on. It causes many problems not only with SearchWP but with other add-ons too.
+== How do I prevent search terms to change horizontal position when turning into jump-to-word buttons? ==
 
-= Shortcut keys =
+You can add the following to your `userChrome.css`:
+{{{
+.searchbox-tokens-container {
+  -moz-margin-start: 0;
+  -moz-margin-end: 0;
+}
 
- * `F3` lets you repeat the last jump-to-word search.
- * `F8` enables or disables the highlighting.
- * `SHIFT + Click`, `SHIFT + F3`, middle-click or right-click reverses the order of the search.
- * `CTRL + Click` or `CTRL + F3` makes the search case-sensitive.
+.searchbox-token {
+  padding: 0 !important;
+  -moz-margin-start: 0 !important;
+  -moz-margin-end: 0.08em !important; /* you might have to tweak this value */
+}
+}}}
+
+== Why is an extra search term called "undefined" shown, whenever I enter something in the search box? ==
+
+Uninstall the McAfee SiteAdvisor add-on. It causes many problems not only with SearchWP but with other add-ons too.
