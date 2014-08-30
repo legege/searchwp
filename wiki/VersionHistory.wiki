@@ -123,7 +123,7 @@
 
 == SearchWP 0.7.1 (April 3rd, 2006) ==
 
- * Improved: The F3 key handling has been improved. There is no more conflit with the find bar.
+ * Improved: The F3 key handling has been improved. There is no more conflict with the find bar.
 
 == SearchWP 0.7 (March 9th, 2006) ==
 
@@ -144,61 +144,61 @@
  * Added: A beep is heard when a term is not found in the page.
  * New translations: Frisian, Korean, Dutch, Portuguese
 
-== SearchWP 0.6.6 (Jan. 24th, 2006) ==
+== SearchWP 0.6.6 (January 24th, 2006) ==
 
  * Added: SearchWP has now an icon in the Extension Manager.
  * This version is compatible with Firefox 1.5.0.1.
 
-== SearchWP 0.6.5 (Jan. 21st, 2006) ==
+== SearchWP 0.6.5 (January 21st, 2006) ==
 
  * Added: After the first installation, there is now a message that ask if the user want to add the terms toolbar and the highlight button.
  * Fixed: Hyphens were removed from the terms text.
  * Fixed: The search string was not correctly divided in buttons in some cases.
  * New translations: Polish, Russian, Slovak
 
-== SearchWP 0.6.1 (Jan. 2nd, 2006) ==
+== SearchWP 0.6.1 (January 2nd, 2006) ==
 
  * Improved: The description in the Extensions Manager is now localized.
  * Fixed: There was a META-INF folder in the XPI file.
  * New translation: Spanish
 
-== SearchWP 0.6 (Dec. 28, 2005) ==
+== SearchWP 0.6 (December 28, 2005) ==
 
  * Dynamic terms toolbar:
    * Improved: An icon has been added to the terms toolbar in the Customize window.
-   * Improved: The insuffisant space detection for the terms buttons has been improved.
+   * Improved: The insufficient space detection for the terms buttons has been improved.
    * Improved: The popup menu displayed when there is not enough space in the toolbar is now refreshed when the window is resized.
    * Fixed: This menu contained old terms in some cases.
  * Highlighting:
    * Improved: The words and special characters analysis has been improved.
    * Improved: A supplementary check has been added before to highlight a word.
    * Fixed: Some words were not highlighted if they were not in the right case for the second occurrence in a node.
-   * Fixed: In some cases, the highlighting changes the appearence of the page (the node <layer> is now used instead of <span>).
+   * Fixed: In some cases, the highlighting changes the appearance of the page (the node `<layer>` is now used instead of `<span>`).
    * Fixed: Minors bugs.
 
-== SearchWP 0.5.5 (Dec. 18, 2005) ==
+== SearchWP 0.5.5 (December 18, 2005) ==
 
  * Fixed: The two-byte space character is now recognized as a separator character (Thanks to Yukichi Kamata).
  * New translation: Japanese
 
-== SearchWP 0.5.4 (Oct. 28, 2005) ==
+== SearchWP 0.5.4 (October 28, 2005) ==
 
  * This version is compatible with Firefox 1.5.
 
-== SearchWP 0.5.3 (Oct. 26, 2005) ==
+== SearchWP 0.5.3 (October 26, 2005) ==
 
  * Improved: Improved display for the highlight button under the "text" and "icon and text" modes.
  * Fixed: The highlight button icon in the Customize Toolbar was missing.
 
-== SearchWP 0.5.2 (Oct. 7, 2005) ==
+== SearchWP 0.5.2 (October 7, 2005) ==
 
  * This version is compatible with Firefox 1.5.
 
-== SearchWP 0.5.1 (Sept. 8, 2005) Download
+== SearchWP 0.5.1 (September 8, 2005) ==
 
  * This version is compatible with Firefox 1.5.
 
-== SearchWP 0.5 (Aug. 14, 2005) ==
+== SearchWP 0.5 (August 14, 2005) ==
 
  * Added: The Shift key reverses the order of the search.
  * Added: The Ctrl key makes the search case-sensitive.
@@ -207,57 +207,57 @@
  * Fixed: Highlighting problems with tabs and many browser windows.
  * Not compatible with Firefox 1.0.5. Please use Firefox 1.0.6 or upper.
 
-== SearchWP 0.4.4 (Jul. 15, 2005) ==
+== SearchWP 0.4.4 (July 15, 2005) ==
 
- * Fixed: Infinit page loading.
+ * Fixed: Infinite page loading.
  * This version is compatible with Firefox 1.0.5.
 
-== SearchWP 0.4.3.2 (Jun. 22, 2005) ==
+== SearchWP 0.4.3.2 (June 22, 2005) ==
 
  * New translation: German
 
-== SearchWP 0.4.3.1 (Jun. 15, 2005) ==
+== SearchWP 0.4.3.1 (June 15, 2005) ==
 
  * New translation: Italian
 
-== SearchWP 0.4.3 (May. 31, 2005) ==
+== SearchWP 0.4.3 (May 31, 2005) ==
 
  * This version is compatible with Firefox 1.1.
 
-== SearchWP 0.4.2 (Mar. 11, 2005) ==
+== SearchWP 0.4.2 (March 11, 2005) ==
 
  * Improved: Various minors improvements
 
-== SearchWP 0.4 (Jan. 4, 2005) ==
+== SearchWP 0.4 (January 4, 2005) ==
 
  * Added: SearchWP can highlight terms.
  * Added: When there is too many terms in the terms bar, a menu is generated.
  * Improved: Completely reviewed and improved
  * New translation: French.
 
-== SearchWP 0.3.7 (Nov. 21, 2004) ==
+== SearchWP 0.3.7 (November 21, 2004) ==
 
  * Fixed: SearchWP is case-sensitive.
 
-== SearchWP 0.3.6 (Nov. 7, 2004) ==
+== SearchWP 0.3.6 (November 7, 2004) ==
 
- * Fixed: The first <input> box on a page traps the search and we're not able to find the next occurence.
+ * Fixed: The first `<input>` box on a page traps the search and we're not able to find the next occurrence.
 
-== SearchWP 0.3.5 (Oct. 19, 2004) ==
+== SearchWP 0.3.5 (October 19, 2004) ==
 
  * Added: Compatible with the new extension SearchBox Sync
  * Improved: New icon set
  * Compatible with FireFox 1.0 PR Nightlies
 
-== SearchWP 0.3 (Sep. 27, 2004) ==
+== SearchWP 0.3 (September 27, 2004) ==
 
  * Compatible with FireFox 1.0 PR (0.10)
 
-== SearchWP 0.2 (May. 19, 2004) ==
+== SearchWP 0.2 (May 19, 2004) ==
 
  * Improved: Reduced height (smaller font, smaller icon) of the toolbar for FireFox 0.9
  * Compatible with FireFox 0.9
 
-== SearchWP 0.1 (Feb. 10, 2004) ==
+== SearchWP 0.1 (February 10, 2004) ==
 
  * First Release
