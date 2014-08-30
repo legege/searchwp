@@ -1,6 +1,16 @@
 #summary Change Log
 #labels Featured
 
+== SearchWP 2.7 (August 30th, 2014) ==
+ * Added: Keyboard shortcut for highlighting (`F8`).
+ * Improved: Options dialog
+   * added controls for highlighting state and case sensitive mode
+   * now accessible by middle clicking the highlighter button
+ * Improved: Toolbar button should look more consistent with other toolbar buttons now.
+ * Fixed: State of highlighter button (checked/unchecked) was not distinguishable in Australis theme. (issue 95)
+ * Fixed: Generously binding to search box class name could cause incompatibilities with other add-ons. (issue 97)
+
+
 == SearchWP 2.6.3 (December 25th, 2013) ==
  * Changed: Token buttons less rounded on Windows and Linux. (issue 87)
  * Fixed: Jump-to-word not working in Firefox 25. (issue 90)
