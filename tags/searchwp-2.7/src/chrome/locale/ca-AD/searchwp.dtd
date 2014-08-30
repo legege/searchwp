@@ -1,0 +1,12 @@
+<!ENTITY searchbox.tokens.menu.tooltiptext "More fast search buttons...">
+<!ENTITY button.highlight.label "Ressalta">
+<!ENTITY button.highlight.tooltiptext "Turn on and off highlighting with or without case matching">
+<!ENTITY pref.title "Opcions">
+<!ENTITY pref.highlightState.label "Activate highlighting">
+<!ENTITY pref.highlightState.accesskey "H">
+<!ENTITY pref.highlightMinLength.label "Minimum length for the words to be highlighted:">
+<!ENTITY pref.highlightMinLength.accesskey "L">
+<!ENTITY pref.highlightMatchCase.label "Highlighting is case sensitive">
+<!ENTITY pref.highlightMatchCase.accesskey "C">
+<!ENTITY pref.groupTokensSingleMenu.label "Group word tokens in a single menu">
+<!ENTITY pref.groupTokensSingleMenu.accesskey "M">
