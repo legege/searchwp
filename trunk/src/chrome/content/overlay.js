@@ -162,8 +162,8 @@ gSearchWP.Overlay = new function() {
         gSearchWP.Highlighting.toggleHighlight(aEvent);
         break;
       case 1: // middle mouse button
-        openDialog("chrome://@NAME@/content/options/optionsDialog.xul",
-                   "", "chrome,titlebar,toolbar,centerscreen,dialog=no");
+		content.openDialog("chrome://@NAME@/content/options/optionsDialog.xul",
+                           "", "chrome,titlebar,toolbar,centerscreen,modal");
         break;
       case 2: // right mouse button
         // do nothing (right mouse button allows to customize toolbar by default)
