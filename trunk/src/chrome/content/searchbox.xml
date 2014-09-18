@@ -146,8 +146,6 @@
 
           this.initializeSearchWPContent();
 
-          this._displayMode = gSearchWP.Preferences.tokensDisplayMode;
-
           var _rebuildTimeout;
           var self = this;
           function rebuildCallback() {
