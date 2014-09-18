@@ -38,7 +38,6 @@ gSearchWP.Overlay = new function() {
 
     this.preferencesObserver.register();
     window.getBrowser().addProgressListener(this.progressListener);
-                                            //Components.interfaces.nsIWebProgress.NOTIFY_STATE_DOCUMENT);
 
     /* XXXLegege: Unfortunately, there is no event on the termisation of the
        toolbox customization. All EventListeners of the searchbar are lost when
@@ -69,7 +68,7 @@ gSearchWP.Overlay = new function() {
     gSearchWP.Highlighting.init();
 
     addEventListener("unload", function(aEvent) { gSearchWP.Overlay.onUnload(aEvent); }, false);
-  }
+  };
 
   /**
    * Uninitializes this extension.
@@ -78,7 +77,7 @@ gSearchWP.Overlay = new function() {
   this.onUnload = function(aEvent) {
     this.preferencesObserver.unregister();
     window.getBrowser().removeProgressListener(this.progressListener);
-  }
+  };
 
   /**
    * @return the searchbox
@@ -122,7 +121,7 @@ gSearchWP.Overlay = new function() {
     catch(e) { }
 
     gSearchWP.Preferences.firstLaunch = false;
-  }
+  };
 
   /**
    * migration code for changed button ID in r237
@@ -142,7 +141,7 @@ gSearchWP.Overlay = new function() {
         }
       } catch (e) {}
     }
-  }
+  };
 
   /**
    * Called when the customization of the toolbar is finised.
@@ -151,7 +150,7 @@ gSearchWP.Overlay = new function() {
   this.onCustomizeDone = function() {
     gSearchWP.Preferences.highlighted = false;
     return _oldCustomizeDone();
-  }
+  };
 
   /**
    * Executed when the higlighting button is clicked
@@ -169,31 +168,22 @@ gSearchWP.Overlay = new function() {
         // do nothing (right mouse button allows to customize toolbar by default)
         break;
     }
-  }
+  };
 
   /**
    * Progress Listener to automatically highlight terms on page load.
    */
-  this.progressListener = new function() {
-    this.QueryInterface = function(aIID) {
-      if (aIID.equals(Components.interfaces.nsIWebProgressListener) ||
-        aIID.equals(Components.interfaces.nsISupportsWeakReference) ||
-        aIID.equals(Components.interfaces.nsISupports)) {
-        return this;
-      }
-      throw Components.results.NS_NOINTERFACE;
-    }
+  this.progressListener = {
+    QueryInterface: XPCOMUtils.generateQI(["nsIWebProgressListener", "nsISupportsWeakReference"]),
 
-    this.onProgressChange = function (aWebProgress, aRequest, aCurSelfProgress,
-                                      aMaxSelfProgress, aCurTotalProgress, aMaxTotalProgress) {}
+    onProgressChange: function (aWebProgress, aRequest, aCurSelfProgress,
+                                      aMaxSelfProgress, aCurTotalProgress, aMaxTotalProgress) {},
 
-    this.onStatusChange = function(aWebProgress, aRequest, aStatus, message) {}
+    onStatusChange: function(aWebProgress, aRequest, aStatus, message) {},
 
-    this.onSecurityChange = function(aWebProgress, aRequest, aState) {}
+    onSecurityChange: function(aWebProgress, aRequest, aState) {},
 
-    this.onLinkIconAvailable = function(a) {}
-
-    this.onStateChange = function (aWebProgress, aRequest, aStateFlags, aStatus) {
+    onStateChange: function (aWebProgress, aRequest, aStateFlags, aStatus) {
       if (aStateFlags & Components.interfaces.nsIWebProgressListener.STATE_STOP) {
         /**
          * XXXLegege (July 15th, 2005): Some users report that the page never stop
@@ -203,10 +193,10 @@ gSearchWP.Overlay = new function() {
           gSearchWP.Highlighting.refresh();
         }, 0);
       }
-    }
+    },
 
-    this.onLocationChange = function(aProgress, aRequest, aLocation) {}
-  }
+    onLocationChange: function(aProgress, aRequest, aLocation) {}
+  };
 
   /**
    * Preferences Observer
