@@ -31,8 +31,6 @@
 
   <script type="application/x-javascript" src="chrome://@NAME@/content/package-info.js" />
   <script type="application/x-javascript" src="chrome://@NAME@/content/preferences.js" />
-
-  <script type="application/x-javascript" src="chrome://@NAME@/content/options/package-info.js" />
   
   <prefpane id="searchwpPrefpane">
 
