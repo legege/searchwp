@@ -37,8 +37,8 @@
   <prefpane id="searchwpPrefpane">
 
     <preferences>
-      <preference id="pref-highlightState" name="extensions.@NAME@.highlight.state" type="bool" instantApply="true" />
-      <preference id="pref-highlightMatchCase" name="extensions.@NAME@.highlight.matchCase" type="bool" instantApply="true" />
+      <preference id="pref-highlightState" name="extensions.@NAME@.highlight.state" type="bool" />
+      <preference id="pref-highlightMatchCase" name="extensions.@NAME@.highlight.matchCase" type="bool" />
       <preference id="pref-highlightMinLength" name="extensions.@NAME@.highlight.minLength" type="int" />
       <preference id="pref-groupTokensSingleMenu" name="extensions.@NAME@.tokens.displayMode" type="int" />
     </preferences>
