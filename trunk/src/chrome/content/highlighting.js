@@ -27,8 +27,6 @@ gSearchWP.Highlighting = new function() {
   var _tokensArrayCache;
   var _matchCaseCache;
   var _highlightTimeout;
-  var _highlighter = new gSearchWP.Highlighter.NodeHighlighter("searchwp-highlighting");
-  var _nodeSearcher = new gSearchWP.Highlighter.NodeSearcher();
 
   /**
    * Initialize this class.
@@ -45,6 +43,9 @@ gSearchWP.Highlighting = new function() {
         this.highlightButton.removeAttribute("checked");
       this.highlightButton.setAttribute("matchcase", gSearchWP.Preferences.highlightMatchCase);
     }
+    
+    // add frame script for highlighting
+    window.messageManager.loadFrameScript("chrome://@NAME@/content/highlighter/package-info.js", true);
   }
 
   /**
@@ -168,158 +169,12 @@ gSearchWP.Highlighting = new function() {
   }
 
   function highlightBrowserWindow(aWord, aCriteria, aMatchCase, aWindow) {
-    var count = 0;
-
-    if (!aWindow) {
-      aWindow = window.content;
-    }
-
-    for (var i = 0; aWindow.frames && i < aWindow.frames.length; i++) {
-      count += highlightBrowserWindow(aWord, aCriteria, aMatchCase, aWindow.frames[i]);
-    }
-
-    var doc = aWindow.document;
-    if ( !doc || !doc.body ) {
-      return count;
-    }
-
-    var clearing = !aCriteria || !aWord;
-    var overlapsDisplayMode = gSearchWP.Preferences.overlapsDisplayMode;
-
-    if ( !clearing && overlapsDisplayMode == 1 ) { // fixed
-      doc.body.classList.add("searchwp-overlaps-display-mode-1");
-    } else {
-      doc.body.classList.remove("searchwp-overlaps-display-mode-1");
-    }
-
-    if ( !clearing && overlapsDisplayMode == 2 ) { // transparent
-      doc.body.classList.add("searchwp-overlaps-display-mode-2");
-    } else {
-      doc.body.classList.remove("searchwp-overlaps-display-mode-2");
-    }
-
-    if ( clearing ) {
-      _highlighter.clear(doc);
-      var findSelection = getFindSelection( aWindow );
-      findSelection && findSelection.removeAllRanges();
-      return count;
-    }
-
-    var criteria = aWord.replace(/\s*/, "");
-
-    var searchResults = _nodeSearcher.search( doc.body, criteria, aMatchCase, true );
-
-    if ( searchResults.length ) {
-      if ( searchResults.length > gSearchWP.Preferences.maxColorizedHighlights ) {
-        var findSelection = getFindSelection( aWindow );
-
-        if ( findSelection ) {
-          for ( var i = 0, l = searchResults.length; i < l; ++i ) {
-            findSelection.addRange( searchResults[i].range );
-          }
-
-          count = searchResults.length;
-        }
-
-      } else {
-        var elementProto = createElementProto( doc, aCriteria );
-        _highlighter.highlight( searchResults, elementProto );
-
-        count = searchResults.length;
-      }
-
-      if ( overlapsDisplayMode == 3 ) { // multiply
-        Array.forEach(doc.body.querySelectorAll(".searchwp-term > .searchwp-term"), recalculateColors);
-      }
-    }
-
-    return count;
-  }
-
-  function recalculateColors( node ) {
-    if ( !node._searchwp_recalculated_rgb ) {
-      var parent = node.parentNode;
-      var upperRgb = term2RGB[ node.getAttribute("highlight") ];
-      var lowerRgb = parent._searchwp_recalculated_rgb || term2RGB[ parent.getAttribute("highlight") ];
-      var rgb = combineColors( upperRgb, lowerRgb, chanelBlanding.mutiply );
-      var color = rgbLuminance( rgb ) > 165 ? "black" : "white";
-
-      node._searchwp_recalculated_rgb = rgb;
-
-      node.style.backgroundColor = "rgb(" + rgb + ")";
-      node.style.color = color;
-    }
-  }
-
-  var term2RGB = {
-    "term-1": [ 251, 237, 115 ],
-    "term-2": [ 255, 177, 140 ],
-    "term-3": [ 255, 210, 129 ],
-    "term-4": [ 195, 249, 145 ],
-    "term-5": [ 233, 184, 255 ]
-  };
-
-  var chanelBlanding = {
-    mutiply: function( a, b ) {
-      return Math.round( a / 255 * b );
-    },
-    difference: function( a, b ) {
-      return Math.abs( a - b );
-    }
-  };
-
-  function combineColors( a, b, method ) {
-    return [
-      method( a[0], b[0] ),
-      method( a[1], b[1] ),
-      method( a[2], b[2] )
-    ];
-  }
-
-  function rgbLuminance( rgb ) {
-    return Math.min(255, Math.round( 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2] ));
-  }
-
-  function createElementProto( aDocument, aCriteria ) {
-    var element = aDocument.createElement("layer");
-    element.className = "searchwp-term";
-    element.setAttribute( "highlight", aCriteria );
-    return element;
-  }
-
-  /**
-   * SoundexMatcher for the NodeSearcher.
-   */
-  function SoundexMatcher(aCriteria) {
-    var _soundex = soundex(aCriteria);
-
-    this.match = function(str) {
-      var matches = str.match(/\b\w+\b/gi);
-      if (matches) {
-        for (var i = 0; i < matches.length; i++) {
-          if (soundex(matches[i]) == _soundex) {
-            return matches[i];
-          }
-        }
-      }
-      return null;
-    }
-
-    function soundex(str, p) {
-      p = isNaN(p) ? 4 : p > 10 ? 10 : p < 4 ? 4 : p;
-      var i, j, r, m = {BFPV: 1, CGJKQSXZ: 2, DT: 3, L: 4, MN: 5, R: 6},
-        r = (s = str.toUpperCase().replace(/[^A-Z]/g, "").split("")).splice(0, 1);
-      for (i in s) {
-        for(j in m) {
-          if(j.indexOf(s[i]) + 1 && r[r.length-1] != m[j] && r.push(m[j])) break;
-        }
-      }
-      return r.length > p && (r.length = p), r.join("") + (new Array(p - r.length + 1)).join("0");
-    }
-  }
-
-  function getFindSelection( aWindow ) {
-    return gSearchWP.getSelectionOfType( aWindow, 128 );
+    // TODO: Highlight here
+    gBrowser.selectedBrowser.messageManager.sendAsyncMessage("@ID@:highlight",
+                                                             {aWord: aWord, aCriteria: aCriteria, aMatchCase: aMatchCase});
+    
+    // return count;
+    return 0;
   }
 
   function areArraysEqual( aArray1, aArray2 ) {

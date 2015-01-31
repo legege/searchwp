@@ -23,3 +23,10 @@
 if (!this.gSearchWP) this.gSearchWP = {};
 if (!this.gSearchWP.Highlighter) this.gSearchWP.Highlighter = {};
 
+// TODO: refactoring preferences.js into a module?
+Services.scriptloader.loadSubScript("chrome://@NAME@/content/preferences.js", {}, "UTF-8");
+
+// TODO: evaluate if loading as subscripts is the best possibility here
+Services.scriptloader.loadSubScript("chrome://@NAME@/content/highlighter/nodeHighlighter.js", {}, "UTF-8");
+Services.scriptloader.loadSubScript("chrome://@NAME@/content/highlighter/nodeSearcher.js", {}, "UTF-8");
+Services.scriptloader.loadSubScript("chrome://@NAME@/content/highlighter/highlighter.js", {}, "UTF-8");
