@@ -364,16 +364,28 @@
           var matchCase = aEvent.altKey || aEvent.ctrlKey;
 
           var fastFind = window.getBrowser().fastFind
-            || window.getBrowser().selectedTab.linkedBrowser.fastFind;
+            || window.getBrowser().selectedTab.linkedBrowser.fastFind // since Firefox 25
+            || window.getBrowser().selectedTab.linkedBrowser.finder; // e10s (Find.jsm/RemoteFinder.jsm is used instead of accessing nsITypeAheadFind directly)
+
+          // add ResultListener if RemoteFinder.jsm is used
+          // TODO: Is there a better way than to add/remove the ResultListener whenever clicking a token?
+          try {
+            fastFind.addResultListener(this);
+          } catch (e) {}
+          
           fastFind.caseSensitive = matchCase;
 
-          var isNewSearch = matchCase ?
-            fastFind.searchString != aWord :
-            fastFind.searchString.toLowerCase() != aWord.toLowerCase();
+          var isNewSearch = true;
+          if (fastFind.searchString) {
+            isNewSearch = matchCase ?
+              fastFind.searchString != aWord :
+              fastFind.searchString.toLowerCase() != aWord.toLowerCase();
+          }
 
           var result;
           if ( isNewSearch ) {
-            result = fastFind.find(aWord, false);
+            // find() is called fastFind() in Find.jsm/RemoteFinder.jsm
+            result = fastFind.find ? fastFind.find(aWord, false) : fastFind.fastFind(aWord, false); 
           }
           else {
             result = fastFind.findAgain(findBackwards, false);
@@ -386,15 +398,32 @@
             this._fixScroll( content );
           }
 
+          if (result != undefined) {
+            this.onFindResult({result: result,
+                               searchString: aWord,
+                               findBackwards: findBackwards});
+          }
+
+          return result;
+        ]]></body>
+      </method>
+
+      <!-- the following three callback methods are hard-coded in RemoteFinder.jsm, we only use onFindResult -->
+      <method name="onMatchesCountResult" />
+      <method name="onCurrentSelection" />
+      <method name="onFindResult">
+        <parameter name="aData"/>
+        <body><![CDATA[
           var stringbundle = this._searchwpStringBundle;
-          switch ( result ) {
+
+          switch ( aData.result ) {
             case 0: // Found
               break;
             case 1: // Not found
-              gSearchWP.displayMessage(stringbundle.getFormattedString("notFound", [aWord], 1), true);
+              gSearchWP.displayMessage(stringbundle.getFormattedString("notFound", [aData.searchString], 1), true);
               break;
             case 2: // Wrapped
-              if ( findBackwards ) {
+              if ( aData.findBackwards ) {
                 gSearchWP.displayMessage(stringbundle.getString("wrappedToBottom"), true);
               }
               else {
@@ -402,10 +431,14 @@
               }
               break;
           }
-
-          return result;
+          
+          // remove ResultListener if RemoteFinder.jsm is used
+          try {
+            window.getBrowser().selectedTab.linkedBrowser.finder.removeResultListener(this);
+          } catch (e) {}
         ]]></body>
       </method>
+
 
       <method name="_fixScroll">
         <parameter name="aWindow" />
