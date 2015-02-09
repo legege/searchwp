@@ -1,30 +1,30 @@
-content @NAME@ jar:chrome/@NAME@.jar!/content/
+content @NAME@ chrome/content/
 
-skin    @NAME@ classic/1.0 jar:chrome/@NAME@.jar!/skin/classic/
-skin    @NAME@-platform classic/1.0 jar:chrome/@NAME@.jar!/skin/classic/platform/default/
-skin    @NAME@-platform classic/1.0 jar:chrome/@NAME@.jar!/skin/classic/platform/mac/ os=Darwin
+skin    @NAME@ classic/1.0 chrome/skin/classic/
+skin    @NAME@-platform classic/1.0 chrome/skin/classic/platform/default/
+skin    @NAME@-platform classic/1.0 chrome/skin/classic/platform/mac/ os=Darwin
 
-locale  @NAME@ ca    jar:chrome/@NAME@.jar!/locale/ca/
-locale  @NAME@ cs    jar:chrome/@NAME@.jar!/locale/cs/
-locale  @NAME@ de    jar:chrome/@NAME@.jar!/locale/de/
-locale  @NAME@ el    jar:chrome/@NAME@.jar!/locale/el/
-locale  @NAME@ en-US jar:chrome/@NAME@.jar!/locale/en-US/
-locale  @NAME@ es-ES jar:chrome/@NAME@.jar!/locale/es-ES/
-locale  @NAME@ fr    jar:chrome/@NAME@.jar!/locale/fr/
-locale  @NAME@ fy-NL jar:chrome/@NAME@.jar!/locale/fy-NL/
-locale  @NAME@ hr    jar:chrome/@NAME@.jar!/locale/hr/
-locale  @NAME@ hu    jar:chrome/@NAME@.jar!/locale/hu/
-locale  @NAME@ it    jar:chrome/@NAME@.jar!/locale/it/
-locale  @NAME@ ja    jar:chrome/@NAME@.jar!/locale/ja/
-locale  @NAME@ ko    jar:chrome/@NAME@.jar!/locale/ko/
-locale  @NAME@ nl    jar:chrome/@NAME@.jar!/locale/nl/
-locale  @NAME@ pl    jar:chrome/@NAME@.jar!/locale/pl/
-locale  @NAME@ pt-BR jar:chrome/@NAME@.jar!/locale/pt-BR/
-locale  @NAME@ ru    jar:chrome/@NAME@.jar!/locale/ru/
-locale  @NAME@ sk    jar:chrome/@NAME@.jar!/locale/sk/
-locale  @NAME@ sv-SE jar:chrome/@NAME@.jar!/locale/sv-SE/
-locale  @NAME@ zh-CN jar:chrome/@NAME@.jar!/locale/zh-CN/
-locale  @NAME@ zh-TW jar:chrome/@NAME@.jar!/locale/zh-TW/
+locale  @NAME@ ca    chrome/locale/ca/
+locale  @NAME@ cs    chrome/locale/cs/
+locale  @NAME@ de    chrome/locale/de/
+locale  @NAME@ el    chrome/locale/el/
+locale  @NAME@ en-US chrome/locale/en-US/
+locale  @NAME@ es-ES chrome/locale/es-ES/
+locale  @NAME@ fr    chrome/locale/fr/
+locale  @NAME@ fy-NL chrome/locale/fy-NL/
+locale  @NAME@ hr    chrome/locale/hr/
+locale  @NAME@ hu    chrome/locale/hu/
+locale  @NAME@ it    chrome/locale/it/
+locale  @NAME@ ja    chrome/locale/ja/
+locale  @NAME@ ko    chrome/locale/ko/
+locale  @NAME@ nl    chrome/locale/nl/
+locale  @NAME@ pl    chrome/locale/pl/
+locale  @NAME@ pt-BR chrome/locale/pt-BR/
+locale  @NAME@ ru    chrome/locale/ru/
+locale  @NAME@ sk    chrome/locale/sk/
+locale  @NAME@ sv-SE chrome/locale/sv-SE/
+locale  @NAME@ zh-CN chrome/locale/zh-CN/
+locale  @NAME@ zh-TW chrome/locale/zh-TW/
 
 overlay chrome://browser/content/browser.xul chrome://@NAME@/content/overlay.xul
 
