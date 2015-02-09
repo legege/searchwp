@@ -27,6 +27,8 @@ gSearchWP.Highlighting = new function() {
   var _tokensArrayCache;
   var _matchCaseCache;
   var _highlightTimeout;
+  var _counts = {counter: 0,
+                 returned: 0};
 
   /**
    * Initialize this class.
@@ -38,14 +40,16 @@ gSearchWP.Highlighting = new function() {
     tabBox.addEventListener("select", refreshCallback, false);
 
     if (this.highlightButton) {
-      gSearchWP.Preferences.highlighted ? 
+      gSearchWP.Preferences.highlighted ?
         this.highlightButton.setAttribute("checked", true) :
         this.highlightButton.removeAttribute("checked");
       this.highlightButton.setAttribute("matchcase", gSearchWP.Preferences.highlightMatchCase);
     }
-    
+
     // add frame script for highlighting
     window.messageManager.loadFrameScript("chrome://@NAME@/content/highlighter/package-info.js", true);
+    // add listener for HighlightCount updates from frame script
+    window.messageManager.addMessageListener("@ID@:HighlightCount", highlightCount);
   }
 
   /**
@@ -140,23 +144,12 @@ gSearchWP.Highlighting = new function() {
   function highlight() {
     var termsArray = _tokensArrayCache;
     if ( termsArray ) {
-      var count = 0;
       var highlighterCount = gSearchWP.Preferences.highlighterCount;
       var highlightMatchCase = gSearchWP.Preferences.highlightMatchCase;
 
       for ( var i = 0, len = termsArray.length; i < len; ++i ) {
         var criteria = "term-" + ( i % highlighterCount + 1 );
-        count += highlightBrowserWindow( termsArray[i], criteria, highlightMatchCase );
-      }
-
-      if (count > 1) {
-        gSearchWP.displayMessage(_stringBundle.getFormattedString("highlightCountN", [count], 1), false);
-      }
-      else if (count == 1) {
-        gSearchWP.displayMessage(_stringBundle.getFormattedString("highlightCount1", [count], 1), false);
-      }
-      else {
-        gSearchWP.displayMessage(_stringBundle.getString("highlightCount0"), false);
+        highlightBrowserWindow( termsArray[i], criteria, highlightMatchCase );
       }
     }
   }
@@ -169,12 +162,28 @@ gSearchWP.Highlighting = new function() {
   }
 
   function highlightBrowserWindow(aWord, aCriteria, aMatchCase, aWindow) {
-    // TODO: Highlight here
-    gBrowser.selectedBrowser.messageManager.sendAsyncMessage("@ID@:highlight",
+    _counts.counter = _counts.returned = 0;
+    gBrowser.selectedBrowser.messageManager.sendAsyncMessage("@ID@:Highlight",
                                                              {aWord: aWord, aCriteria: aCriteria, aMatchCase: aMatchCase});
-    
-    // return count;
-    return 0;
+  }
+
+  function highlightCount(message) {
+    _counts.counter += message.data.count;
+    _counts.returned++;
+
+    // show count if all results are in
+    if (_counts.returned == _tokensArrayCache.length) {
+      var count = _counts.counter;
+      if (count > 1) {
+        gSearchWP.displayMessage(_stringBundle.getFormattedString("highlightCountN", [count], 1), false);
+      }
+      else if (count == 1) {
+        gSearchWP.displayMessage(_stringBundle.getFormattedString("highlightCount1", [count], 1), false);
+      }
+      else {
+        gSearchWP.displayMessage(_stringBundle.getString("highlightCount0"), false);
+      }
+    }
   }
 
   function areArraysEqual( aArray1, aArray2 ) {
