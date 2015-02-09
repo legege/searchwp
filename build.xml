@@ -16,6 +16,7 @@
 
   <!-- Public Targets -->
   <target name="all" description="Execute all" depends="xpi, uninstall, install, run" />
+  <target name="build" description="Build and install only" depends="xpi, uninstall, install" />
 
   <target name="xpi-base">
     <!-- Copy everything -->
