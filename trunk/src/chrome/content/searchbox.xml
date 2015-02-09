@@ -64,6 +64,8 @@
         node;
       ]]></field>
 
+      <field name="_clickedToken">null</field>
+
       <field name="_cropped">false</field>
       <field name="_displayMode">0</field>
 
@@ -371,8 +373,9 @@
           // TODO: Is there a better way than to add/remove the ResultListener whenever clicking a token?
           try {
             fastFind.addResultListener(this);
+            this._clickedToken = aEvent.target; // store event target (the clicked searchbox-token) so we can notify it of the SearchResult
           } catch (e) {}
-          
+
           fastFind.caseSensitive = matchCase;
 
           var isNewSearch = true;
@@ -385,7 +388,7 @@
           var result;
           if ( isNewSearch ) {
             // find() is called fastFind() in Find.jsm/RemoteFinder.jsm
-            result = fastFind.find ? fastFind.find(aWord, false) : fastFind.fastFind(aWord, false); 
+            result = fastFind.find ? fastFind.find(aWord, false) : fastFind.fastFind(aWord, false);
           }
           else {
             result = fastFind.findAgain(findBackwards, false);
@@ -431,14 +434,15 @@
               }
               break;
           }
-          
-          // remove ResultListener if RemoteFinder.jsm is used
+
+          // remove ResultListener if RemoteFinder.jsm is used,
+          // forward the result to the searchbox-token that initially triggered the search
           try {
             window.getBrowser().selectedTab.linkedBrowser.finder.removeResultListener(this);
+            this._clickedToken._onFindResult(aData);
           } catch (e) {}
         ]]></body>
       </method>
-
 
       <method name="_fixScroll">
         <parameter name="aWindow" />
@@ -516,6 +520,19 @@
         <body><![CDATA[
           var result = document.getBindingParent(this)._findFast( this.value, aEvent );
 
+          if (result != undefined) {
+            this._onFindResult({result: result});
+          }
+
+          return result;
+        ]]></body>
+      </method>
+
+      <method name="_onFindResult">
+        <parameter name="aData"/>
+        <body><![CDATA[
+          var result = aData.result;
+
           if ( result == 1 ) {
             this.setAttribute("notfound", true);
             if (this._notFoundTimeout) {
@@ -526,10 +543,9 @@
               aToken.removeAttribute("notfound");
             }, 3000, this);
           }
-
-          return result;
         ]]></body>
       </method>
+
 
     </implementation>
 
