@@ -164,9 +164,12 @@ gSearchWP.Highlighter = new function() {
     }
   }
 
-  // listeners for messages from chrome content
+  // handling of messages for interaction with chrome content
   function receivedHighlight(message) {
-    highlightBrowserWindow(message.data.aWord, message.data.aCriteria, message.data.aMatchCase, null);
+    var count = highlightBrowserWindow(message.data.aWord, message.data.aCriteria, message.data.aMatchCase, null);
+    if (message.data.aWord) { // do not send count when unhighlighting
+      sendAsyncMessage("@ID@:HighlightCount", {count: count});
+    }
   };
-  addMessageListener("@ID@:highlight", receivedHighlight);
+  addMessageListener("@ID@:Highlight", receivedHighlight);
 }
