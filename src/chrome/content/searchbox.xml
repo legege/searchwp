@@ -156,7 +156,7 @@
             gSearchWP.Highlighting.flushUpdate();
           }
 
-          this._SearchWPPreferencesObserver = new gSearchWP.Preferences.Observer(function( pref_name ) {
+          this._SearchWPPreferencesObserver = new gSearchWP.PreferencesObserver(function( pref_name ) {
                // If any pref changed, we need to rebuild tokens to adjust presentation
                switch ( pref_name ) {
                  case gSearchWP.Preferences.PREF_HIGHLIGHT_MATCH_CASE:
@@ -167,7 +167,7 @@
                    _rebuildTimeout && clearTimeout( _rebuildTimeout );
                    _rebuildTimeout = setTimeout( rebuildCallback, 5 );
                    break;
-                 case gSearchWP.Preferences.PREF_HIGHLIGHT_OVERLAPS_DYSPLAY_MODE:
+                 case gSearchWP.Preferences.PREF_HIGHLIGHT_OVERLAPS_DISPLAY_MODE:
                    gSearchWP.Highlighting.refresh();
                    break;
                }

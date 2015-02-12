@@ -22,6 +22,8 @@
 
 if (!this.gSearchWP) this.gSearchWP = {};
 
+Components.utils.import("chrome://@NAME@/content/preferences.jsm", gSearchWP);
+
 gSearchWP.playBeep = function() {
   Components.classes["@mozilla.org/sound;1"]
             .createInstance(Components.interfaces.nsISound)

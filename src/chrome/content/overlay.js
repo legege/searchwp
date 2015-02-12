@@ -229,7 +229,7 @@ gSearchWP.Overlay = new function() {
   /**
    * Preferences Observer
    */
-  this.preferencesObserver = new gSearchWP.Preferences.Observer(function( pref_name ) {
+  this.preferencesObserver = new gSearchWP.PreferencesObserver(function( pref_name ) {
       switch (pref_name) {
         case gSearchWP.Preferences.PREF_HIGHLIGHT_STATE:
           setTimeout(function() {

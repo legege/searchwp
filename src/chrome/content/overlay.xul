@@ -35,7 +35,6 @@
   </stringbundleset>
 
   <script type="application/x-javascript" src="chrome://@NAME@/content/package-info.js" />
-  <script type="application/x-javascript" src="chrome://@NAME@/content/preferences.js" />
   <script type="application/x-javascript" src="chrome://@NAME@/content/highlighting.js" />
   <script type="application/x-javascript" src="chrome://@NAME@/content/tokenizer.js" />
   <script type="application/x-javascript" src="chrome://@NAME@/content/overlay.js" />
