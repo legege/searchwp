@@ -1,6 +1,11 @@
 #summary Change Log
 #labels Featured
 
+
+== SearchWP 2.7.1 (February 21st, 2015) ==
+ * Fixed: Compatibility fix for Firefox 36.0
+
+
 == SearchWP 2.7 (August 30th, 2014) ==
  * Added: Keyboard shortcut for highlighting (`F8`).
  * Improved: Options dialog
