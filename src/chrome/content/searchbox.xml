@@ -207,8 +207,8 @@
 
           // Adjust token visibility
           if ( !showAll ) {
-            var tokensScrollBoxObject = this._tokensContainer.boxObject.QueryInterface(Components.interfaces.nsIScrollBoxObject);
-            var rightLimitX = tokensScrollBoxObject.x + tokensScrollBoxObject.width - this._calculateEmbeddedActionsWidth();
+            var boxObject = this._tokensContainer.boxObject;
+            var rightLimitX = boxObject.x + boxObject.width - this._calculateEmbeddedActionsWidth();
           }
 
           for ( var i = 0; i < tokens.length; ++i ) {
