@@ -470,6 +470,13 @@
       <handler event="dragover" phase="capturing">this._hideTokens();</handler>
       <handler event="dragexit" phase="capturing">this._showTokens(this.value);</handler>
 
+      <handler event="mousedown" phase="capturing"><![CDATA[
+        if (event.button == 2 && event.originalTarget.nodeName == "xul:box") {
+          var bindingParent = document.getBindingParent(this);
+          bindingParent._ignoreFocus = true;
+        }
+      ]]></handler>
+
       <handler event="DOMMouseScroll"><![CDATA[
         if ( event.rangeParent.nodeType != 3 ) {
           return;
