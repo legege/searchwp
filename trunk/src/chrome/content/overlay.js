@@ -222,36 +222,24 @@ gSearchWP.Overlay = new function() {
   /**
    * Preferences Observer
    */
-  this.preferencesObserver = new gSearchWP.PreferencesObserver(function( pref_name ) {
-      switch (pref_name) {
-        case gSearchWP.Preferences.PREF_HIGHLIGHT_STATE:
-          setTimeout(function() {
-            var item = gSearchWP.Highlighting.highlightButton;
-            if (item) {
-              gSearchWP.Preferences.highlighted ? 
-                item.setAttribute("checked", true) :
-                item.removeAttribute("checked");
-            }
-            //gSearchWP.Highlighting.refresh();
-          }, 0);
-          break;
-        case gSearchWP.Preferences.PREF_HIGHLIGHT_MATCH_CASE:
-          setTimeout(function() {
-            var item = gSearchWP.Highlighting.highlightButton;
-            if (item) {
-              item.setAttribute("matchcase", gSearchWP.Preferences.highlightMatchCase);
-            }
-            //gSearchWP.Highlighting.refresh();
-          }, 0);
-          break;
-        case gSearchWP.Preferences.PREF_HIGHLIGHT_MINLENGTH:
-          //setTimeout(function() {
-          //  gSearchWP.Highlighting.refresh();
-          //}, 0);
-          break;
-      }
+  this.preferencesObserver = new gSearchWP.PreferencesObserver( function(pref_name) {
+    switch (pref_name) {
+      case gSearchWP.Preferences.PREF_HIGHLIGHT_STATE:
+        var highlightButton = gSearchWP.Highlighting.highlightButton;
+        if (highlightButton) {
+          gSearchWP.Preferences.highlighted ? 
+            highlightButton.setAttribute("checked", true) :
+            highlightButton.removeAttribute("checked");
+        }
+        break;
+      case gSearchWP.Preferences.PREF_HIGHLIGHT_MATCH_CASE:
+        var highlightButton = gSearchWP.Highlighting.highlightButton;
+        if (highlightButton) {
+          highlightButton.setAttribute("matchcase", gSearchWP.Preferences.highlightMatchCase);
+        }
+        break;
     }
-  );
+  });
 
 };
 
