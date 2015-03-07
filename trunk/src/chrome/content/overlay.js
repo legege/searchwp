@@ -204,26 +204,19 @@ gSearchWP.Overlay = new function() {
   this.progressListener = {
     QueryInterface: XPCOMUtils.generateQI(["nsIWebProgressListener", "nsISupportsWeakReference"]),
 
-    onProgressChange: function (aWebProgress, aRequest, aCurSelfProgress,
-                                      aMaxSelfProgress, aCurTotalProgress, aMaxTotalProgress) {},
-
-    onStatusChange: function(aWebProgress, aRequest, aStatus, message) {},
-
-    onSecurityChange: function(aWebProgress, aRequest, aState) {},
-
     onStateChange: function (aWebProgress, aRequest, aStateFlags, aStatus) {
       if (aStateFlags & Components.interfaces.nsIWebProgressListener.STATE_STOP) {
-        /**
-         * XXXLegege (July 15th, 2005): Some users report that the page never stop
-         * to load. The solution is to make the highlighting asynchrone.
-         */
-        setTimeout(function() {
-          gSearchWP.Highlighting.refresh();
-        }, 0);
+        gSearchWP.Highlighting.refresh();
       }
     },
 
-    onLocationChange: function(aProgress, aRequest, aLocation) {}
+    onProgressChange: function (aWebProgress, aRequest, aCurSelfProgress, aMaxSelfProgress, aCurTotalProgress, aMaxTotalProgress) {},
+
+    onLocationChange: function(aWebProgress, aRequest, aLocation) {},
+
+    onStatusChange: function(aWebProgress, aRequest, aStatus, aMessage) {},
+
+    onSecurityChange: function(aWebProgress, aRequest, aState) {}
   };
 
   /**
