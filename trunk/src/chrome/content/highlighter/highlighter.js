@@ -164,12 +164,34 @@ gSearchWP.Highlighter = new function() {
     }
   }
 
-  // handling of messages for interaction with chrome content
-  function receivedHighlight(message) {
-    var count = highlightBrowserWindow(message.data.aWord, message.data.aCriteria, message.data.aMatchCase, null);
-    if (message.data.aWord) { // do not send count when unhighlighting
-      sendAsyncMessage("@ID@:HighlightCount", {count: count});
+
+
+
+  /**
+   * Highlight the current page.
+   */
+  function highlight(message) {
+    var termsArray = message.data.aTermsArray;
+
+    var highlighterCount = gSearchWP.Preferences.highlighterCount;
+    var highlightMatchCase = gSearchWP.Preferences.highlightMatchCase;
+
+    var count = 0;
+    for ( var i = 0, len = termsArray.length; i < len; ++i ) {
+      var criteria = "term-" + ( i % highlighterCount + 1 );
+      count += highlightBrowserWindow( termsArray[i], criteria, highlightMatchCase );
     }
+    sendAsyncMessage("@ID@:HighlightCount", {count: count});
   };
-  addMessageListener("@ID@:Highlight", receivedHighlight);
+
+  /**
+   * Removes the highlighting of the current page.
+   */
+  function unhighlight(message) {
+     highlightBrowserWindow();
+  };
+
+  // listeners for interaction with chrome content
+  addMessageListener("@ID@:Highlight", highlight);
+  addMessageListener("@ID@:Unhighlight", unhighlight);
 }
