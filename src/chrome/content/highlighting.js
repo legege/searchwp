@@ -27,8 +27,6 @@ gSearchWP.Highlighting = new function() {
   var _tokensArrayCache;
   var _matchCaseCache;
   var _highlightTimeout;
-  var _counts = {counter: 0,
-                 returned: 0};
 
   /**
    * Initialize this class.
@@ -144,13 +142,7 @@ gSearchWP.Highlighting = new function() {
   function highlight() {
     var termsArray = _tokensArrayCache;
     if ( termsArray ) {
-      var highlighterCount = gSearchWP.Preferences.highlighterCount;
-      var highlightMatchCase = gSearchWP.Preferences.highlightMatchCase;
-
-      for ( var i = 0, len = termsArray.length; i < len; ++i ) {
-        var criteria = "term-" + ( i % highlighterCount + 1 );
-        highlightBrowserWindow( termsArray[i], criteria, highlightMatchCase );
-      }
+      gBrowser.selectedBrowser.messageManager.sendAsyncMessage("@ID@:Highlight", {aTermsArray: termsArray});
     }
   }
 
@@ -158,31 +150,20 @@ gSearchWP.Highlighting = new function() {
    * Removes the highlighting of the current page.
    */
   function unhighlight() {
-    highlightBrowserWindow();
-  }
-
-  function highlightBrowserWindow(aWord, aCriteria, aMatchCase, aWindow) {
-    _counts.counter = _counts.returned = 0;
-    gBrowser.selectedBrowser.messageManager.sendAsyncMessage("@ID@:Highlight",
-                                                             {aWord: aWord, aCriteria: aCriteria, aMatchCase: aMatchCase});
+    gBrowser.selectedBrowser.messageManager.sendAsyncMessage("@ID@:Unhighlight");
   }
 
   function highlightCount(message) {
-    _counts.counter += message.data.count;
-    _counts.returned++;
+    var count = message.data.count;
 
-    // show count if all results are in
-    if (_counts.returned == _tokensArrayCache.length) {
-      var count = _counts.counter;
-      if (count > 1) {
-        gSearchWP.displayMessage(_stringBundle.getFormattedString("highlightCountN", [count], 1), false);
-      }
-      else if (count == 1) {
-        gSearchWP.displayMessage(_stringBundle.getFormattedString("highlightCount1", [count], 1), false);
-      }
-      else {
-        gSearchWP.displayMessage(_stringBundle.getString("highlightCount0"), false);
-      }
+    if (count > 1) {
+      gSearchWP.displayMessage(_stringBundle.getFormattedString("highlightCountN", [count], 1), false);
+    }
+    else if (count == 1) {
+      gSearchWP.displayMessage(_stringBundle.getFormattedString("highlightCount1", [count], 1), false);
+    }
+    else {
+      gSearchWP.displayMessage(_stringBundle.getString("highlightCount0"), false);
     }
   }
 
