@@ -4,7 +4,7 @@
 
 If you like this add-on, you will probably want to try [SearchBox Sync](https://github.com/legege/searchboxsync).
 
-For more details, please visit [Mozilla Add-ons](https://addons.mozilla.org/fr/firefox/addon/searchwp/).
+For more details, please visit [Mozilla Add-ons](https://addons.mozilla.org/firefox/addon/searchwp/).
 
  * Video: [SearchWP Quick Look on Mac OS X](http://video.google.com/videoplay?docid=-6212809882398677899)
 
