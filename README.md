@@ -4,6 +4,10 @@
 
 If you like this add-on, you will probably want to try [SearchBox Sync](https://github.com/legege/searchboxsync).
 
+![SearchWP on OS X](https://addons.cdn.mozilla.net/user-media/previews/full/18/18860.png?modified=1409417514)
+![SearchWP on Windows](https://addons.cdn.mozilla.net/user-media/previews/full/142/142358.png?modified=1409417515)
+![SearchWP jump-to-word buttons](https://addons.cdn.mozilla.net/user-media/previews/full/25/25567.png?modified=1409417514)
+
 For more details, please visit [Mozilla Add-ons](https://addons.mozilla.org/firefox/addon/searchwp/).
 
  * Video: [SearchWP Quick Look on Mac OS X](http://video.google.com/videoplay?docid=-6212809882398677899)
